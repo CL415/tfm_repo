@@ -1,0 +1,42 @@
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {2.1}{Studies of multiple interactions networks}}{19}{table.2.1}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Sampling of multiple interaction types}}{33}{table.37}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Multidegrees of the Aire Island multilayer network}}{40}{table.48}%
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {4.1}{\ignorespaces Coefficients from evenness regression in simulated networks}}{69}{table.99}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Coefficients from skewness regression in simulated networks}}{69}{table.100}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Evenness model coefficients}}{71}{table.103}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Skewness model coefficients}}{71}{table.104}%
+\addvspace {10pt}
+\contentsline {table}{\numberline {5.1}{\ignorespaces Spatial effects summary metrics}}{84}{table.123}%
+\addvspace {10pt}
+\contentsline {table}{\numberline {6.1}{\ignorespaces GAM model results}}{98}{table.141}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Facilitation impacts}}{99}{table.144}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {A.3.1.1}{Model community parameters}}{129}{table.7.1}%
+\contentsline {table}{\numberline {A.3.1.2}{Interaction probabilities}}{130}{table.7.2}%
+\contentsline {table}{\numberline {A.3.1.3}{Model interaction parameters}}{130}{table.7.3}%
+\contentsline {table}{\numberline {A.3.1.4}{Model species parameters}}{131}{table.7.4}%
+\addvspace {10pt}
+\contentsline {table}{\numberline {A.3.2.1}{Kruskal-Wallis tests for persistence distributions}}{139}{table.7.1}%
+\contentsline {table}{\numberline {A.3.2.2}{Post-hoc Dunn tests for persistence distributions}}{140}{table.7.2}%
+\contentsline {table}{\numberline {A.3.2.3}{Distribution of interaction frequencies}}{141}{table.7.3}%
+\contentsline {table}{\numberline {A.3.2.4}{Skewness of species impacts}}{142}{table.7.4}%
+\contentsline {table}{\numberline {A.3.2.5}{Trophic-level impacts}}{143}{table.7.5}%
+\contentsline {table}{\numberline {A.3.2.6}{Post-hoc tests of trophic-level impacts}}{143}{table.7.6}%
+\contentsline {table}{\numberline {A.3.2.7}{Rare and very abundant species}}{146}{table.7.7}%
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {A.4.1.1}{\ignorespaces Guild pairs differences in evenness}}{159}{table.207}%
+\contentsline {table}{\numberline {A.4.1.2}{\ignorespaces Guild pairs differences in skewness}}{160}{table.208}%
+\contentsline {table}{\numberline {A.4.1.3}{\ignorespaces Guild species/individuals}}{160}{table.209}%
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {A.6.1.1}{\ignorespaces Response curves parameterization}}{169}{table.219}%
