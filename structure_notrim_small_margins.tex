@@ -20,7 +20,8 @@
 \usepackage{microtype} % Slightly tweak font spacing for aesthetics
 \usepackage{tabularx} % more control over tables
 %\usepackage{kpfonts} % kepler fonts, las viejas de la tesis
-\usepackage[lining]{ibarra} %% remove option 'lining' to get oldstyle figures as default
+\usepackage[lining]{ibarra} % remove option 'lining' to get oldstyle figures as default
+\usepackage[scaled]{ulgothic} % para el código
 \usepackage[T1]{fontenc}
 \usepackage{mdframed} % boxed text
 \usepackage{pdflscape} % landscape tables etc
@@ -153,7 +154,7 @@
 \setlength{\beforechapskip}{0pt}
 \setlength{\midchapskip}{0pt}
 \setlength{\afterchapskip}{0pt}
-\renewcommand{\chapnamefont}{\LARGE}
+\renewcommand{\chapnamefont}{\LARGE\normalfont}
 \renewcommand{\chapnumfont}{\chapnamefont}
 \renewcommand{\chaptitlefont}{\chapnamefont}
 \renewcommand{\printchapternum}{}
@@ -162,6 +163,11 @@
 \renewcommand{\afterchaptertitle}{\chapnumfont\hfill\thechapter\\\vspace*{-.3cm}\hrulefill\vspace*{2cm}\\}%6cm
 }
 \makeatother
+
+% Remove bold from section and subsection titles
+\setsecheadstyle{\Large\normalfont}
+\setsubsecheadstyle{\large\normalfont}
+\setsubsubsecheadstyle{\normalsize\normalfont}
 
 %----------------------------------------------------------------------------------------
 %	TABLE OF CONTENTS DEPTH

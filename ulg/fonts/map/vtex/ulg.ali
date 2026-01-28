@@ -1,0 +1,7 @@
+%1 = $PFM$
+%2 = $TEXMF$fonts/type1/urw/lettrgth/
+
+@LetterGothic-Bol = ulgb8a %2,1
+@LetterGothic-Bol-8r = ulgb8r %2,1,r="8r",b="ulgb8a"
+@LetterGothic-BolIta = ulgbi8a %2,1
+@LetterGothic-BolIta-8r = ulgbi8r %2,1,r="8r",b="ulgbi8a"
