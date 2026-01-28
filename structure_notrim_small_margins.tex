@@ -42,8 +42,6 @@
 \captiontitlefont{\footnotesize}
 \newfixedcaption{\figcaption}{figure}
 
-\hypersetup{colorlinks, breaklinks, linkcolor=black,citecolor=black,filecolor=black,urlcolor=black} % Set up hyperlinks including colors for references, urls and citations
-
 %\definecolor{c64}{rgb}{.063,0,.612} % Example color definition, the color can be used with the \color{name} command
 
 \makeatletter
@@ -213,3 +211,10 @@
 \lstnewenvironment{pseudoctiny}{\lstset{language=C,mathescape=true,basicstyle=\tiny\sffamily}}{}
 \lstnewenvironment{cctiny}{\lstset{language=C,basicstyle=\tiny\sffamily}}{}
 \lstnewenvironment{pseudotiny}{\lstset{mathescape=true,basicstyle=\tiny\sffamily}}{}
+
+%----------------------------------------------------------------------------------------
+%	HYPERREF LINK COLORS (must be at the end after all packages)
+%----------------------------------------------------------------------------------------
+
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\hypersetup{colorlinks=true, breaklinks, linkcolor=darkblue, citecolor=darkblue, filecolor=darkblue, urlcolor=darkblue, anchorcolor=darkblue}
