@@ -21,7 +21,7 @@
 % Thesis Information
 
 \title{Reinforcement Learning-based multimodal traffic signal control considering pedestrians and cyclists in real scenarios} % Thesis title
-
+% CONSIDERAR CAMBIAR A NETWORKS????
 \author{Pau Martí Talens} % Author name
 
 \date{July 2026} % The date
@@ -41,11 +41,30 @@
 
 \hyphenation{} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
 
+%------------------------------------------------
+% Glossary
+
+\makeglossaries
+
+\newglossaryentry{maths}
+{
+    name=mathematics,
+    description={Mathematics is what mathematicians do}
+}
+
 %----------------------------------------------------------------------------------------
 
 \makeindex % Write an index file
 
 \begin{document}
+
+% Include PDF outer cover
+\includepdf[pages=1]{../cover/cover2.pdf}
+
+\clearpage
+\thispagestyle{empty}
+\mbox{}
+\clearpage
 
 \include{FrontBackMatter/titlepage}
 
@@ -137,6 +156,14 @@
 
 \backmatter
 
+\pagestyle{plain} % Reset page style for backmatter
+
+%----------------------------------------------------------------------------------------
+%	LIST OF ACRONYMS
+%----------------------------------------------------------------------------------------
+
+\input{FrontBackMatter/acronyms} % Include the list of acronyms with page references
+
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
@@ -145,8 +172,12 @@
 %\bibliographystyle{plainnat} % Use the plainnat bibliography style
 
 % create reference list
+\nobibintoc
+\addcontentsline{toc}{chapter}{Bibliography}
+{\renewcommand{\bibname}{\noindent{\LARGE Bibliography}}
 %\bibliography{full_library_server}
 \bibliography{full_library}
+}
 
 
 %----------------------------------------------------------------------------------------

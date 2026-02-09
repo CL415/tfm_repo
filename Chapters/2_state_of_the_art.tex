@@ -8,29 +8,321 @@
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
-Lorem ipsum
-
-% INVESTIGA SI HAY TRABAJOS SIMILARES EN ESPAÑITAAA
+% INVESTIGA SI HAY TRABAJOS SIMILARES EN ESPAÑITAAA O DINAMARCA
 % keremos primera letra en mayúsucula tocha etc?
+% ver si TSC se capitaliza o no
 
-\section{Traffic signal control}
+\section{Traffic signal control as a multimodal problem}
+
+% X.1 Traffic Signal Control as a Multi-Modal Problem
+
+% Purpose: Frame the problem, not the solution yet
+
+% Include:
+
+% Classical TSC objectives (delay, throughput, fairness)
+
+% Limitations of vehicle-centric TSC
+
+% Safety, delay, and priority issues for pedestrians and cyclists
+
+% Fixed-time, actuated, adaptive systems (SCOOT, SCATS, etc.)
+
+% End this section with:
+
+% “These limitations motivate learning-based approaches that can incorporate heterogeneous agents and complex objectives.”
+
+% This creates a clean bridge to RL.
+
+As introduced in \ref{sec:preface}, traffic signals were, from their inception, designed to manage
+ multimodal traffic, and not just motor vehicles. However, as motorization increased throughout
+ the 20th century, traffic lights became centred around the needs of the automobile; once the
+ first automatically timed traffic signals were installed in the 1920s, their time periods were
+ set using traffic surveys, and the later development of green wave systems continued the trend. \cite{McShane1999}
+
+Despite remaining an anecdote, the 1931 letter of the Swedish traffic engineer Perikö af der Stykker to the
+ \textit{American City Magazine} illustrates frankly the treatment of non-motorized users at the
+ time. Af der Stykker, who was the traffic engineer of Stockholm, was planning to add pedestrian
+ signals to the city's new traffic lights. As the latest developments in traffic signals were then
+ occuring in the United States —by then, systems incorporating turn lane phases, management of reversible
+ lanes or traffic activation were being used in major US cities \cite{McShane1999}—, af der Stykker
+ asked his US colleagues if they had tried any similar solution. They had not. \cite{AC1931}
+
+enlazar con lo anterior a nivel network q Vehicle delay is perhaps the most important parameter used by transportation professionals to
+evaluate the performance of signalized intersections??? o otros parámetros??? 
+
+Noland has shown that focusing only on motorvehicle ﬂows may not lead to economically optimal solutions whenpedestrian delay is also accounted for (\cite{Noland1996}). For some trips, the traveltime delay costs associated with walking may reduce the likelihoodthat people will choose to walk.
+
+diciendo q research focus en coxes, de ahi pasamos a multimodal
+
+Network optimisation has traditionally been approached
+as a problem of vehicle flow optimisation. The various
+approaches developed for optimisation of signal-controlled
+intersections are no exception. Webster’s (\cite{Webster1957}) and other
+numerous methods that have since been formulated for
+optimisation of signalised intersections perform stage- or
+phase-based optimisation for conflicting streams of vehicle
+flows but assign fixed times to the pedestrian phase
+exogenously, not taking into account pedestrian flows
+and delays.
+
+Only a few research studies have considered pedestrian
+travel cost as a constituent of the criteria for design of
+traffic control elements. An example is Griffiths et al.
+(1976) who based the selection of type of control (zebra or
+pelican) at pedestrian crossings on comparative values of
+time of different modes. Disregarding pedestrian travel
+costs might lead to non-optimal network design if
+pedestrians form a noticeable proportion of road users,
+such as in urban centres
+
+q mayoria trabajos que consideran peats pero en intersecciones concretas, no a nivel de red, y que no consideran ciclistas ni tampoco la variabilidad de los peats,
+ y que además no usan RL sino optimización tradicional, o fuzzy logic (justificar xq eso no sirve para lo nuestor)
+
+ Previous works have been done to dynamically control adaptive traffic lights. But due to the limited computing power and simulation tools, early studies focus on solving the problem by fuzzy logic [19], linear programming [20], etc. In these works, road traffic is modeled by limited information, which cannot be applied in large scale.
+ 
+% ES AUTOMATED TSC?
+ OBJS NO TRADICIONALES: vilarinho y also incorpora peds \cite{Vilarinho2017}
+
+% peds en interseccs concretas
+Li et al. \cite{Li2010} proposed an optimization model to improve vehicle and
+pedestrian efficiency, the results have shown that considering
+pedestrian and vehicle delays together improves the model
+performance. Other studies \cite{Zhang2018} [21], [22] also sought
+to minimize a combination of vehicle and pedestrian delays.
+Beyond optimizing traffic efficiency, traffic safety also attract
+researchers’ attention. Ma et al. [23] minimized total monetary costs that include traffic delays as well as potential
+pedestrian/vehicle conflicts. Considering the allotted pedestrian clearance time may fail to clear the crosswalk, which
+will increase the probability of pedestrian-vehicle exposures,
+Zhang et al. [24] introduced an additional dynamic all red
+phase to balance traffic efficiency and safety
+also single one pero famoso \cite{Liang2019}
+
+% nivel network
+Ishaque, et al. (\cite{Ishaque2005}; \cite{Ishaque2007} el segundo accounts for non compliance) analyzed the trade-offs in pedestrian and vehicle delays in a
+hypothetical network by considering relative values of time for pedestrians and vehicles. They
+found that shorter cycle lengths are beneficial for pedestrians. Moreover, the existing policies
+that are most advantageous to vehicles might be disadvantageous to pedestrians, which do not
+make the network optimally perform for all road users. Although, they assumed that pedestrian
+delay is composed only from control delay. Actually with high demands, pedestrians experience
+significant delays while discharging at the edge of the crosswalk and while crossing the street
+due to the interaction between opposing pedestrian flows. Furthermore, a discussion about the
+optimized signal parameters considering pedestrian and vehicle delays was not presented.
+Few studies addressed the issue of bi-directional pedestrian flow and its impact on
+crossing time and speed at signalized crosswalks and the resultant delays. HCM does not
+consider the effects of pedestrian demand and crosswalk width on pedestrian crossing time.
+However when pedestrian demand increases at both sides of the crosswalk, crossing time
+increases due to the interaction between conflicting pedestrian flows.
+Algo similar a Ishaque usando el software Synchro hicieron en \cite{Bhattacharya2005}
+
+\cite{Zhang2018} usa meta-heuristics con discrete
+harmony search (DHS) algorithm en red en cuadrícula considerando peds
+
+The artificial intelligence methods have also been applied
+on adaptive traffic signal control. Signal controllers using reinforcement learning approaches are developed via the networkwide multi-agent coordination and the relationship between
+actions, states and environment [24], [25]. Although no prespecified traffic model is required, the exponential growth of
+the state-action space with the increase of the agents may
+fail to efficiently solve the problem. Neural network (NN)
+is another technique that has been employed for signal controllers. A fuzzy NN system is formulated via the simultaneous
+perturbation stochastic approximation (SPSA) algorithm to
+update the weight online [26]. Chao et al. [27] proposed
+an intelligent traffic light control strategy based on extension neural network theory (ENN) for isolated intersection.
+However, NN-based methods need to consider appropriate
+number of layers and neurons, also, they are not easily
+adjustable when new traffic situation occurs. Moreover, fuzzy
+logic (FL) is adopted in traffic signal control to mimic
+human thinking or experts’ knowledge when the mathematical
+model is very difficult to formulate [28], [29]. The cellular
+automata (CA) mechanism with particle swarm optimization
+method is proposed to solve traffic light scheduling problem [30]. Also, a CA-based multi-intersection model representing the evolution of the traffic network is developed to
+reduce the traffic pressure [31]
+
+Review of lit para mixed traffic flows: 2023, \cite{Majstorović2023}
+
+qlearning algorythm en network \cite{Liu2017}
+
+% ciclistas!
+\cite{Apostola2014}
+During the mid 1980’s, in Beijing, in China, the increased traffic volumes lead the
+authorities to implement an urban traffic and control system in a section of the city. The
+11
+CHAPTER 2. STATE-OF-THE-ART
+chosen system was the SCOOT traffic control system (Split Cycle Offset Optimization
+Technique). The system takes into account the cyclists traveling along a link, by detecting
+them with a loop detector, which is located a short distance from the stop line. The team
+established a composite measure of bicycle flow and occupancy called a Bicycle Link Profile
+Unit (BLPU) which was capable of aggregation with the normal SCOOT Link Profile Unit
+(LPU). This enabled the bicycle link to be incorporated into the standard SCOOT model
+in the same manner as other links. Weighting functions are then available to advantage
+or disadvantage the bicycle traffic stream relative to the motorized traffic stream 
+
+A European example is the historic city of York in the UK. Within York the level of commuting by
+cycles is high at 19% of trips and the level of congestion on the roads has resulted in the
+deployment of much urban traffic control infrastructure. The local authority has a package of
+techniques and expertise which it can use in the appropriate circumstances. One techniques is “tailend biasing” where the offsets at the ends of greens are co-ordinated to provide for slower modes
+such as buses and cyclists. Another technique is the use of SCOOT detectors in cycle loops and
+“dummy” SCOOT loops which shadow existing SCOOT links. Increasingly use is made of
+microwave detectors mounted on signal heads which are able to accurately detect cyclists if they
+are travelling at 10km/h (6.25 mph) or more.
+
+Green waves, also en apostola: The world’s first green wave for cyclists was created in Odense, in Denmark. Along a
+bicycle route 45 low poles have been placed between two intersections, over a distance of
+some 350 meters, each provided with a light. The lights turn green one after the other, at
+an interval of some seconds. Following the timing of the lights, the cyclist has the right
+speed for a green wave. However, the problem is that cyclists have widely varying cruising
+speeds (Andersen, 2013).
+In the autumn of 2006 a green wave for cyclists has been realized on Norrebrogade, in
+Copenhagen, by the local authorities. The green wave affects 12 traffic lights over a stretch
+of road of over 2 km. The idea is that if the bicyclist rides 20 km/h, he will hit green lights
+the whole way into the city center. The traffic lights are coordinated during the morning
+rush hour between 6 : 00 - 10 : 00/12 : 00 (depending on the route) and then the wave
+reverses so the lights are coordinated in the opposite direction between 12 : 00/15 : 00 -
+18 : 00 for the trip home. Norrebrogade is a major route for both motorized and bicycle
+13
+CHAPTER 2. STATE-OF-THE-ART
+traffic. The results for bicycles are very positive, considering the decrease of number of
+stops from 6 to 0 and the increase of speed from 15.1 to 20.7 km/h. The green wave for
+cyclists has also realized on three other roads (Hoegh, 2007). luego de esto muchas otras ciudades
+
+% ===============================================================================
+\section{Reinforcement Learning for traffic signal control}
+
+% Purpose: Introduce the control paradigm you adopt
+
+% Include:
+
+% MDP formulation in TSC (state, action, reward)
+
+% Single- vs multi-intersection RL
+
+% Centralized vs decentralized agents
+
+% Common reward formulations (delay, queue length, pressure)
+
+% Known challenges (sample efficiency, generalization, safety)
+
+% Crucially:
+
+% Explicitly highlight how non-vehicular users are handled or ignored in prior RL-TSC work
+
+% Point out that many works assume simplified or absent pedestrian models
+
+% End with:
+
+% “Most RL-based TSC studies rely on simplified traffic participants, which places strong importance on the fidelity of the underlying simulator.”
+
+% Now SUMO and behavior models enter naturally.
+
+% funamentos de RL y luego aplicaciones en TSC
+
+fonament de multiagent RL en TSC: \cite{Bakker2010}
+
+RL solutions WITH PEDS constrained to intersections: \cite{Wang2025} (considering large intersections with pedestrian
+two-stage crosswalks)
+
+BUENA REVIEW DE LA LIT DE RL AS OF 2024: https://academic.oup.com/iti/article/doi/10.1093/iti/liaf009/8125227?login=false
+\cite{Xiao2024}
+
+Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
+
+BICIS THO????
+léete y anota
+\cite{Magnana2024}
+
+\section{Modelling Pedestrians and Cyclists in Microscopic Traffic Simulation}
 
 
-\citep{Robertson1991}
-Where adjacent junctions in a network of urban road are
-less than a mile apart and are controlled by traffic signals,
-major benefits can be obtained by installing an urban traffic
-control (UTC) system to coordinate the operation of the signals.
-Such systems use a central computer to control the signal
-sequences and to monitor their operation; the signals and computer are usually connected by voice grade data transmission
-lines. The method of controlling the signal sequences can have a
-significant effect on levels of urban congestion, on fuel economy, and on exhaust emissions. This is the main topic of this
-paper. 
-The first UTC systems came into operation in the mid-l960’s,
-and since then their use has been growing rapidly.
+% Purpose: Justify your modeling assumptions, not reinvent them
 
-\section{Modelling the behaviour of pedestrian and cyclists}
+% Focus on:
 
-\section{Reinforcement learning in traffic signal control}
+% Why explicit modeling of pedestrians/cyclists matters for RL rewards and constraints
+
+% Overview (not derivation) of pedestrian and bicycle models
+
+% SUMO’s pedestrian model (e.g., based on social force concepts)
+
+% Known limitations and abstractions in SUMO
+
+% Important framing:
+
+% You are not proposing new behavior models
+
+% You are evaluating control policies under an established behavioral abstraction
+
+% This avoids the “why is this here?” feeling.
+
+Traffic control systems are the most visible element of the urban
+infrastructure. They are not just physical systems like telephones or
+sewers or streets, although their technological elements, traffic lights,
+signs, and painted pavements, fit that description. Rather, they are systems that attempt to impose a strong social control over the most fundamental of human behaviors, whether to move or be still. Traffic
+engineers must control police, drivers, and pedestrians. For most other
+elements of the urban infrastructure, controlling the behavior of users
+did not constitute the primary goal of designers.\cite{McShane1999}
+For traffic engineers,
+understanding and manipulating the behavioral patterns of drivers and
+pedestrians (a group that included not just walkers, but people using
+the street for play, social gatherings, and commerce) proved to be a
+more important problem than the control mechanisms themselves.
+Traffic engineers learned rapidly to pay careful attention to ergonomics, the interface between people and machines. There was also a
+political agenda of maximizing expert control. \cite{McShane1999}
+
+
+%In general, pedestrian models have been centred in crossing behavior at single intersections, GOTTA LOOK AT NETWORK LEVEL
+
+Pedestrian crossing speed will directly impact the determination of TSC parameters, such as pedestrian clearance time.
+Pedestrian crossing speed is influenced by various factors,
+including age, health condition, physical fitness, and psychological expectations. As a result, there are significant
+differences in crossing speeds among different individuals.
+Relevant studies \cite{Chandra2013} \cite{Huang2010} indicate that pedestrian crossing
+speed at intersections typically follows a normal distribution.
+However, due to the lack of detailed consideration of pedestrian speed characteristics, most studies adopt fixed clearance
+time, which may result in potential traffic risks, as illustrated
+in Fig. 2.
+
+More recent research, conducted through child and adult
+focus groups by the Transport Research Laboratory, has
+shown that 30 s is the maximum amount of time that both
+children and adults are willing to wait at a signalised
+intersection (\cite{Martin2006}). The German Highway Capacity Manual specifically recommends that signal cycle times
+above 90 s should be avoided to reduce pedestrian delay
+(Brilon, 1994). In many cases where infrastructure has been
+designed based on the Transportation Research Board’s
+‘Highway Capacity Manual’ (2000) or the UK Highways
+Agency’s ‘Design Manual for Roads and Bridges’ (Highways Agency, 2005) and related policy guidelines, longer
+signal cycles are in effect
+
+At present, HCM’s (2010) pedestrian delay model is the
+most commonly used model to estimate pedestrian delay value at signalized intersections. The model
+is developed considering assumptions such, as uniform
+arrival rate of pedestrian, pedestrian comply with traffic
+signal, and fixed cycle length with the delay being dependent only on signal time. It is to be noted that these
+assumptions are not suitable for mixed traffic conditions
+prevailing on Indian (DANISH too) roads. \cite{Marisamynathan2018} proposes models to estimate
+pedestrian delay considering compliance to signals. 
+
+\cite{Li2010} tiene modelos para ped delays tanto en acera como cruzando
+
+% SUMO tiene Jupedsim con social force model a su vez q creo que considera eso. UPHILL OR DOWNHILL: phys models, noslapelan aki pero a considerar
+
+\section{Simulation Environments for RL-Based TSC}
+
+% pon las cosas en el repo de andrew too
+
+% Purpose: Bridge literature to your actual implementation
+
+% Include:
+
+% Why simulators are essential for RL in TSC
+
+% Comparison: SUMO vs CityFlow vs VISSIM
+
+% Prior RL-TSC studies using SUMO
+
+% Interfaces (TraCI) and implications for RL loop design
+
+% This section makes your methods feel inevitable, not arbitrary.
 
 Lorem ipsum
+
+% VER SI SUMO CONSIDERA TRAF BIDIRECCIONAL PEATS SU IMPACTO EN VELOCIDAD % SUMO tiene Jupedsim con social force model a su vez q creo que considera eso
