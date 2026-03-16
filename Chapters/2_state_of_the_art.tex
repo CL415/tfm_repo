@@ -184,6 +184,8 @@ traffic. The results for bicycles are very positive, considering the decrease of
 stops from 6 to 0 and the increase of speed from 15.1 to 20.7 km/h. The green wave for
 cyclists has also realized on three other roads (Hoegh, 2007). luego de esto muchas otras ciudades
 
+Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well \cite{Gao2021}
+
 % ===============================================================================
 \section{Reinforcement Learning for traffic signal control}
 
@@ -220,14 +222,23 @@ fonament de multiagent RL en TSC: \cite{Bakker2010}
 RL solutions WITH PEDS constrained to intersections: \cite{Wang2025} (considering large intersections with pedestrian
 two-stage crosswalks)
 
+\cite{Guo2019} muy citao, una sola intersecc y coches, sumo tho
+
+solo con una intesecc pero SUMO y CICLISTAS, deep reinf learning \cite{Magnana2024}
+
 BUENA REVIEW DE LA LIT DE RL AS OF 2024: https://academic.oup.com/iti/article/doi/10.1093/iti/liaf009/8125227?login=false
 \cite{Xiao2024}
 
+ \cite{Ault2021} paper de resco también tiene  una lista de metodos de ML aplicados a TSC, incluyendo RL específicamente
+
 Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
 
-BICIS THO????
-léete y anota
-\cite{Magnana2024}
+Dice el perplejo:
+Multimodal RL signal control in SUMO is mostly restricted to single‑intersection case studies,
+ with incomplete treatment of non‑motorized users and typically without cyclists as a separate mode.
+To the best of our knowledge, network‑level multimodal RL TSC in SUMO with simultaneous motor vehicle,
+ bicycle, and pedestrian flows calibrated from real data has not yet been demonstrated; the closest work
+  (e.g., the TKDE 2025 article you cite) does not include cyclists explicitly.
 
 \section{Modelling Pedestrians and Cyclists in Microscopic Traffic Simulation}
 
@@ -251,6 +262,8 @@ léete y anota
 % You are evaluating control policies under an established behavioral abstraction
 
 % This avoids the “why is this here?” feeling.
+
+% igual poner tras expl de SUMO, o igual mover ambas a metodos idk
 
 Traffic control systems are the most visible element of the urban
 infrastructure. They are not just physical systems like telephones or
@@ -305,6 +318,8 @@ pedestrian delay considering compliance to signals.
 
 % SUMO tiene Jupedsim con social force model a su vez q creo que considera eso. UPHILL OR DOWNHILL: phys models, noslapelan aki pero a considerar
 
+q bicis son heterogeneas (como demuestra \cite{PérezCastro2025}) y sumo no considera por defecto
+
 \section{Simulation Environments for RL-Based TSC}
 
 % pon las cosas en el repo de andrew too
@@ -324,5 +339,15 @@ pedestrian delay considering compliance to signals.
 % This section makes your methods feel inevitable, not arbitrary.
 
 Lorem ipsum
+
+Frameworks en SUMO ya hechos:
+https://github.com/flow-project/flow tocho pero creo que sin ciclistas ni peds, \cite{Wu2017} \cite{Vinitsky2018}
+idem sin ciclistas ni peds pero buena review de research, usa datos de camaras: \cite{Azfar2025}
+
+RESCO, Andrew parte de él \cite{Ault2021}, SUMO‑based benchmark suite (single and multi‑agent) with realistic, calibrated scenarios and standardized RL implementations; traffic is essentially motor vehicles only.
+This is the canonical reference for RL + SUMO benchmarks and multi‑intersection networks.
+
+
+https://github.com/LucasAlegre/sumo-rl ahí hay lista lista de papers basados en SUMO-RL (RESCO entre ellos)
 
 % VER SI SUMO CONSIDERA TRAF BIDIRECCIONAL PEATS SU IMPACTO EN VELOCIDAD % SUMO tiene Jupedsim con social force model a su vez q creo que considera eso
