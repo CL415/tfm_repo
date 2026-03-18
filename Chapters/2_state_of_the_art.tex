@@ -137,9 +137,11 @@ automata (CA) mechanism with particle swarm optimization
 method is proposed to solve traffic light scheduling problem [30]. Also, a CA-based multi-intersection model representing the evolution of the traffic network is developed to
 reduce the traffic pressure [31]
 
-Review of lit para mixed traffic flows: 2023, \cite{Majstorović2023}
+Review of lit para mixed traffic flows: 2023, \cite{Majstorović2023} mencionar de pasada y au xq mixed es vehiculos autonomos, verifica q no haya nada con peds tho
 
 qlearning algorythm en network \cite{Liu2017}
+
+pedestrians con camaras nsk creo q no es RL \cite{Raza2025}
 
 % ciclistas!
 \cite{Apostola2014}
@@ -219,19 +221,81 @@ Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well
 
 fonament de multiagent RL en TSC: \cite{Bakker2010}
 
+review lit 2021 \cite{Wei2021}
+
 RL solutions WITH PEDS constrained to intersections: \cite{Wang2025} (considering large intersections with pedestrian
 two-stage crosswalks)
 
 \cite{Guo2019} muy citao, una sola intersecc y coches, sumo tho
 
+solo una interesecc con peds \cite{Wu2020} \cite{Zhu2022} \cite{Huang2025}
+
+solo una intersecc pero primero q considera loc de peds, also peque review de research con peds so far \cite{Han2022}
+
+solo una interescc \cite{Chen2025}, \cite{Nayeri2025}, \cite{Sleiman2025}, \cite{Han2022}
+
 solo con una intesecc pero SUMO y CICLISTAS, deep reinf learning \cite{Magnana2024}
+
+solo una intersecc pero con peds, sumo y vehs autonomos \cite{Zhang2025b}
+
+2 ints solo coches pero CNN+DRL \cite{Faqir2025}
+
+idem pero con PEDS \cite{Zeng2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
 
 BUENA REVIEW DE LA LIT DE RL AS OF 2024: https://academic.oup.com/iti/article/doi/10.1093/iti/liaf009/8125227?login=false
 \cite{Xiao2024}
 
  \cite{Ault2021} paper de resco también tiene  una lista de metodos de ML aplicados a TSC, incluyendo RL específicamente
 
+Network level, monaco y grid, also interesante \cite{Chu2019}
+
 Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
+
+network level sin peds \cite{Luo2025}, \cite{Elharoun2025}
+
+grids sin peds pero considerando fairness para patas coches \cite{Liu2025d}
+idem pero citao por tener graph nsk \cite{Shang2025}
+idem pero buses no fairness tho \cite{Liu2025e}
+
+network sencillita con peds \cite{Rong2024}
+
+corredor coches y buses no peds \cite{Yu2023} y \cite{Othman2025}, solo coches \cite{Guo2023}
+
+idem china \cite{Liu2025}, also \cite{Fan2025} y \cite{Liu2025b}
+
+also networkk overcomeando movidas \cite{Du2025}
+
+corredor no peds \cite{Zhu2025}
+
+Network en seul y oversaturated conditions \cite{Lee2023}
+
+algo alternativo a RL??? \cite{Wu2025}
+
+network en grid \cite{Zhang2021}, idem y tmb es framework \cite{Jia2025}
+
+network xikita si considera peats pero con green duration nsk; also itneresante en RL \cite{Fuhao2025}
+
+network siux falls con peds \cite{Xu2022}
+
+network con peds \cite{Liu2025c}
+
+grids tochas no peds \cite{Zhang2025c}
+
+Network no peds \cite{Nie2025}
+
+corredor con demanda ped sintetica \cite{Kumarasamy2024}, leer bien y mirar citados y quienes lo citan
+
+desarrolla mas \cite{Kumarasamy2025}, idem
+
+corredor con DEMANDA PED REAL!!! \cite{Poudel2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
+
+REVIEW DE LIT EN 2025: \cite{Maheshwari2025}
+
+\cite{Wang2026} Grid en beijing, xikita, Traditional methods cannot effectively coordinate multi-intersections with different signal timing time. This has led to the introduction of a novel clock consistency mechanism the operation of which is implemented through a Multi-Agent Coordinated Reinforcement Learning (MACRL) algorithm.
+
+\cite{Huang2026} Despite its potential, the real-world application of RL-based controllers is constrained by low sample efficiency and high computational demands. To address these challenges, we propose DTLight, a simple yet powerful lightweight Decision Transformer (DT)-based offline-to-online TSC method that can learn policy from pre-collected offline datasets while maintaining the capability to refine policy with minimal online interactions.
+
+\cite{Nam2026} una sola intersecc pero muy interesante, a la vanguardia de peds rn Y ESTAO DEL ARTEEEE as of 2026666
 
 Dice el perplejo:
 Multimodal RL signal control in SUMO is mostly restricted to single‑intersection case studies,
@@ -239,6 +303,10 @@ Multimodal RL signal control in SUMO is mostly restricted to single‑intersecti
 To the best of our knowledge, network‑level multimodal RL TSC in SUMO with simultaneous motor vehicle,
  bicycle, and pedestrian flows calibrated from real data has not yet been demonstrated; the closest work
   (e.g., the TKDE 2025 article you cite) does not include cyclists explicitly.
+
+
+Ojo la ped safety: los tiempos han de permitir cruzarrr
+
 
 \section{Modelling Pedestrians and Cyclists in Microscopic Traffic Simulation}
 
@@ -345,9 +413,14 @@ https://github.com/flow-project/flow tocho pero creo que sin ciclistas ni peds, 
 idem sin ciclistas ni peds pero buena review de research, usa datos de camaras: \cite{Azfar2025}
 
 RESCO, Andrew parte de él \cite{Ault2021}, SUMO‑based benchmark suite (single and multi‑agent) with realistic, calibrated scenarios and standardized RL implementations; traffic is essentially motor vehicles only.
-This is the canonical reference for RL + SUMO benchmarks and multi‑intersection networks.
+This is the canonical reference for RL + SUMO benchmarks and multi‑intersection networks. (https://github.com/Pi-Star-Lab/RESCO)
 
 
 https://github.com/LucasAlegre/sumo-rl ahí hay lista lista de papers basados en SUMO-RL (RESCO entre ellos)
+
+
+https://github.com/EEEEEclectic/traffic_signal_control -, sin cita preparada idk, We integrate approaches like DCRNN and transformer-based models within the SUMO-RL environment and focus on capturing spatio-temporal dependencies in the traffic network via graph structures.
+
+network en grid en SUMO, tmb es framework \cite{Jia2025}
 
 % VER SI SUMO CONSIDERA TRAF BIDIRECCIONAL PEATS SU IMPACTO EN VELOCIDAD % SUMO tiene Jupedsim con social force model a su vez q creo que considera eso
