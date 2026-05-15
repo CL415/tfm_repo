@@ -5,7 +5,11 @@
 %\XeTeXinputencoding latin1
 \usepackage[utf8]{inputenc} % Support for more character glyphs
 \DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
-\usepackage[round]{natbib}\citeindextrue % Round brackets around citations, change to square for square brackets
+\usepackage{cite} % numeric citation sorting/compression
+\providecommand{\bibnumfmt}[1]{#1.}
+% Compatibility shims for documents that used natbib commands
+\providecommand{\citet}[1]{\cite{#1}}
+\providecommand{\citep}[1]{\cite{#1}}
 \usepackage{graphicx} % Required to include images
 \usepackage{color} % Required for custom colors
 \usepackage{amsmath,amssymb,theorem} % Math packages
