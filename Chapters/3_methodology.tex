@@ -49,7 +49,31 @@ The \ac{AADT} count data was converted to peak hour traffic volumes using
 
 \section{Reinforcement learning framework}
 
-Lorem ipsum
+Decir q se ha usado el framework de RESCO, explicar estados etc
+
+\subsection{Handling of vehicles and pedestrians that never reach their destination}
+
+During the different development phases, it was observed that part of the
+ vehicles and pedestrians simulated never reached their destinations, sometimes
+ simply because the simulation ended while they were on-route, but in most of
+ the cases as a result of becoming stuck due to traffic congestion.
+
+While several fixes in scenario design resulted in significant improvements in
+ this regard, a non-negligible amount of simulated persons still never reached
+ their destinations, especially when agents performed poorly or where in early
+ training stages.
+
+The reward function used by the IDQN algorithm (see tal) analyses at each step
+ the \verb|total_wait| value, and thus it quickly became monotonic as the
+ stuck vehicles kept accumulating time and thus penalising the agent for
+ failures it could no longer fix. To address this, a different reward function
+ was formulated, using the delta of the \verb|total_wait| value between steps.
+\begin{equation}
+    r_t = \text{total\_wait}_{t-1} - \text{total\_wait}_t
+\end{equation}
+
+% DEFINIR una vez tengamos bien
+
 
 \section{Definitions and architecture}
 
