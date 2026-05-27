@@ -69,10 +69,16 @@ The reward function used by the IDQN algorithm (see tal) analyses at each step
  failures it could no longer fix. To address this, a different reward function
  was formulated, using the delta of the \verb|total_wait| value between steps.
 \begin{equation}
-    r_t = \text{total\_wait}_{t-1} - \text{total\_wait}_t
+    r_t = \verb|total_wait|_{t-1} - \verb|total_wait|_t
 \end{equation}
 
 % DEFINIR una vez tengamos bien
+
+To normalize the reward values, the positive 95\% percentile of the \verb|total_wait|
+ delta values observed during the training process was chosen, along with a clipping
+ to the range $[-p, p]$, where experimentation determined 3 as the best value for $p$:
+ 
+% poner ec
 
 
 \section{Definitions and architecture}
