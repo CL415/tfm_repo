@@ -45,6 +45,8 @@ The \ac{AADT} count data was converted to peak hour traffic volumes using
 
 % decir q hemos jutnado intersecciones proximas con semaforos pareados en signal groups xq
 %  si no los modelos se volvian locos q no haboa espacio para modelar bien etc vease results de idqn en 420
+% decir q hemos diseñado fases en SUMO manualmente basadas en reales xq las por defecto volvian loco
+% a modelo; en todas, giros a dchas de bicis estan en green minor para repre como ceden paso a peats
 
 
 \section{Reinforcement learning framework}
@@ -79,6 +81,8 @@ To normalize the reward values, the positive 95\% percentile of the \verb|total_
  to the range $[-p, p]$, where experimentation determined 3 as the best value for $p$:
  
 % poner ec
+
+replay-buffer reset hook for IDQN agents and wired it to run at the start of each training episode, so the buffer clears every epoch
 
 
 \section{Definitions and architecture}
