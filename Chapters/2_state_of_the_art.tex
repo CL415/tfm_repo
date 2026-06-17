@@ -14,7 +14,7 @@
 
 \section{Traffic signal control as a multimodal problem}
 
-% X.1 Traffic Signal Control as a Multi-Modal Problem
+% =============================================================
 
 % Purpose: Frame the problem, not the solution yet
 
@@ -34,20 +34,19 @@
 
 % This creates a clean bridge to RL.
 
-As introduced in the \hyperref[sec:preface]{preface}, traffic signals were, from their inception, designed to manage
- multimodal traffic, and not just motor vehicles \cite{TrafficSignsBranch1999}. However, as motorization increased throughout
- the 20th century, traffic lights quickly centred around the needs of the automobile; once the
- first automatically timed traffic signals were installed in the 1920s, their time periods were
- set using traffic surveys, and the later development of green wave systems continued the trend. \cite{McShane1999}
+% TRADITIONAL TSC
 
-Despite remaining an anecdote, the 1931 letter of the Swedish traffic engineer Perikö af der Stykker to the
- \textit{American City Magazine} illustrates frankly the treatment of non-motorized users at the
- time. Af der Stykker, who was the traffic engineer of Stockholm, was planning to add pedestrian
- signals to the city's new traffic lights. As the latest developments in traffic signals were then
- occuring in the United States —by then, systems incorporating turn lane phases, management of reversible
- lanes or traffic activation were already in operation there \cite{McShane1999}—, af der Stykker
- asked his US colleagues if they had tried any similar solution. They had not. \cite{AC1931}
+As introduced in the \hyperref[sec:preface]{preface}, traffic signals were, from their inception, designed to manage multimodal traffic, and not just motor vehicles \cite{TrafficSignsBranch1999}. However, as motorization increased throughout the 20th century, traffic lights quickly centred around the needs of the automobile; once the first automatically timed traffic signals were installed in the 1920s, their time periods were set using traffic surveys, and the later development of green wave systems continued the trend. \cite{McShane1999}
 
+Despite remaining an anecdote, McShane \cite{McShane1999} reports a 1931 letter of a Swedish engineer to the \textit{American City Magazine} which illustrates frankly the treatment of non-motorized users at the time. The author of the missive was the traffic engineer of Stockholm, who was planning to add pedestrian signals to the city's new traffic lights. As the latest developments in traffic signals were then occuring in the United States —by then, systems incorporating turn lane phases, management of reversible  lanes or traffic activation were already in operation there \cite{McShane1999}—, the Swede asked his US colleagues if they had tried any similar solution. They had not. \cite{AC1931}
+
+% seguir con métodos clásicos
+
+% CLASSICAL TSC OBJECTIVES AND THEIR LIMITATIONS
+
+% 
+
+% SIN ORDENAR
 enlazar con lo anterior a nivel network q Vehicle delay is perhaps the most important parameter used by transportation professionals to
 evaluate the performance of signalized intersections??? o otros parámetros??? 
 
@@ -259,6 +258,8 @@ Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
 
 network level sin peds \cite{Luo2025}, \cite{Elharoun2025}
 
+idem habla usa dqn \cite{Wang2025b}
+
 grids sin peds pero considerando fairness para patas coches \cite{Liu2025d}
 idem pero citao por tener graph nsk \cite{Shang2025}
 idem pero buses no fairness tho \cite{Liu2025e}
@@ -395,10 +396,11 @@ pedestrian delay considering compliance to signals.
 
 q bicis son heterogeneas (como demuestra \cite{PérezCastro2025}) y sumo no considera por defecto
 
-han hecho para sumo el Realistic Bicycle Dynamics Model ver si usaremos al final \cite{Ostendorf2025}, viene de simra
- creo \cite{Karakaya2023}
+han hecho para sumo el Realistic Bicycle Dynamics Model ver si usaremos al final \cite{Ostendorf2025}, viene de simra \cite{Karakaya2023}
 
 \cite{Kaths2023} framework para modelar bicis en sumo, no usamos xq coste computacional y no impacta en tiempos parece ser segun autores???
+
+otro modelo no para sumo pero buena review de lit! \cite{Mukbil2025}
 
 \section{Simulation Environments for RL-Based TSC}
 
