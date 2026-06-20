@@ -18,7 +18,6 @@
 \usepackage{listings} % Required for including snippets of code
 \usepackage{booktabs} % Required for better horizontal rules in tables
 \usepackage{xspace} % Provides the ability to use an intelligent space which is used in \institution and \department
-\usepackage[printonlyused,withpage]{acronym} % Include a list of acronyms
 \usepackage{rotating} % Allows tables and figures to be rotated
 \usepackage[hypertexnames=false]{hyperref} % Required for links and changing link options
 %\usepackage{fontspec} % Required for specifying custom fonts in XeTeX
@@ -49,8 +48,8 @@
 \captionnamefont{\footnotesize}
 \captiontitlefont{\footnotesize}
 \newfixedcaption{\figcaption}{figure}
-\usepackage{glossaries}
-
+\usepackage[acronym,toc,automake]{glossaries} % glosario + acrónimos
+\newglossary{notation}{not}{ntn}{List of Notations} % Define a new glossary type for notations
 %\definecolor{c64}{rgb}{.063,0,.612} % Example color definition, the color can be used with the \color{name} command
 
 \makeatletter

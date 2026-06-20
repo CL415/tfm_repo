@@ -8,7 +8,6 @@
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-%\documentclass[12pt,letterpaper,twoside,fleqn]{memoir}
 \documentclass[12pt,a4paper,twoside,fleqn]{memoir}
 % Change font size here (allowable values are 9pt-12pt), change the paper size, specify one or two sided printing and specify whether to show trimming lines
 
@@ -31,26 +30,39 @@
 \newcommand{\department}{TBA\xspace} % Department name
 
 %------------------------------------------------
-% Fonts
-
-\renewcommand*{\acffont}[1]{{\normalsize\itshape #1}} % Font style for the acronym text (e.g. Do It Yourself)
-\renewcommand*{\acfsfont}[1]{{\normalsize\upshape #1}} % Font style for the acronym in bracket (e.g. (DIY))
-
-%------------------------------------------------
 % Hyphenations
 
 \hyphenation{} % Specify custom hyphenation points in words with dashes where you would like hyphenation to occur, or alternatively, don't put any dashes in a word to stop hyphenation altogether
 
 %------------------------------------------------
-% Glossary
+% Glossary AND acronyms
 
 \makeglossaries
+\setacronymstyle{long-short}
 
-\newglossaryentry{maths}
-{
+\newglossaryentry{gls:maths}
+{ % This entry goes in the `main' glossary (gls:),
     name=mathematics,
-    description={Mathematics is what mathematicians do}
+    description={Mathematics is what mathematicians do, ejemplo}
 }
+
+\newglossaryentry{not:set}
+{% This entry goes in the `notation' glossary:
+type={notation},
+name={\ensuremath{\mathcal{S}}},
+description={A set},
+}
+
+
+\newacronym{aadt}{AADT}{annual average daily traffic}
+\newacronym{fhwa}{FHWA}{Federal Highway Administration}
+\newacronym{tsc}{TSC}{traffic signal control}
+\newacronym{rl}{RL}{reinforcement learning}
+\newacronym{dqn}{DQN}{deep Q-network}
+
+%usar  \gls{label} para singular y \glspl{label} para plural; \Gls{} para mayúscula, o \Glspl{} para mayúscula plural
+
+
 
 %----------------------------------------------------------------------------------------
 
@@ -159,10 +171,10 @@
 \pagestyle{plain} % Reset page style for backmatter
 
 %----------------------------------------------------------------------------------------
-%	LIST OF ACRONYMS
+%	GLOSSARY AND LIST OF ACRONYMS
 %----------------------------------------------------------------------------------------
 
-\input{FrontBackMatter/acronyms} % Include the list of acronyms with page references
+\input{FrontBackMatter/acronyms} % Include the glossary and list of acronyms with page references
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
