@@ -4,15 +4,66 @@
 
 % switch between these depending on page size, or modify directly
 % same for the rest of the chapters
-\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
+\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/torci_title.png}};
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
-\clearpage 
+\clearpage
+
+
+\vspace*{100pt}
+\noindent This second chapter presents the context in which this work is framed. Bla bla bla
+
+\section{Theoretical framework}
+
+\subsection{Traffic signal control fundamentals}
+\gls{Tsc} is the term used to define the assignation of right-of-way to different traffic movements in a road network through the use of traffic signals.
+
+During the last century, \gls{tsc} has become an entire field of research within traffic engineering, with its own concepts and terminology. This section introduces some of its key concepts, with definitions to clarify their usage throughout this work.\footnote{For a deeper review of traffic engineering concepts, the interested reader may find the following works useful: \cite{Koonce2008,Sullivan2015,Urbanik2015}}
+
+\subsubsection{Intersections}
+An intersection is a point on a traffic network where two or more directions of traffic meet. These directions can reach the intersection through roads, streets or paths...
+
+An intersection is a point on a network where two or more roads or streets meet.
+
+Aquí also expl lanes y sidewalks
+
+\subsubsection{Traffic signal}
+A traffic signal is etc. They can also be known as traffic lights, stoplights or robots, and these terms are used interchangeably in this work.
+
+Aquí also expl phases, movements, stages, cycles, etc
+
+\subsubsection{Evaluation metrics}
+In \gls{tsc} research and metrics, several metrics are used to assess the performance of the systems.
+
+\begin{itemize}
+  \item \textbf{Delay}: the time lost by users due to the operation of  traffic signals.
+  \item \textbf{Travel time}: the time it takes for a person to travel from one point to another, considering the presence of traffic signals and other traffic.
+  \item \textbf{Waiting time}: the time an user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic.
+  \item \textbf{Queue length}: the number of vehicles, cyclists or pedestrians waiting at a traffic signal.
+  \item \textbf{Throughput}: the number of users that are able to pass through a certain part of the system during a defined period.
+\end{itemize}
+
+
+the most common metrics used to evaluate the performance of a traffic signal are delay, queue length, and throughput. Delay is defined as the time lost by vehicles due to the presence of a traffic signal, queue length is the number of vehicles waiting at a red light, and throughput is the number of vehicles that pass through an intersection in a given time period.
+
+\subsection{Traffic signal control as a reinforcement learning problem}
+\subsubsection{Markov decision process formulation}
+expl mejor q paper de la lit review. A \gls{mdp} is defined by the quintuple $(S,A,P,R,\gamma)$.
+
+explicar aki state, reward etc punto a punto
+
+bla bla
+
+\begin{equation}\label{eq:idqn_q}
+  L(\theta) = \mathbb{E}_{(s,a,r,s')\sim U(D)}\left[\left(r + \gamma \max_{a'} Q(s',a';\theta^-) - Q(s,a;\theta)\right)^2\right]
+\end{equation}
+
+\section{Literature review}
 
 % INVESTIGA SI HAY TRABAJOS SIMILARES EN ESPAÑITAAA O DINAMARCA
 % keremos primera letra en mayúsucula tocha etc?
 % ver si TSC se capitaliza o no
 
-\section{Traffic signal control as a multimodal problem}
+\subsection{Traffic signal control as a multimodal problem}
 
 % =============================================================
 
@@ -42,14 +93,24 @@ Despite remaining an anecdote, McShane \cite{McShane1999} reports a 1931 letter 
 
 This, however, does not mean that pedestrians and cyclists were completely ignored by engineers and planners in the realm of \acrlong{tsc}. 
 
-A year before the mentioned letter, during the US National Safety Council's Nineteenth Annual Safety Congress, engineer Ralph W. Robinson delivered a paper titled «What can we do for the pedestrian?», voicing concerns about the high fatality rates of pedestrians in traffic accidents. Among the various solutions raised —mostly dealing with policing, education and the building of infrastructure like traffic islands—, Robinson suggested using traffic signals to \textit{also} control pedestrians in central business districts. This was not a novel idea, as the engineer noted that many cities had tried that already, intending pedestrians to cross when automobile movements had a red light; this normally resulted in unendurable waits: for example, in the paper presented immediately after, J. R. Bibbins reported that New Yorkers afoot were meant to wait for two full minutes on main streets; naturally, most did not.\cite{Bibbins1930}
+A year before the mentioned letter, during the US National Safety Council's Nineteenth Annual Safety Congress, engineer Ralph W. Robinson delivered a paper titled «What can we do for the pedestrian?», voicing concerns about the high fatality rates of pedestrians in traffic accidents. Among the various solutions raised —mostly dealing with policing, education and the building of infrastructure like traffic islands—, Robinson suggested using traffic signals to \textit{also} control pedestrians in central business districts. This was not a novel idea, as the engineer noted that many cities had tried that already, intending pedestrians to cross when automobile movements had a red light; this normally resulted in unendurable waits: for example, in the paper presented immediately after, J.\/R.\/Bibbins reported that New Yorkers afoot were meant to wait for two full minutes on main streets; naturally, most did not.\cite{Bibbins1930}
 
 Robinson raised that for jaywalking not to happen and thus traffic signals also controlling pedestrians, vehicle phases should be defined such that maximum waits under normal conditions do not exceed 45 seconds, and ideally not 30. \cite{Robinson1930}; Bibbins agreed, stating that pedestrian safety was not contradictory with network efficiency. On that effect, he studied the crossing speeds of pedestrians of different characteristics and proposed a methodology for designing pedestrian phases based on these speeds and street geometry, suggesting as well the installation of the dedicated pedestrian signals his Swedish colleague inquired about. \cite{Bibbins1930}
 
-Over time, the concept of minimum crossing time became a standard for \gls{tsc} systems, and this is the kind of regard for the pedestrian that can be found in the literature of the time, and pedestrian-specific signals became widespread. \gls{tsc}
+Over time, the concept of minimum crossing time became a standard for \gls{tsc} systems and pedestrian-specific signals became widespread. Still, the design of the phases themselves focused on vehicle delays, assigning fixed times for the pedestrian phases exogenously. The Webster's method \cite{Webster1957} that became widely used to define fixed time signals did only mention pedestrian phases as part of the calculations for estimating «lost time», its popular successor TRANSYT \cite{Robertson1969} only considered vehicular flows;\footnote{The latest version of TRANSYT, with a significant usage at the time of writing, still completely disregards pedestrian and cyclist flows on its optimization process. \cite{Transyt2025}} and the paper describing the SCOOT method \cite{Robertson1991}, one of the most popular adaptive \gls{tsc} systems nowadays, does not even mention pedestrians, let alone cyclists.\footnote{It should be noted that the latest versions of the SCOOT software do provide functionalities regarding pedestrians and cyclists.\cite{Scoot2020}}
+
+While scarce, some research on traffic signals that considered other modes besides motor vehicles remained scarce was already performed in those early stages of the art. In 1966, Bailey \cite{Bailey1966} concluded that the long signal cycles that resulted from the vehicle-based optimization methods of the time have negative effects on pedestrian movements. Griffiths \textit{et al}. \cite{Griffiths1976} studied control methods at pedestrian crossings based on the relative values of time of different modes, including pedestrians.
+
+% ========================
+
+
+
+
+Precisely, SCOOT is one of the \gls{tsc} systems on which the inclusion of pedestrians was studied. \cite{Hunt1991} demonstrated that conventional SCOOT resulted in significantly higher pedestrian delays than previous solutions, but also that SCOOT could be modified to consider pedestrians in its optimization and result in lower delays for all the road users.
+
+decir q eso es malardo por lo q la motivacion dice etc
 % menconar los clasicos aki
 
-traffic islands, and educ programs, also ped control in cbdss \cite{Bibbins1930} 
 
 % seguir con métodos clásicos
 
@@ -64,17 +125,6 @@ evaluate the performance of signalized intersections??? o otros parámetros???
 Noland has shown that focusing only on motorvehicle ﬂows may not lead to economically optimal solutions whenpedestrian delay is also accounted for (\cite{Noland1996}). For some trips, the traveltime delay costs associated with walking may reduce the likelihoodthat people will choose to walk.
 
 diciendo q research focus en coxes, de ahi pasamos a multimodal
-
-Network optimisation has traditionally been approached
-as a problem of vehicle flow optimisation. The various
-approaches developed for optimisation of signal-controlled
-intersections are no exception. Webster’s (\cite{Webster1957}) and other
-numerous methods that have since been formulated for
-optimisation of signalised intersections perform stage- or
-phase-based optimisation for conflicting streams of vehicle
-flows but assign fixed times to the pedestrian phase
-exogenously, not taking into account pedestrian flows
-and delays.
 
 Only a few research studies have considered pedestrian
 travel cost as a constituent of the criteria for design of
@@ -201,7 +251,7 @@ cyclists has also realized on three other roads (Hoegh, 2007). luego de esto muc
 Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well \cite{Gao2021}
 
 % ===============================================================================
-\section{Reinforcement Learning for traffic signal control}
+\subsection{Reinforcement learning for multimodal traffic signal control}
 
 % Purpose: Introduce the control paradigm you adopt
 
@@ -230,6 +280,12 @@ Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well
 % Now SUMO and behavior models enter naturally.
 
 % funamentos de RL y luego aplicaciones en TSC
+
+% ===============================================================================
+
+Significant research has been conducted on the usage of reinforcement learning for traffic signal control in the last 25 years. 
+
+USAR LA REVIEW TOCHA 
 
 fonament de multiagent RL en TSC: \cite{Bakker2010}
 
@@ -327,7 +383,7 @@ Ojo la ped safety: los tiempos han de permitir cruzarrr
 
 comparacion de metodos en sumo: \cite{Louw2022}
 
-\section{Modelling Pedestrians and Cyclists in Microscopic Traffic Simulation}
+\subsection{Modelling Pedestrians and Cyclists in Microscopic Traffic Simulation}
 
 
 % Purpose: Justify your modeling assumptions, not reinvent them
@@ -413,7 +469,7 @@ han hecho para sumo el Realistic Bicycle Dynamics Model ver si usaremos al final
 
 otro modelo no para sumo pero buena review de lit! \cite{Mukbil2025}
 
-\section{Simulation Environments for RL-Based TSC}
+\subsection{Simulation Environments for RL-Based TSC}
 
 % pon las cosas en el repo de andrew too
 

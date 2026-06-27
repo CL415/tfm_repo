@@ -18,6 +18,19 @@ Lorem ipsum
 
 Lorem ipsum
 
+% sobre optimizar pa intereseccs sueltas:
+40Chapter2:TRANSYT-7FApplicationsTRANSYT-7FUsersGuide
+the cycle length should be long enough to facilitate traffic progression. This constraint often requires a
+background cycle length that is somewhat higher than the cycle lengths that would minimize delay at the
+individual intersections.
+
+% en j1 hay un mov siempre verde; la bici recta on top de 01.02
+Does FRAP's competition-graph structure even make sense for an always-on movement?
+
+You hit this directly with — a movement that's never gated by phase choice doesn't fit FRAP's "mutually competing phase pairs" assumption at all.
+That's a structural question, not just an implementation detail: is forcing always-on movements into the same embedding space as competing ones actually doing anything useful, or is it dead weight the network learns to ignore? You could test this by literally zeroing that embedding's gradient and checking if performance changes.
+
+
 \section{Limitations of the study}
 
 Lorem ipsum
