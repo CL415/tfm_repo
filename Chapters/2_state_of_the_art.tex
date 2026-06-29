@@ -10,17 +10,20 @@
 
 
 \vspace*{100pt}
-\noindent This second chapter presents the context in which this work is framed. Bla bla bla
+\noindent This second chapter presents the context in which this work is framed. Bla bla bla \gls{tsc} \gls{rltsc}
 
 \section{Theoretical framework}
 
 \subsection{Traffic signal control fundamentals}
-\gls{Tsc} is the term used to define the assignation of right-of-way to different traffic movements in a road network through the use of traffic signals.
+\Acrlong{tsc} is the term used to define the assignation of right-of-way to different traffic movements in a road network through the use of traffic signals.
 
 During the last century, \gls{tsc} has become an entire field of research within traffic engineering, with its own concepts and terminology. This section introduces some of its key concepts, with definitions to clarify their usage throughout this work.\footnote{For a deeper review of traffic engineering concepts, the interested reader may find the following works useful: \cite{Koonce2008,Sullivan2015,Urbanik2015}}
 
 \subsubsection{Intersections}
-An intersection is a point on a traffic network where two or more directions of traffic meet. These directions can reach the intersection through roads, streets or paths...
+An intersection is a point on a traffic network where two or more flows of traffic meet. These flows are carried by roads, streets, bike lanes, pedestrian paths and other types of lineal infrastructure, which are called in the context of the intersection as \textit{approaches}, or \textit{legs}.
+
+% igual dibujito aki?
+
 
 An intersection is a point on a network where two or more roads or streets meet.
 
@@ -31,27 +34,74 @@ A traffic signal is etc. They can also be known as traffic lights, stoplights or
 
 Aquí also expl phases, movements, stages, cycles, etc
 
-\subsubsection{Evaluation metrics}
-In \gls{tsc} research and metrics, several metrics are used to assess the performance of the systems.
+\subsubsection{Evaluation metrics} \label{subsubsec:eval_metrics}
+In \gls{tsc} research and metrics, several metrics are used to assess the performance of the systems. Trying to describe mathematically the optimization of a system as complex as a traffic network is a difficult endeavour. Any function chosen will unavoidably be a crude simplification, with its inherent trade-offs and limitations. Because of that, several metrics have been used historically, alone or combined, as evaluation metrics:
+
 
 \begin{itemize}
-  \item \textbf{Delay}: the time lost by users due to the operation of  traffic signals.
-  \item \textbf{Travel time}: the time it takes for a person to travel from one point to another, considering the presence of traffic signals and other traffic.
-  \item \textbf{Waiting time}: the time an user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic.
+  \item \textbf{Delay}: the time difference between the observed and expected travel time of a vehicle, hence the time lost by users due to the operation of the traffic signal system or the congestion resulting from it. It requires an estimation model of the expected travel times.
+  \item \textbf{Travel time}: the time it takes for a person to travel from one point to another, considering the presence of traffic signals and other traffic. While easy to measure, it cannot distinguish if the time spent in the network is trip-related or congestion-related.
+  \item \textbf{Waiting time}: the time a user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic.
   \item \textbf{Queue length}: the number of vehicles, cyclists or pedestrians waiting at a traffic signal.
   \item \textbf{Throughput}: the number of users that are able to pass through a certain part of the system during a defined period.
+  \item \textbf{Speed}: the average speed of users in a certain part of the system during a defined period.
 \end{itemize}
 
+% =============================================================================
+\subsection{Traffic signal control as a reinforcement learning problem}\label{subsec:TSC_as_a_RL_problem}
+% igual mover tras ppio state of the art?
+\Acrlong{rl} models the interaction between an \textit{agent} and an \textit{environment}. The agent has an objective, which it aims to maximize by acting on the environment. However, the agent has no initial knowledge of how its different actions will affect its goal in relation to the current state of the environment. To overcome this, the agent tests multiple actions by trial-and-error so it can learn which ones are best suited to maximize its objective.
 
-the most common metrics used to evaluate the performance of a traffic signal are delay, queue length, and throughput. Delay is defined as the time lost by vehicles due to the presence of a traffic signal, queue length is the number of vehicles waiting at a red light, and throughput is the number of vehicles that pass through an intersection in a given time period.
+A reinforcement learning model is composed of three parts. The interactions between the agent and its environment are modelled with a \textit{decision process}; the agent learns from these repeated interactions via a \textit{learning algorithm} and chooses the actions to apply to the environment using a \textit{policy}.
 
-\subsection{Traffic signal control as a reinforcement learning problem}
+These elements can be adapted to model the \gls{tsc} problem, where the agent is the traffic signal controller, the environment is the traffic network, and the objective is to optimize the performance of the system.
+
+For a further understanding of these concepts in the context of \gls{rltsc} and specific examples in the literature, the reader can consult the surveys performed by \cite[Tréca]{Treca2022}, \cite[Koohy \textit{et al.}]{Koohy2022}, \cite[Majstorović \textit{et al.}]{Majstorović2023}, \cite[Xiao \textit{et al.}]{Xiao2024} or  \cite[Maheshwari \textit{et al.}]{Maheshwari2025}, which have informed the present work. \label{reviews a consultar}
+
 \subsubsection{Markov decision process formulation}
-expl mejor q paper de la lit review. A \gls{mdp} is defined by the quintuple $(S,A,P,R,\gamma)$.
+A \gls{mdp} is a mathematical model for sequential decision-making that aims to maximize a global objective function $F$ in a given environment. A \gls{mdp} is defined by the quadruple $(S,A,T,R)$, where $S$ and $A$ are the state and action spaces, and $T$ and $R$ are the transition and reward functions, respectively.\cite{Bellman1957}
+
+In the realm of \gls{rltsc}, the \gls{mdp} is used to define the decision process that models the interactions between the traffic signal control system and the traffic network.
+
+\begin{enumerate}
+    \item[] \textbf{Objective function $F$}
+    The objective function $F$ is the global function that the \gls{mdp} aims to maximize.
+       
+    
+    \item[] \textbf{State space $S$}
+    
+    A state $s$ is a representation of the environment at a given time step, which can be defined by a set of features that describe the relevant aspects of the environment for the agent's decision-making process. The space $S$ corresponds to the set of all possible states of the environment, thus $s \in S$.
+
+    In the context of \gls{tsc}, the state $S$ captures the current traffic conditions at an intersection. The most common definition in the literature is the number of vehicles on each lane of the intersection approaches. Other definitions include real-time image and video data, phase indicators, vehicle position and velocity grids, vehicle dynamics or their GPS trajectories.
+
+    \item[] \textbf{Action space $A$} 
+    
+    Similarly, an action $a \in A$ is a representation of the possible decisions that the agent can take at a given time step; and the space $A$ corresponds to the set of all possible actions that the agent can take.
+    
+    Naturally, as \gls{rltsc} controls traffic via signals, the action spaces of its methods are centered on phase control.
+
+    Most of the works in the art define the action space either as \textit{cyclic}, where phases transition sequentially along a predefined cycle, with actions determining each phase length; \textit{acyclic}, where the agent can choose any of the predefined phases in fixed selection intervals; and \textit{hybrid}, which combines discrete phase selection with continuous control over their duration.
+  
+    \item[] \textbf{Transition function $T$}
+    
+    $T$ defines the probability of transitioning from one state to another given an action.
+    
+    \item[] \textbf{Reward function $R$} $R$ defines the immediate reward received after taking an action in a particular state and transitioning to a new state.
+\end{enumerate}
+
+
 
 explicar aki state, reward etc punto a punto
 
-bla bla
+\subsubsection{Learning algorithm}
+As was explained in section \ref{subsec:TSC_as_a_RL_problem}, the agent learns from its interactions with the environment by trial-and-error and aims in this way to maximize the cumulative reward. However, it cannot simply try all available actions $a \in A$ and stick with the highest-rewarding ones, as the reward received after taking an action also depends on the current state of the environment and its effects are not immediately observable. The role of the learning algorithm is to estimate the quality of each action in relation to the state of the environment, so then its policy can choose the best action to take based on these estimates.
+
+sobre tsc
+
+\subsubsection{Agent policy}
+The policy is the agent's strategy for choosing actions based on the estimates that the learning algorithm provides. To perform its function, the policy must balance exploration and exploitation: it must explore the environment to learn properly about the effects of its actions, but it must also exploit its knowledge to maximize its objective. This presents a dilemma, as the agent must explore to learn, but doing so may result in lower rewards than exploiting its current knowledge. The policy is the agent's strategy for balancing these two objectives.
+
+
 
 \begin{equation}\label{eq:idqn_q}
   L(\theta) = \mathbb{E}_{(s,a,r,s')\sim U(D)}\left[\left(r + \gamma \max_{a'} Q(s',a';\theta^-) - Q(s,a;\theta)\right)^2\right]
@@ -310,7 +360,7 @@ solo una intersecc pero con peds, sumo y vehs autonomos \cite{Zhang2025b}
 
 idem pero con PEDS \cite{Zeng2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
 
-BUENA REVIEW DE LA LIT DE RL AS OF 2024: https://academic.oup.com/iti/article/doi/10.1093/iti/liaf009/8125227?login=false
+BUENA REVIEW DE LA LIT DE RL AS OF 2024: 
 \cite{Xiao2024}
 
  \cite{Ault2021} paper de resco también tiene  una lista de metodos de ML aplicados a TSC, incluyendo RL específicamente
