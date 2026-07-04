@@ -17,7 +17,7 @@
 \subsection{Traffic signal control fundamentals}
 \Acrlong{tsc} is the term used to define the assignation of right-of-way to different traffic movements in a road network through the use of traffic signals.
 
-During the last century, \gls{tsc} has become an entire field of research within traffic engineering, with its own concepts and terminology. This section introduces some of its key concepts, with definitions to clarify their usage throughout this work.\footnote{For a deeper review of traffic engineering concepts, the interested reader may find the following works useful: \cite{Koonce2008,Sullivan2015,Urbanik2015}}
+During the last century, \gls{tsc} has become an entire field of research within traffic engineering, with its own concepts and terminology. This section introduces some of its key concepts, with definitions to clarify their usage throughout this work.\footnote{For a deeper review of traffic engineering concepts in relationship with traffic signal control, the interested reader may find the following works useful: \cite{Koonce2008,Sullivan2015,Urbanik2015}}
 
 \subsubsection{Intersections}
 An intersection is a point on a traffic network where two or more flows of traffic meet. These flows are carried by roads, streets, bike lanes, pedestrian paths and other types of lineal infrastructure, which are called in the context of the intersection as \textit{approaches}, or \textit{legs}.
@@ -35,16 +35,16 @@ A traffic signal is etc. They can also be known as traffic lights, stoplights or
 Aquí also expl phases, movements, stages, cycles, etc
 
 \subsubsection{Evaluation metrics} \label{subsubsec:eval_metrics}
-In \gls{tsc} research and metrics, several metrics are used to assess the performance of the systems. Trying to describe mathematically the optimization of a system as complex as a traffic network is a difficult endeavour. Any function chosen will unavoidably be a crude simplification, with its inherent trade-offs and limitations. Because of that, several metrics have been used historically, alone or combined, as evaluation metrics:
+In \gls{tsc} research, several metrics are used to assess the performance of the systems. Trying to describe mathematically the optimization of a system as complex as a traffic network is a difficult endeavour. Any metric chosen will unavoidably be a crude simplification, with its inherent compromises and limitations. Because of that, several measures have been used historically, alone or combined, as evaluation metrics. Among the most common, we can find the following:
 
 
 \begin{itemize}
   \item \textbf{Delay}: the time difference between the observed and expected travel time of a vehicle, hence the time lost by users due to the operation of the traffic signal system or the congestion resulting from it. It requires an estimation model of the expected travel times.
   \item \textbf{Travel time}: the time it takes for a person to travel from one point to another, considering the presence of traffic signals and other traffic. While easy to measure, it cannot distinguish if the time spent in the network is trip-related or congestion-related.
-  \item \textbf{Waiting time}: the time a user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic.
-  \item \textbf{Queue length}: the number of vehicles, cyclists or pedestrians waiting at a traffic signal.
-  \item \textbf{Throughput}: the number of users that are able to pass through a certain part of the system during a defined period.
-  \item \textbf{Speed}: the average speed of users in a certain part of the system during a defined period.
+  \item \textbf{Waiting time}: the time a user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic. Albeit it provides information before the users reach their destination and is easy to measure in simulation software, it requires complex sensing systems to be measured in the field.
+  \item \textbf{Queue length}: the number of vehicles, cyclists or pedestrians waiting at a traffic signal. Similarly to waiting time, it can provide information before ends of trips, but its measuring can be challenging for non-vehicular users.
+  \item \textbf{Throughput}: the number of users that are able to pass through a certain part of the system during a defined period. An alternative congestion metric to queue length, which can be easier to measure but cannot provide as much information about the users that wait.
+  \item \textbf{Speed}: the average speed of users in a certain part of the system during a defined period. Useful for prioritizing smoothness or uniformness, but only provides a limited view of the system's performance.
 \end{itemize}
 
 % =============================================================================
@@ -58,15 +58,17 @@ These elements can be adapted to model the \gls{tsc} problem, where the agent is
 
 For a further understanding of these concepts in the context of \gls{rltsc} and specific examples in the literature, the reader can consult the surveys performed by \cite[Tréca]{Treca2022}, \cite[Koohy \textit{et al.}]{Koohy2022}, \cite[Majstorović \textit{et al.}]{Majstorović2023}, \cite[Xiao \textit{et al.}]{Xiao2024} or  \cite[Maheshwari \textit{et al.}]{Maheshwari2025}, which have informed the present work. \label{reviews a consultar}
 
-\subsubsection{Markov decision process formulation}
-A \gls{mdp} is a mathematical model for sequential decision-making that aims to maximize a global objective function $F$ in a given environment. A \gls{mdp} is defined by the quadruple $(S,A,T,R)$, where $S$ and $A$ are the state and action spaces, and $T$ and $R$ are the transition and reward functions, respectively.\cite{Bellman1957}
+\subsubsection{The Markov decision process}
+In \gls{rl}, the decision process is modelled as a \gls{mdp}, a mathematical model for sequential decision-making that aims to maximize a global objective function $F$ in a given environment. A \gls{mdp} is defined by the quadruple $(S,A,T,R)$, where $S$ and $A$ are the state and action spaces, and $T$ and $R$ are the transition and reward functions, respectively.\cite{Bellman1957}
 
 In the realm of \gls{rltsc}, the \gls{mdp} is used to define the decision process that models the interactions between the traffic signal control system and the traffic network.
 
 \begin{enumerate}
     \item[] \textbf{Objective function $F$}
-    The objective function $F$ is the global function that the \gls{mdp} aims to maximize.
-       
+    
+    The objective function $F$ is the global function that the \gls{mdp} aims to maximize. As a mathematical representation of the agent's goal, its definition will also determine the solutions that the agent will learn to achieve.
+
+    In \gls{rltsc}, the objective function is normally chosen to optimize one or several of the metrics listed in section \ref{subsubsec:eval_metrics}, being temporal, congestion and speed metrics the most commonly used. The choice of the objective function is a crucial design decision, as some of these metrics are not always aligned with each other, especially when introducing in the system other modes of transport.
     
     \item[] \textbf{State space $S$}
     
@@ -86,22 +88,31 @@ In the realm of \gls{rltsc}, the \gls{mdp} is used to define the decision proces
     
     $T$ defines the probability of transitioning from one state to another given an action.
     
-    \item[] \textbf{Reward function $R$} $R$ defines the immediate reward received after taking an action in a particular state and transitioning to a new state.
+    \item[] \textbf{Reward function $R$}
+    
+    $R$ defines the immediate reward received after taking an action in a particular state and transitioning to a new state. This is used by the agent as feedback on its learning process towards maximizing the global objective.
+    
+    Hence, the reward function is closely related to the objective function, and thus in \gls{rltsc} it is also usually defined in terms of the metrics listed in section \ref{subsubsec:eval_metrics}. The most common definitions are based on delay, waiting time, queue lengths, or  combinations of them. As with the objective function, its design is also of certain trascendence and any choices will come with their inherent trade-offs and shortcomings.
+
+
 \end{enumerate}
 
-
-
-explicar aki state, reward etc punto a punto
-
 \subsubsection{Learning algorithm}
-As was explained in section \ref{subsec:TSC_as_a_RL_problem}, the agent learns from its interactions with the environment by trial-and-error and aims in this way to maximize the cumulative reward. However, it cannot simply try all available actions $a \in A$ and stick with the highest-rewarding ones, as the reward received after taking an action also depends on the current state of the environment and its effects are not immediately observable. The role of the learning algorithm is to estimate the quality of each action in relation to the state of the environment, so then its policy can choose the best action to take based on these estimates.
+As was explained in section \ref{subsec:TSC_as_a_RL_problem}, the agent learns from its interactions with the environment by trial-and-error and aims in this way to maximize the cumulative reward. However, it cannot simply try all available actions $a \in A$ and stick with the highest-rewarding ones, as the reward received after taking an action also depends on the current state of the environment and its effects are not immediately observable. The role of the learning algorithm is to estimate the relative value of state and of state-action couples using a value $V$ and quality $Q$ function, respectively, 
+so then its policy can choose the best action to take based on these estimates.
 
-sobre tsc
+While a great number of learning techniques have been employed for traffic optimization, such as linear automata, fuzzy logic and classifier systems or model-based reinforcement learning, the most widely used learning algorithms in \gls{rltsc} are Q-learning and its variants, both on single-agent and multi-agent settings.
 
 \subsubsection{Agent policy}
 The policy is the agent's strategy for choosing actions based on the estimates that the learning algorithm provides. To perform its function, the policy must balance exploration and exploitation: it must explore the environment to learn properly about the effects of its actions, but it must also exploit its knowledge to maximize its objective. This presents a dilemma, as the agent must explore to learn, but doing so may result in lower rewards than exploiting its current knowledge. The policy is the agent's strategy for balancing these two objectives.
 
+In \gls{rltsc}, the usual approach is to use an $\varepsilon$-greedy policy, where the agent chooses the action between the highest estimated value with probability $1-\varepsilon$ or a random action with probability $\varepsilon$ otherwise. This allows the agent to explore the environment while still exploiting its current knowledge. As this assigns the same probability to desirable and undesirable actions, it is also usual to use decaying $\varepsilon$ values, or to combine the $\varepsilon$-greedy policy with a \textit{softmax} one, which assigns a probability weight to all actions of the action space derived from their estimated values and a temperature setting.
 
+\subsection{Reinforcement learning agents} %?
+
+
+
+primer paper con q learning: \cite{Abdulhai2003}
 
 \begin{equation}\label{eq:idqn_q}
   L(\theta) = \mathbb{E}_{(s,a,r,s')\sim U(D)}\left[\left(r + \gamma \max_{a'} Q(s',a';\theta^-) - Q(s,a;\theta)\right)^2\right]
@@ -113,7 +124,7 @@ The policy is the agent's strategy for choosing actions based on the estimates t
 % keremos primera letra en mayúsucula tocha etc?
 % ver si TSC se capitaliza o no
 
-\subsection{Traffic signal control as a multimodal problem}
+\subsection{Background on multimodal traffic signal control}
 
 % =============================================================
 
@@ -143,11 +154,13 @@ Despite remaining an anecdote, McShane \cite{McShane1999} reports a 1931 letter 
 
 This, however, does not mean that pedestrians and cyclists were completely ignored by engineers and planners in the realm of \acrlong{tsc}. 
 
-A year before the mentioned letter, during the US National Safety Council's Nineteenth Annual Safety Congress, engineer Ralph W. Robinson delivered a paper titled «What can we do for the pedestrian?», voicing concerns about the high fatality rates of pedestrians in traffic accidents. Among the various solutions raised —mostly dealing with policing, education and the building of infrastructure like traffic islands—, Robinson suggested using traffic signals to \textit{also} control pedestrians in central business districts. This was not a novel idea, as the engineer noted that many cities had tried that already, intending pedestrians to cross when automobile movements had a red light; this normally resulted in unendurable waits: for example, in the paper presented immediately after, J.\/R.\/Bibbins reported that New Yorkers afoot were meant to wait for two full minutes on main streets; naturally, most did not.\cite{Bibbins1930}
+A year before the mentioned letter, during the US National Safety Council's Nineteenth Annual Safety Congress, engineer Ralph W. Robinson delivered a paper titled «What can we do for the pedestrian?», voicing concerns about the high fatality rates of pedestrians in traffic accidents. Among the various solutions raised —mostly dealing with policing, education and the building of infrastructure like traffic islands—, Robinson suggested using traffic signals to \textit{also} control pedestrians in central business districts. This was not a novel idea, nevertheless as the engineer noted that many cities had tried that already, intending pedestrians to cross when automobile movements had a red light. However, this normally resulted in unendurable waits: for example, in the paper presented immediately after, J.\/R.\/Bibbins reported that New Yorkers afoot were meant to wait for two full minutes on main streets; naturally, most did not.\cite{Bibbins1930}
 
 Robinson raised that for jaywalking not to happen and thus traffic signals also controlling pedestrians, vehicle phases should be defined such that maximum waits under normal conditions do not exceed 45 seconds, and ideally not 30. \cite{Robinson1930}; Bibbins agreed, stating that pedestrian safety was not contradictory with network efficiency. On that effect, he studied the crossing speeds of pedestrians of different characteristics and proposed a methodology for designing pedestrian phases based on these speeds and street geometry, suggesting as well the installation of the dedicated pedestrian signals his Swedish colleague inquired about. \cite{Bibbins1930}
 
 Over time, the concept of minimum crossing time became a standard for \gls{tsc} systems and pedestrian-specific signals became widespread. Still, the design of the phases themselves focused on vehicle delays, assigning fixed times for the pedestrian phases exogenously. The Webster's method \cite{Webster1957} that became widely used to define fixed time signals did only mention pedestrian phases as part of the calculations for estimating «lost time», its popular successor TRANSYT \cite{Robertson1969} only considered vehicular flows;\footnote{The latest version of TRANSYT, with a significant usage at the time of writing, still completely disregards pedestrian and cyclist flows on its optimization process. \cite{Transyt2025}} and the paper describing the SCOOT method \cite{Robertson1991}, one of the most popular adaptive \gls{tsc} systems nowadays, does not even mention pedestrians, let alone cyclists.\footnote{It should be noted that the latest versions of the SCOOT software do provide functionalities regarding pedestrians and cyclists.\cite{Scoot2020}}
+
+Also SCATS Sydney  \cite{Sims1980}
 
 While scarce, some research on traffic signals that considered other modes besides motor vehicles remained scarce was already performed in those early stages of the art. In 1966, Bailey \cite{Bailey1966} concluded that the long signal cycles that resulted from the vehicle-based optimization methods of the time have negative effects on pedestrian movements. Griffiths \textit{et al}. \cite{Griffiths1976} studied control methods at pedestrian crossings based on the relative values of time of different modes, including pedestrians.
 
@@ -333,7 +346,12 @@ Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well
 
 %===============================================================================
 
-Significant research has been conducted on the usage of reinforcement learning for traffic signal control in the last 25 years. 
+In 1994 
+\cite{Mikami1994}
+\cite{Cao1999} \cite{text}{Wiering2000}
+Significant research has been conducted on the usage of reinforcement learning for traffic signal control since the first works were published.
+
+decir q en los tres primeros papers no se mencionan peds
 
 USAR LA REVIEW TOCHA 
 
