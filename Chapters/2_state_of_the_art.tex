@@ -158,18 +158,25 @@ A year before the mentioned letter, during the US National Safety Council's Nine
 
 Robinson raised that for jaywalking not to happen and thus traffic signals also controlling pedestrians, vehicle phases should be defined such that maximum waits under normal conditions do not exceed 45 seconds, and ideally not 30. \cite{Robinson1930}; Bibbins agreed, stating that pedestrian safety was not contradictory with network efficiency. On that effect, he studied the crossing speeds of pedestrians of different characteristics and proposed a methodology for designing pedestrian phases based on these speeds and street geometry, suggesting as well the installation of the dedicated pedestrian signals his Swedish colleague inquired about. \cite{Bibbins1930}
 
-Over time, the concept of minimum crossing time became a standard for \gls{tsc} systems and pedestrian-specific signals became widespread. Still, the design of the phases themselves focused on vehicle delays, assigning fixed times for the pedestrian phases exogenously. The Webster's method \cite{Webster1957} that became widely used to define fixed time signals did only mention pedestrian phases as part of the calculations for estimating «lost time», its popular successor TRANSYT \cite{Robertson1969} only considered vehicular flows;\footnote{The latest version of TRANSYT, with a significant usage at the time of writing, still completely disregards pedestrian and cyclist flows on its optimization process. \cite{Transyt2025}} and the paper describing the SCOOT method \cite{Robertson1991}, one of the most popular adaptive \gls{tsc} systems nowadays, does not even mention pedestrians, let alone cyclists.\footnote{It should be noted that the latest versions of the SCOOT software do provide functionalities regarding pedestrians and cyclists.\cite{Scoot2020}}
+Over time, the concept of minimum crossing time became a standard for \gls{tsc} systems and pedestrian-specific signals became widespread. Still, the design of the phases themselves focused on vehicle delays, assigning fixed times for the pedestrian phases exogenously. The Webster's method \cite{Webster1957} that became widely used to define fixed time signals did only mention pedestrian phases as part of the calculations for estimating «lost time», and its popular successor TRANSYT \cite{Robertson1969} only considered vehicular flows;\footnote{The latest version of TRANSYT, with a significant usage at the time of writing, still completely disregards pedestrian and cyclist flows on its optimization process. \cite{Transyt2025}}.
 
-Also SCATS Sydney  \cite{Sims1980}
+While scarce, some research on traffic signals that considered other modes besides motor vehicles was already performed in those early stages of the art. 
+For example, in 1966, Bayley \cite{Bayley1966} concluded that the long signal cycles that resulted from the vehicle-based optimization methods of the time have negative effects on pedestrian movements; or in 1976, Griffiths \textit{et al}. \cite{Griffiths1976} studied control methods at pedestrian crossings basing on the relative values of time of different modes, including pedestrians.
 
-While scarce, some research on traffic signals that considered other modes besides motor vehicles remained scarce was already performed in those early stages of the art. In 1966, Bailey \cite{Bailey1966} concluded that the long signal cycles that resulted from the vehicle-based optimization methods of the time have negative effects on pedestrian movements. Griffiths \textit{et al}. \cite{Griffiths1976} studied control methods at pedestrian crossings based on the relative values of time of different modes, including pedestrians.
+Advances on computation in the last decades of the 20th century allowed for more complex optimization methods to be applied to \gls{tsc}, and the development of \gls{atcs} like SCATS \cite{Sims1980} and SCOOT \cite{Robertson1991} allowed for real-time optimization of traffic signals. However, these systems —which are widely popular today— were still primarily focused on vehicle flows: SCATS considered pedestrians only on crossing timing constraints, while the paper describing the SCOOT method does not even mention pedestrians, let alone cyclists.\footnote{It should be noted that the latest versions of the SCOOT software do provide functionalities regarding pedestrians and cyclists.\cite{Scoot2020}}
+
+Despite being developed with car traffic in mind, \gls{atcs} also allow for the inclusion of other modes of transport in their optimization process, and soon research and implementations on real cities followed. 
+
+The mentioned SCOOT system became almost since its conception a valuable tool for handling multimodal traffic. It was the system chosen by the authorities of Beijing to deal with the large car and bike volumes in the city during the mid 1980s, installing loop detectors for both modes and using weighing functions to incorporate cyclists in the standard SCOOT model \cite[text]{Wood1988}, a similar solution was developed for York, in the United Kingdom and more cities have adopted comparable systems ever since. \cite{Clark2002} Regarding pedestrian control, SCOOT has also been studied as a feasible system. Hunt \textit{et al.} \cite{Hunt1991} demonstrated that conventional SCOOT resulted in significantly higher pedestrian delays than previous solutions, but also that SCOOT could be modified to consider pedestrians in its optimization and result in lower delays for all the road users.
+
+The usage of \gls{atcs} has also made much easier the implementation of green waves not only catered for cars. Odense in Denmark, in 2002, became the first of many cities worldwide which have created green waves specifically for bicycles.\cite{Apostola2014} Copenhagen authorities were able to increase average speeds from 15.1 to 20.7\,km/h when they implemented one along the busy Nørrebrogade, and they extended the system to more thoroughfares in the following years. Similar benefits have been reported in Amsterdam and San Francisco, and cities like Rotterdam even implemented lights that indicate cyclists the speed to follow in order to take the most advantage of the green wave. Interestingly, in Graz, Austria, the green waves do not only cater to cyclists but also to pedestrians, enabling both modes to have a probability of 70\% for not having to wait at all for crossing the road. While green waves for cyclists —-and in a smaller quantity for pedestrians— have become more common nowadays, their implementation still poses challenges, as non-motorized modes have wider speed distributions than cars, and their operation can also be in conflict with the most optimal vehicle flows.\cite{Apostola2014}
+
+and similar benefits have been reported in Amsterdam, San Francisco, Rotterdam, Graz
+
+\cite{Apostola2014} optimiz coches y bicis as a multiobjective minimization problem
 
 % ========================
 
-
-
-
-Precisely, SCOOT is one of the \gls{tsc} systems on which the inclusion of pedestrians was studied. \cite{Hunt1991} demonstrated that conventional SCOOT resulted in significantly higher pedestrian delays than previous solutions, but also that SCOOT could be modified to consider pedestrians in its optimization and result in lower delays for all the road users.
 
 decir q eso es malardo por lo q la motivacion dice etc
 % menconar los clasicos aki
@@ -202,7 +209,6 @@ such as in urban centres
 q mayoria trabajos que consideran peats pero en intersecciones concretas, no a nivel de red, y que no consideran ciclistas ni tampoco la variabilidad de los peats,
  y que además no usan RL sino optimización tradicional, o fuzzy logic (justificar xq eso no sirve para lo nuestor)
 
- Previous works have been done to dynamically control adaptive traffic lights. But due to the limited computing power and simulation tools, early studies focus on solving the problem by fuzzy logic [19], linear programming [20], etc. In these works, road traffic is modeled by limited information, which cannot be applied in large scale.
  
 % ES AUTOMATED TSC?
  OBJS NO TRADICIONALES: vilarinho y also incorpora peds \cite{Vilarinho2017}
@@ -269,47 +275,6 @@ qlearning algorythm en network \cite{Liu2017}
 pedestrians con camaras nsk creo q no es RL \cite{Raza2025}
 
 % ciclistas!
-\cite{Apostola2014}
-During the mid 1980’s, in Beijing, in China, the increased traffic volumes lead the
-authorities to implement an urban traffic and control system in a section of the city. The
-11
-CHAPTER 2. STATE-OF-THE-ART
-chosen system was the SCOOT traffic control system (Split Cycle Offset Optimization
-Technique). The system takes into account the cyclists traveling along a link, by detecting
-them with a loop detector, which is located a short distance from the stop line. The team
-established a composite measure of bicycle flow and occupancy called a Bicycle Link Profile
-Unit (BLPU) which was capable of aggregation with the normal SCOOT Link Profile Unit
-(LPU). This enabled the bicycle link to be incorporated into the standard SCOOT model
-in the same manner as other links. Weighting functions are then available to advantage
-or disadvantage the bicycle traffic stream relative to the motorized traffic stream 
-
-A European example is the historic city of York in the UK. Within York the level of commuting by
-cycles is high at 19% of trips and the level of congestion on the roads has resulted in the
-deployment of much urban traffic control infrastructure. The local authority has a package of
-techniques and expertise which it can use in the appropriate circumstances. One techniques is “tailend biasing” where the offsets at the ends of greens are co-ordinated to provide for slower modes
-such as buses and cyclists. Another technique is the use of SCOOT detectors in cycle loops and
-“dummy” SCOOT loops which shadow existing SCOOT links. Increasingly use is made of
-microwave detectors mounted on signal heads which are able to accurately detect cyclists if they
-are travelling at 10km/h (6.25 mph) or more.
-
-Green waves, also en apostola: The world’s first green wave for cyclists was created in Odense, in Denmark. Along a
-bicycle route 45 low poles have been placed between two intersections, over a distance of
-some 350 meters, each provided with a light. The lights turn green one after the other, at
-an interval of some seconds. Following the timing of the lights, the cyclist has the right
-speed for a green wave. However, the problem is that cyclists have widely varying cruising
-speeds (Andersen, 2013).
-In the autumn of 2006 a green wave for cyclists has been realized on Norrebrogade, in
-Copenhagen, by the local authorities. The green wave affects 12 traffic lights over a stretch
-of road of over 2 km. The idea is that if the bicyclist rides 20 km/h, he will hit green lights
-the whole way into the city center. The traffic lights are coordinated during the morning
-rush hour between 6 : 00 - 10 : 00/12 : 00 (depending on the route) and then the wave
-reverses so the lights are coordinated in the opposite direction between 12 : 00/15 : 00 -
-18 : 00 for the trip home. Norrebrogade is a major route for both motorized and bicycle
-13
-CHAPTER 2. STATE-OF-THE-ART
-traffic. The results for bicycles are very positive, considering the decrease of number of
-stops from 6 to 0 and the increase of speed from 15.1 to 20.7 km/h. The green wave for
-cyclists has also realized on three other roads (Hoegh, 2007). luego de esto muchas otras ciudades
 
 Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well \cite{Gao2021}
 
@@ -348,7 +313,7 @@ Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well
 
 In 1994 
 \cite{Mikami1994}
-\cite{Cao1999} \cite{text}{Wiering2000}
+\cite{Cao1999, Wiering2000}
 Significant research has been conducted on the usage of reinforcement learning for traffic signal control since the first works were published.
 
 decir q en los tres primeros papers no se mencionan peds

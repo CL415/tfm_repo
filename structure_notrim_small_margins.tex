@@ -48,7 +48,8 @@
 \captionnamefont{\footnotesize}
 \captiontitlefont{\footnotesize}
 \newfixedcaption{\figcaption}{figure}
-\usepackage[acronym,toc,automake]{glossaries} % glosario + acrónimos
+\usepackage[acronym,automake]{glossaries} % glosario + acrónimos
+\expandafter\def\csname AC@undonewlabel\endcsname#1{}
 \newglossary{notation}{not}{ntn}{List of Notations} % Define a new glossary type for notations
 %\definecolor{c64}{rgb}{.063,0,.612} % Example color definition, the color can be used with the \color{name} command
 
