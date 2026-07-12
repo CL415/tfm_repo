@@ -31,7 +31,23 @@ You hit this directly with — a movement that's never gated by phase choice doe
 That's a structural question, not just an implementation detail: is forcing always-on movements into the same embedding space as competing ones actually doing anything useful, or is it dead weight the network learns to ignore? You could test this by literally zeroing that embedding's gradient and checking if performance changes.
 
 
+sobre usar pressure peds en fases no activas as queue en grafs:
+ if two different phase-pairs serve overlapping pedestrian groups, excluding only the currently active one won't stop double-counting across the other, still-unserved pairs. This fix addresses "currently being served shouldn't count as waiting" but not cross-pair overlap.
+
 \section{Limitations of the study}
+
+% del wahlstedt pero aplicable aki
+Both Utopia/Spot and ImFlow need additional loopdetectors, placed at different locations in both systems, and at
+least ImFlow also requires other signal controller hardware
+than currently existing in the studied signal system. This
+would have required substantial costs in a field test, costs
+which were saved with the simulation approach.
+However, a simulation environment can never capture the
+whole of reality and the impacts of irregularities as parking
+cars, irregular vehicle movement at detector loops, detector
+errors and communication problems etc. which are not
+captured in the simulations. Field tests are necessary to
+confirm the positive simulation results.
 
 Lorem ipsum
 Lorem ipsum
