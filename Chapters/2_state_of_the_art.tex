@@ -62,7 +62,7 @@ Aquí also expl phases, movements, stages, cycles, green waves etc
 In \gls{tsc} research, several metrics are used to assess the performance of the systems. Trying to describe mathematically the optimization of a system as complex as a traffic network is a difficult endeavour, for any metric chosen will unavoidably be a crude simplification, with its inherent compromises and limitations. Because of that, several measures have been used historically, alone or combined, as evaluation metrics. Among the most common,\footnote{The list has been compiled during the literature review that can be found in the homonymous section that follows, at page \pageref{sec:lit_review}.} we can find the following:
 
 \begin{itemize}
-  \item \textbf{Delay}: the time difference between the observed and expected travel time of a vehicle, hence the time lost by users due to the operation of the traffic signal system or the congestion resulting from it. It requires an estimation model of the expected travel times.
+  \item \textbf{Delay}: the time difference between the observed and expected travel time of an user, hence the time lost by users due to the operation of the traffic signal system or the congestion resulting from it. It requires an estimation model of the expected travel times.
   \item \textbf{Travel time}: the time it takes for a person to travel from one point to another, considering the presence of traffic signals and other traffic. While easy to measure, it cannot distinguish if the time spent in the network is trip-related or congestion-related.
   \item \textbf{Waiting time}: the time a user remains stationary or moving at very slow speeds as a result of traffic signals or the presence of other traffic. Albeit it provides information before the users reach their destination and is easy to measure in simulation software, it requires complex sensing systems to be measured in the field.
   \item \textbf{Queue length}: the number of vehicles, cyclists or pedestrians waiting at a traffic signal. Similarly to waiting time, it can provide information before ends of trips, but its measuring can be challenging for non-vehicular users.
@@ -207,9 +207,9 @@ What Robinson put forward in order to make pedestrian traffic signal control a r
 While scarce, some research on traffic signals that considered other modes besides motor vehicles was already performed in those early stages of the art. 
 For example, in 1966, Bayley \cite{Bayley1966} concluded that the long signal cycles that resulted from the vehicle-based optimization methods of the time have negative effects on pedestrian movements; or in 1976, Griffiths \textit{et al}. \cite{Griffiths1976} studied control methods at zebra crossings basing on the relative values of time of different modes, including pedestrians.
 
-Advances on computation in the last decades of the 20th century allowed for more complex optimization methods to be applied to \gls{tsc}, and the development of \gls{atcs} like SCATS in 1980 \cite{Sims1980}, SCOOT in 1981 \cite{Robertson1991}, PRODYN in 1983 \cite{Henry1983}, UTOPIA in 1993 \cite{Mauro1990} or ImFlow in 2013 \cite{Imflow} allowed for real-time optimization of traffic signals. Instead of relying on a set of fixed phases, \glspl{atcs} can adapt their length continuously to the current conditions in the network by using sensors that relay traffic information to a central controller, which then optimizes the signal timings.
+Advances on computation in the last decades of the 20th century allowed for more complex optimization methods to be applied to \gls{tsc}, and the development of \gls{atcs} like SCATS in 1980 \cite{Sims1980}, SCOOT in 1981 \cite{Robertson1991}, PRODYN in 1983 \cite{Henry1983}, UTOPIA in 1993 \cite{Mauro1990}, RHODES in 1998 \cite{Mirchandani2001} or ImFlow in 2013 \cite{Imflow} allowed for real-time optimization of traffic signals. Instead of relying on a set of fixed phases, \glspl{atcs} can adapt their length continuously to the current conditions in the network by using sensors that relay traffic information to a central controller, which then optimizes the signal timings.
 
-However, these systems —some of which are widely popular today— were still primarily focused on vehicle flows: SCATS considered pedestrians only on crossing timing constraints, while the paper describing the SCOOT or PRODYN methods does not even mention pedestrians, let alone cyclists; finally, UTOPIA is focused in public transport instead but did not consider people afoot or biking either. On the other hand, methods developed more recently, like ImFlow, did consider other road users on their definition since the beginning, although their usage is more limited in practice \cite{Wahlstedt2013}.
+However, these systems —some of which are widely popular today— were still primarily focused on vehicle flows: SCATS considered pedestrians only on crossing timing constraints, while the papers describing the SCOOT, PRODYN or RHODES methods does not even mention pedestrians, let alone cyclists; finally, UTOPIA is focused in public transport instead but did not consider people afoot or biking either. On the other hand, methods developed more recently, like ImFlow, did consider other road users on their definition since the beginning, although their usage is more limited in practice \cite{Wahlstedt2013}.
 
 \medskip
 
@@ -243,10 +243,19 @@ These works, and their successors, would not only result in improvements for sub
 
 \medskip
 
-\noindent Research during the 2010s in the field of \gls{tsc} increasingly became focused on new approaches enabled by advances in computing, like decentralized mathematical control, mixed-integer programming,\footnote{Despite being out of the scope of this thesis, a growing body of research exists on the application of mixed-integer programming methods for multimodal \gls{tsc}. For specific example, the inquisitive reader can examine the review of the state in the art performed by Xu \textit{et al.} \cite{Xu2024}.} or \acrfull{rl}. The latter is the focus of the next section, \ref{subsec:rlformtsc}, which provides a general review of the current state of the art of \gls{rltsc} with an accent on multimodal traffic.
+\noindent Research during the 2010s in the field of \gls{tsc} increasingly became focused on new approaches enabled by advances in computing, like decentralized mathematical control, mixed-integer programming,\footnote{
+  Despite being out of the scope of this thesis, a growing body of research exists on the application of mixed-integer programming methods for multimodal \gls{tsc}. For specific examples, the inquisitive reader can examine the review of the state in the art performed by Xu \textit{et al.} in \cite{Xu2024}.
+  }
+multi-agent systems,\footnote{
+  Similarly, the work of Vilarinho \textit{et al.} \cite{Vilarinho2017} can be a good starting point to consult applications of multi-agent systems to multimodal \gls{tsc}.
+  }
+genetic algorithms\footnote{
+  For more about the application of genetic algorithms to multimodal \gls{tsc}, it is worth mentioning the pioneering 2009 work of Turky \textit{et al.} \cite{Turky2009} as a relevant onset for further research.
+  }
+or \acrfull{rl}. The latter is the focus of the next section, \ref{subsec:rlformtsc}, which provides a general review of the current state of the art of \gls{rltsc} with an accent on multimodal traffic.
 
 \label{par:maxpressure}
-Among the many developments on decentralized control algorithms, which continue to this day, it is worth mentioning the work of Varaiya in 2013 \cite{Varaiya2013}, who proposed the Max Pressure control method. Taking advantage from the backpressure algorithm used in communication networks, Varaiya suggested a decentralized method that uses local car queue information along with turn ratios to obtain a phase pressure, which then is used to select the phase with the highest pressure. Max Pressure is able in this way to optimize \gls{tsc} for car throughput without requiring demand data. While its application to the field has its caveats, the method has ever since become a topic of research —by itself or in combination with other methods—, and a baseline for many subsequent works, especially in those of \gls{rltsc}.
+Among the many developments on decentralized control algorithms, which continue to this day, it is worth mentioning the work of Varaiya in 2013 \cite{Varaiya2013}, who proposed the Max Pressure control method. Taking advantage from the backpressure algorithm used in communication networks, Varaiya suggested a decentralized method that uses local car queue information along with turn ratios to obtain a phase pressure, which then is used to select the phase with the highest pressure. Max Pressure is able in this way to optimize \gls{tsc} for car throughput without requiring demand data. While its application to the field has its caveats, the method has ever since become a topic of research —by itself or in combination with other methods—, and a baseline for many subsequent works, especially for those of \gls{rltsc}.
 
 Max Pressure has also been extended for multimodal traffic, specifically, for pedestrians. Chen \textit{et al.} \cite{Chen2020b} extended the method to include pedestrians for the first time in 2020, while Xu \textit{et al.} \cite{Xu2024} proposed further improvements by designing dynamic queueing models for both pedestrians and cars, developing a conflict region constructor and testing their method in the Sioux Falls network in the VISSIM simulator. A similar approach, albeit with a different architecture, was taken by Liu \textit{et al.} \cite{Liu2024}, which evaluated their method on a grid network using the SUMO simulator. Overall, the mentioned papers showed that Max Pressure can be extended to multimodal traffic, but also that the design of the method is not trivial and requires significant investments in sensors and data collection for it to be a feasible solution in practice.
 
@@ -289,67 +298,101 @@ This first work, as the ones that would follow on the development of \gls{rltsc}
 
 \medskip
 
-Developments in the realm of \gls{rltsc} sped up with the new century, with several foundational works being published in its first decades.
+\noindent Developments in the realm of \gls{rltsc} sped up with the new century, with several foundational works being published in its first decades.
 
 Wiering published in the year 2000 the first model-based \gls{rl} for traffic signal control \cite{Wiering2000}. The model featured both intersections and vehicles as learning agents, aiming to minimize vehicular waiting time, relaying destinations and waiting time for vehicles, and congestion information for intersections. However, their model did not consider the coordination between intersections, which could result in agents selecting phases locally optimal but globally inefficient.
 
-To address this issue, Kuyer \textit{et al.} \cite{Kuyer2008} extended in 2008 the work of Wiering with the usage of coordination graphs and global optimization with max-plus algorithms. In their model, each intersection was an agent that learned to optimize its own traffic flow while staying coordinated with neighbouring intersections to improve overall network performance. The authors tested their model on a series of grid networks with up to 15 intersections, using the Green Light District traffic simulator, and found that their model outperformed the previous one by Wiering in terms of average vehicle waiting time.
+Another pioneering work was that of Abdulhai \textit{et al.} in 2003 \cite{Abdulhai2003}, the first to apply Q-learning to traffic signal control, the learning algorithm that would become predominant in ulterior research. Their paper was focused on a single intersection, optimizing for car delay.
 
-Another pioneering work was that of Abdulhai \textit{et al.} in 2003, the first to apply Q-learning to traffic signal control \cite{Abdulhai2003}, the learning algorithm that would become predominant in ulterior research. Their paper was focused on a single intersection, optimizing for car delay.
+To address the issues identified in Wiering's work, Kuyer \textit{et al.} \cite{Kuyer2008} extended in 2008 the previous implementation with the usage of coordination graphs and global optimization with max-plus algorithms, becoming an essential work in \acrfull{marl} for \gls{tsc}. In their model, each intersection was an agent that learned to optimize its own traffic flow while staying coordinated with neighbouring intersections to improve overall network performance. The authors tested their model on a series of grid networks with up to 15 intersections, using the Green Light District traffic simulator, and found that their model outperformed the previous one by Wiering in terms of average vehicle waiting time.
 
-\cite{Kuyer2008}
-% El-Tantawy 2010/2013, Brys 2014, Wei/CoLight 2019, PressLight 2019, Vinitsky/Flow 2018) as the historical backbone, then read the 2023–2025 papers on LLMs, offline RL, and interpretability (Lai 2023, Da 2024b, Cai 2025, Yuan 2025, Gu 2024b) since that's where the field is currently heading according to both reviews' "future directions" sections.
+This research would later be broadened by Bakker \textit{et al.} \cite{Bakker2010}, who proposed a series of improvements to the model, including the usage of congestion information from neighbouring intersections or the handling of partial observability of traffic states to align better with practical implementations.
 
+A different approach was that presented by Balaji \textit{et al.} \cite{Balaji2010}, which used a distributed multi-agent system that applied an agent communication protocol for signal coordination and online Q-learning for fine-tuning agent parameters. Their model was tested on a simulation of the street network of the Singapore central business district with real car traffic data, outperforming the GLIDE \gls{atcs} system —a local version of SCATS— deployed in the city at the time and other contemporary multi-agent architectures.
 
-fonament de multiagent RL en TSC: \cite{Bakker2010}
+One more work that pushed \gls{marl} further is the system proposed by El-Tantawy \textit{et al.} \cite{El-Tantawy2013}, MARLIN-ATSC. While the previous research was able to coordinate multiple intersections effectively, this process does not scale well, suffering from the curse of dimensionality as the number of intersections increases. MARLIN-ATSC adressed this problem by using the model-free Q-learning algorithm modularly, with agents only considering the interaction with its immediate neighbours and not the entire network and splitting the space state into each couple of neighbouring agents, so that its size is always $|{S}|^2$ regardless of the number of intersections. The authors tested their model on a simulation of the Toronto, Canada downtown area in the Paramics traffic simulator, with 59 intersections and real traffic data, and found that it offered better car delay and travel time results than the existing systems used in the city at the time.
 
-review lit 2021 \cite{Wei2021}
+The first work that applied deep \gls{rl} to \gls{marl} \gls{tsc} was the paper presented by van der Pol and Oliehoek in the year 2016 \cite{vanderPol2016}. The authors proposed the usage of the then novel \gls{dqn} algorithm along with a max-plus coordination algorithm as a scalable solution for multi-intersection \gls{tsc}. Their model was tested in simple corridors and networks in the SUMO traffic simulator, outperforming the method of Kuyer \textit{et al.} \cite{Kuyer2008}, however, the researchers noted the high oscillations that \gls{dqn} exhibited.
 
-RL solutions WITH PEDS constrained to intersections: \cite{Wang2025} (considering large intersections with pedestrian
-two-stage crosswalks)
+\medskip
+
+\noindent While \gls{rltsc} research developed significantly in the first decades of the 2000s, as the previous paragraphs show, it was still focused on a single mode: the automobile.
+
+It would not be until 2017 that the first work that considers multimodal traffic in a \gls{rltsc} context was published, with the work of Liu \textit{et al.} \cite{Liu2017}. 
+
+qlearning algorythm en network \cite{Liu2017}
+
+Vinitsky, Kreidieh et al. (2018) — Flow: first standard benchmark suite for deep RL in mixed-autonomy micro-simulated traffic.
+Torabi, Wenkstern y Saylor (2018) — MATISSE 3.0; largest realistic simulated multi-agent traffic network published to date.
+Xu, Zheng, Xu, Zhu y Li (2019) — First work targeting sim-to-real transfer for RL-TSC.
+Wei, Xu, Zhang, Zheng, Zang, Chen et al. (2019) — CoLight: graph attentional network for network-level cooperation (extremely influential); first RL-NTSC with GAN and hundreds of signals.
+Wei, Chen, Zheng, Wu, Gayah, Xu et al. (2019) — PressLight: max-pressure-based coordination achieving automatic arterial coordination.
+
 
 \cite{Guo2019} muy citao, una sola intersecc y coches, sumo tho
 
-solo una interesecc con peds \cite{Wu2020} \cite{Zhu2022} \cite{Huang2025}
+also single one pero famoso \cite{Liang2019}
 
-solo una intersecc pero primero q considera loc de peds, also peque review de research con peds so far \cite{Han2022}
-
-solo una interescc \cite{Chen2025}, \cite{Nayeri2025}, \cite{Sleiman2025}, \cite{Han2022}
-
-solo con una intesecc pero SUMO y CICLISTAS, deep reinf learning \cite{Magnana2024}
-
-solo una intersecc pero con peds, sumo y vehs autonomos \cite{Zhang2025b}
-
-2 ints solo coches pero CNN+DRL \cite{Faqir2025}
-
-idem pero con PEDS \cite{Zeng2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
-
-BUENA REVIEW DE LA LIT DE RL AS OF 2024: 
-\cite{Xiao2024}
-
- \cite{Ault2021} paper de resco también tiene  una lista de metodos de ML aplicados a TSC, incluyendo RL específicamente
+ Network level, monaco y grid, also interesante \cite{Chu2019}
 
 Network NY MPLight \cite{Chen2020}
 
 IDQN \cite{Ault2020}
 
-decir q eso es malardo por lo q la motivacion dice etc
-% menconar los clasicos aki
+Rashid et al. (2020) — QMIX (foundational MARL algorithm widely reused in later TSC work).
+
+corredor solo coches \cite{Guo2023}
+corredor coches y buses no peds \cite{Yu2023}
+Network en seul y oversaturated conditions \cite{Lee2023}
+
+Lai, Xu et al. (2023) — First systematic use of LLMs as TSC decision agents (chain-of-thought reasoning).
+Da, Mei et al. (2024b) — LLM-based sim-to-real prompt-transfer framework for RL-TSC.
+Yuan, Lai y Liu (2025) — CoLMLight: cooperative LLM-agent framework for network-wide TSC coordination.
+
+\cite{Huang2024} y desarrollado en \cite{Huang2026}, networks default, Despite its potential, the real-world application of RL-based controllers is constrained by low sample efficiency and high computational demands. To address these challenges, we propose DTLight, a simple yet powerful lightweight Decision Transformer (DT)-based offline-to-online TSC method that can learn policy from pre-collected offline datasets while maintaining the capability to refine policy with minimal online interactions.
+
+Du, Wang et al. (2024) — FELight: fairness-aware RL-TSC balancing equity and efficiency.
+Gu, Zhu et al. (2024b) — pi-Light: interpretable programmatic policies via domain-specific language + MCTS.
+Cai, Fang y Xu (2025) — XLight: interpretable MARL with provable reward–travel-time equivalence.
+
+2 ints solo coches pero CNN+DRL \cite{Faqir2025}
+
+network level sin peds \cite{Luo2025}, \cite{Elharoun2025}
+
+Network no peds \cite{Nie2025}
+network en grid en SUMO, tmb es framework \cite{Jia2025}
+
+network level sin peds habla usa dqn \cite{Wang2025b}
+
+grids sin peds pero considerando fairness para patas coches \cite{Liu2025d}
+grids sin peds citao por tener graph nsk \cite{Shang2025}
+grids sin peds buses no fairness tho \cite{Liu2025e}
+also networkk overcomeando movidas \cite{Du2025}
+
+corredor coches y buses no peds \cite{Othman2025}
+corredor china \cite{Liu2025}, also \cite{Fan2025} y \cite{Liu2025b}
+corredor no peds \cite{Zhu2025}
+algo alternativo a RL??? \cite{Wu2025}
+grids tochas no peds \cite{Zhang2025c}
+
+\cite{Wang2026} Grid en beijing, xikita, Traditional methods cannot effectively coordinate multi-intersections with different signal timing time. This has led to the introduction of a novel clock consistency mechanism the operation of which is implemented through a Multi-Agent Coordinated Reinforcement Learning (MACRL) algorithm.
 
 
-% seguir con métodos clásicos
+obvs menciona a compis
 
-% CLASSICAL TSC OBJECTIVES AND THEIR LIMITATIONS
+review lit 2021 \cite{Wei2021}
+BUENA REVIEW DE LA LIT DE RL AS OF 2024: 
+\cite{Xiao2024}
+Review of lit para mixed traffic flows: 2023, \cite{Majstorović2023} mencionar de pasada y au xq mixed es vehiculos autonomos, verifica q no haya nada con peds tho
+REVIEW DE LIT EN 2025: \cite{Maheshwari2025}
 
-% 
+% MULTIMODALLL ==========================================
 
-% SIN ORDENAR
-
+network con peds \cite{Liu2017}
  
-% ES AUTOMATED TSC?
- OBJS NO TRADICIONALES: vilarinho y also incorpora peds \cite{Vilarinho2017}
+\cite{Zhang2018} usa meta-heuristics con discrete
+harmony search (DHS) algorithm en red en cuadrícula considerando peds
 
-% peds en interseccs concretas
 Other studies \cite{Zhang2018} [21], [22] also sought
 to minimize a combination of vehicle and pedestrian delays.
 Beyond optimizing traffic efficiency, traffic safety also attract
@@ -357,134 +400,65 @@ researchers’ attention. Ma et al. [23] minimized total monetary costs that inc
 pedestrian/vehicle conflicts. Considering the allotted pedestrian clearance time may fail to clear the crosswalk, which
 will increase the probability of pedestrian-vehicle exposures,
 Zhang et al. [24] introduced an additional dynamic all red
-phase to balance traffic efficiency and safety
-also single one pero famoso \cite{Liang2019}
+phase to balance traffic efficiency and safety?
 
-SUMO \cite{Akyol2019}
+SUMO y peds \cite{Akyol2019}
 
-% nivel network
-
-\cite{Zhang2018} usa meta-heuristics con discrete
-harmony search (DHS) algorithm en red en cuadrícula considerando peds
-
-The artificial intelligence methods have also been applied
-on adaptive traffic signal control. Signal controllers using reinforcement learning approaches are developed via the networkwide multi-agent coordination and the relationship between
-actions, states and environment [24], [25]. Although no prespecified traffic model is required, the exponential growth of
-the state-action space with the increase of the agents may
-fail to efficiently solve the problem. Neural network (NN)
-is another technique that has been employed for signal controllers. A fuzzy NN system is formulated via the simultaneous
-perturbation stochastic approximation (SPSA) algorithm to
-update the weight online [26]. Chao et al. [27] proposed
-an intelligent traffic light control strategy based on extension neural network theory (ENN) for isolated intersection.
-However, NN-based methods need to consider appropriate
-number of layers and neurons, also, they are not easily
-adjustable when new traffic situation occurs. Moreover, fuzzy
-logic (FL) is adopted in traffic signal control to mimic
-human thinking or experts’ knowledge when the mathematical
-model is very difficult to formulate [28], [29]. The cellular
-automata (CA) mechanism with particle swarm optimization
-method is proposed to solve traffic light scheduling problem [30]. Also, a CA-based multi-intersection model representing the evolution of the traffic network is developed to
-reduce the traffic pressure [31]
-
-Review of lit para mixed traffic flows: 2023, \cite{Majstorović2023} mencionar de pasada y au xq mixed es vehiculos autonomos, verifica q no haya nada con peds tho
-
-qlearning algorythm en network \cite{Liu2017}
-
-pedestrians con camaras nsk creo q no es RL \cite{Raza2025}
-
-% ciclistas!
+solo una interesecc con peds \cite{Wu2020}
 
 Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well \cite{Gao2021}
 
-
- Network level, monaco y grid, also interesante \cite{Chu2019}
-
-Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
-
-network level sin peds \cite{Luo2025}, \cite{Elharoun2025}
-
-idem habla usa dqn \cite{Wang2025b}
-
-grids sin peds pero considerando fairness para patas coches \cite{Liu2025d}
-idem pero citao por tener graph nsk \cite{Shang2025}
-idem pero buses no fairness tho \cite{Liu2025e}
-
-network sencillita con peds \cite{Rong2024}
-
-corredor coches y buses no peds \cite{Yu2023} y \cite{Othman2025}, solo coches \cite{Guo2023}
-
-idem china \cite{Liu2025}, also \cite{Fan2025} y \cite{Liu2025b}
-
-also networkk overcomeando movidas \cite{Du2025}
-
-corredor no peds \cite{Zhu2025}
-
-Network en seul y oversaturated conditions \cite{Lee2023}
-
-algo alternativo a RL??? \cite{Wu2025}
-
 network en grid \cite{Zhang2021}, idem y tmb es framework \cite{Jia2025}
-
-network xikita si considera peats pero con green duration nsk; also itneresante en RL \cite{Fuhao2025}
+Network level e interesante: \cite{Zhang2025} (en vd es de 2021)
 
 network siux falls con peds \cite{Xu2022}
 
-network con peds \cite{Liu2017}
+comparacion de metodos en sumo: \cite{Louw2022}
 
-grids tochas no peds \cite{Zhang2025c}
+solo una interesecc con peds \cite{Zhu2022} 
 
-Network no peds \cite{Nie2025}
+solo una interescc con peds \cite{Han2022}
+
+solo una intersecc pero primero q considera loc de peds, also peque review de research con peds so far \cite{Han2022}
+
+solo con una intesecc pero SUMO y CICLISTAS, deep reinf learning \cite{Magnana2024}
 
 corredor con demanda ped sintetica \cite{Kumarasamy2024}, leer bien y mirar citados y quienes lo citan
-
 desarrolla mas \cite{Kumarasamy2025}, idem
+
+network sencillita con peds \cite{Rong2024}
+
+solo una interesecc con peds \cite{Huang2025}
+
+solo una interescc con peds \cite{Chen2025}
+solo una interescc con peds \cite{Nayeri2025}
+solo una interescc con peds \cite{Sleiman2025}
+
+RL solutions WITH PEDS constrained to intersections: \cite{Wang2025} (considering large intersections with pedestrian
+two-stage crosswalks)
+
+solo una intersecc pero con peds, sumo y vehs autonomos \cite{Zhang2025b}
+
+network xikita si considera peats pero con green duration nsk; also itneresante en RL \cite{Fuhao2025}
+
+ PEDS \cite{Zeng2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
+
+pedestrians con camaras nsk creo q no es RL \cite{Raza2025}
 
 corredor con DEMANDA PED REAL!!! \cite{Poudel2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
 
-REVIEW DE LIT EN 2025: \cite{Maheshwari2025}
-
-\cite{Wang2026} Grid en beijing, xikita, Traditional methods cannot effectively coordinate multi-intersections with different signal timing time. This has led to the introduction of a novel clock consistency mechanism the operation of which is implemented through a Multi-Agent Coordinated Reinforcement Learning (MACRL) algorithm.
-
-\cite{Huang2024} y desarrollado en \cite{Huang2026}, networks default, Despite its potential, the real-world application of RL-based controllers is constrained by low sample efficiency and high computational demands. To address these challenges, we propose DTLight, a simple yet powerful lightweight Decision Transformer (DT)-based offline-to-online TSC method that can learn policy from pre-collected offline datasets while maintaining the capability to refine policy with minimal online interactions.
-
 \cite{Nam2026} una sola intersecc pero muy interesante, a la vanguardia de peds rn Y ESTAO DEL ARTEEEE as of 2026666
 
-Dice el perplejo:
-Multimodal RL signal control in SUMO is mostly restricted to single‑intersection case studies,
- with incomplete treatment of non‑motorized users and typically without cyclists as a separate mode.
-To the best of our knowledge, network‑level multimodal RL TSC in SUMO with simultaneous motor vehicle,
- bicycle, and pedestrian flows calibrated from real data has not yet been demonstrated; the closest work
-  (e.g., the TKDE 2025 article you cite) does not include cyclists explicitly.
+% ORDEN asta aki
+% SIN ORDENAR
+
 
 
 Ojo la ped safety: los tiempos han de permitir cruzarrr
 
-comparacion de metodos en sumo: \cite{Louw2022}
-
+% ===========================================================================
 \subsection{Pedestrians and cyclists in microscopic traffic simulation} \label{subsec:modelpedsandcyclists}
 
-
-% Purpose: Justify your modeling assumptions, not reinvent them
-
-% Focus on:
-
-% Why explicit modeling of pedestrians/cyclists matters for RL rewards and constraints
-
-% Overview (not derivation) of pedestrian and bicycle models
-
-% SUMO’s pedestrian model (e.g., based on social force concepts)
-
-% Known limitations and abstractions in SUMO
-
-% Important framing:
-
-% You are not proposing new behavior models
-
-% You are evaluating control policies under an established behavioral abstraction
-
-% This avoids the “why is this here?” feeling.
-
-% igual poner tras expl de SUMO, o igual mover ambas a metodos idk
 
 Traffic control systems are the most visible element of the urban
 infrastructure. They are not just physical systems like telephones or
@@ -556,7 +530,9 @@ consider the effects of pedestrian demand and crosswalk width on pedestrian cros
 However when pedestrian demand increases at both sides of the crosswalk, crossing time
 increases due to the interaction between conflicting pedestrian flows.
 
-\subsection{Simulation Environments for RL-Based TSC}
+paramics simulator?
+
+\subsection{Simulation environments for RL-TSC}
 
 % pon las cosas en el repo de andrew too
 
@@ -579,7 +555,7 @@ Lorem ipsum
 Frameworks en SUMO ya hechos:
 https://github.com/flow-project/flow tocho pero creo que sin ciclistas ni peds, \cite{Wu2017} \cite{Vinitsky2018}
 idem sin ciclistas ni peds pero buena review de research, usa datos de camaras: \cite{Azfar2025}
-
+\cite{Ault2021} paper de resco también tiene  una lista de metodos de ML aplicados a TSC, incluyendo RL específicamente
 RESCO, Andrew parte de él \cite{Ault2021}, SUMO‑based benchmark suite (single and multi‑agent) with realistic, calibrated scenarios and standardized RL implementations; traffic is essentially motor vehicles only.
 This is the canonical reference for RL + SUMO benchmarks and multi‑intersection networks. (https://github.com/Pi-Star-Lab/RESCO)
 
