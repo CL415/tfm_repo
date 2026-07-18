@@ -14,31 +14,31 @@ Lorem ipsum
 
 \subsection{Traffic simulator}
 
-The simulation software chosen is the SUMO traffic simulator \cite{AlvarezLopez2018}, which is a microscopic and continuous traffic simulator that allows for the simulation of multimodal networks. As a microscopic simulator, SUMO models the behaviour of individual vehicles and pedestrians, allowing for a detailed representation of traffic dynamics by the combination of a variety of specific vehicle and traffic models.
+The simulation software chosen is the SUMO traffic simulator~\cite{AlvarezLopez2018}, which is a microscopic and continuous traffic simulator that allows for the simulation of multimodal networks. As a microscopic simulator, SUMO models the behaviour of individual vehicles and pedestrians, allowing for a detailed representation of traffic dynamics by the combination of a variety of specific vehicle and traffic models.
 
-The choice for using SUMO as the simulation environment was mainly motivated by its usage on the reinforcement learning framework that this work builds upon and which is detailed in Section \ref{sec:reinforcement_learning_framework}; however, several other reasons support this selection.
+The choice for using SUMO as the simulation environment was mainly motivated by its usage on the reinforcement learning framework that this work builds upon and which is detailed in Section~\ref{sec:reinforcement_learning_framework}; however, several other reasons support this selection.
 
 Firstly, SUMO is open source software, which allows for a better understanding of its inner workings and provides the possibility to modify it freely to adapt it to our needs. This open source nature enables on one hand that the works of the research community can easily be incorporated to it, like advanced vehicle dynamics models or additional scenarios; while it also offers great flexibility for integration with other tools. The latter feature is particularly relevant, as SUMO offers a Python API, the \gls{traci}, which can be used to communicate with a running simulation process.
 
 Besides its possibilites for integration, SUMO also offers many utilities designed to process simulation inputs and outputs, such as traffic demand or simulation logs. This allows for a more efficient development of the simulation scenarios and the analysis of the results.
 
-Finally, SUMO is a well-established traffic simulator, which has been used in a wide range of research studies and applications, making it a reliable and trusted tool for traffic simulation. Its possibilites have made it the most popular choice in the \gls{rltsc} literature, as shown by the different literature reviews examined in this work, and its usage is increasing over the years. In 2021 Noaeen \textit{et al.} \cite{Noaeen2022} found that 17 out of 27 surveyed papers relied on SUMO (a 63\% prevalence). Four years later, in 2025, the review of Michailidis \textit{et al.} \cite{Michailidis2025} showed that the popularity of SUMO as a choice had increased to a 68\% prevalence, being used on 38 out of 56 works examined.
+Finally, SUMO is a well-established traffic simulator, which has been used in a wide range of research studies and applications, making it a reliable and trusted tool for traffic simulation. Its possibilites have made it the most popular choice in the \gls{rltsc} literature, as shown by the different literature reviews examined in this work, and its usage is increasing over the years. In 2021 Noaeen \textit{et al.}~\cite{Noaeen2022} found that 17 out of 27 surveyed papers relied on SUMO (a 63\% prevalence). Four years later, in 2025, the review of Michailidis \textit{et al.}~\cite{Michailidis2025} showed that the popularity of SUMO as a choice had increased to a 68\% prevalence, being used on 38 out of 56 works examined.
 
 \medskip
 
-\noindent The SUMO simulator is written in C++ and uses XML files as its inputs and outputs. As input for a simulation, it requires a network file, which describes the road or street network that defines the simulation environment, and a trip file, which contains traffic demand information over the network. Both of these files can be generated from real data from using different built-in tools, as will be explained in Section \ref{sec:scenario_design}. The simulator can be run in command line mode, which allows for a faster execution of the simulation, or in GUI mode, which provides a graphical interface to visualize the simulation and its results.
+\noindent The SUMO simulator is written in C++ and uses XML files as its inputs and outputs. As input for a simulation, it requires a network file, which describes the road or street network that defines the simulation environment, and a trip file, which contains traffic demand information over the network. Both of these files can be generated from real data from using different built-in tools, as will be explained in Section~\ref{sec:scenario_design}. The simulator can be run in command line mode, which allows for a faster execution of the simulation, or in GUI mode, which provides a graphical interface to visualize the simulation and its results.
 
 \subsection{Pedestrian and cyclist models}
 
-The model that SUMO uses for pedestrians by default is the \textit{striping model}, which models the interactions of pedestrians with vehicles and themselves. The model achieves high execution speed by only considering close-range interactions along piecewise linear paths. This is done by separating the available space into narrow stripes along the walking direction and only interacting with at most one other traffic object per stripe \cite{AlvarezLopez2018}.
+The model that SUMO uses for pedestrians by default is the \textit{striping model}, which models the interactions of pedestrians with vehicles and themselves. The model achieves high execution speed by only considering close-range interactions along piecewise linear paths. This is done by separating the available space into narrow stripes along the walking direction and only interacting with at most one other traffic object per stripe~\cite{AlvarezLopez2018}.
 
-Bicycles, in the other hand, lack a dedicated model. The options to simulate them are either to do so by treating them as smaller and slower cars, or to behave as a fast pedestrian \cite{Kaths2023}. While lacking a specific model for bicycles, their simulation in SUMO greatly benefits from its \textit{sublane model}, which allows for the longitudinal division of driving lanes into multiple sub-lanes using lateral dynamics, the width of which can be defined by the user \cite{AlvarezLopez2018}. This permits to model common behaviours of cyclists, such as riding side by side on a same lane if it is wide enough.
+Bicycles, in the other hand, lack a dedicated model. The options to simulate them are either to do so by treating them as smaller and slower cars, or to behave as a fast pedestrian~\cite{Kaths2023}. While lacking a specific model for bicycles, their simulation in SUMO greatly benefits from its \textit{sublane model}, which allows for the longitudinal division of driving lanes into multiple sub-lanes using lateral dynamics, the width of which can be defined by the user~\cite{AlvarezLopez2018}. This permits to model common behaviours of cyclists, such as riding side by side on a same lane if it is wide enough.
 
 While the default SUMO software does not provide any further models for accurate multimodal simulation at the time of writing, the research community has developed some integrations to bring more realistic models to the simulator.
 
-In the case of pedestrians, SUMO can be coupled with the pedestrian-specific \gls{jupedsim} software, which uses several microscopic models to provides a more realistic simulation of pedestrian dynamics, especially when large crowds develop \cite{Chraibi2026}. Among the models it uses, the chosen for the scenario is the collision-free speed model developed by Tordeux \textit{et al.} \cite{Tordeux2015}.
+In the case of pedestrians, SUMO can be coupled with the pedestrian-specific \gls{jupedsim} software, which uses several microscopic models to provides a more realistic simulation of pedestrian dynamics, especially when large crowds develop~\cite{Chraibi2026}. Among the models it uses, the chosen for the scenario is the collision-free speed model developed by Tordeux \textit{et al.}~\cite{Tordeux2015}.
 
-For cyclists, the Realistic Bicycle Dynamics Model for SUMO was developed to simulate bicycles using the real-world data from the SimRa dataset \cite{Ostendorf2025}. This model provides a more accurate representation of bicycle dynamics, including realistic acceleration and deceleration behaviour, as well a better simulation of the various types of cyclists.
+For cyclists, the Realistic Bicycle Dynamics Model for SUMO was developed to simulate bicycles using the real-world data from the SimRa dataset~\cite{Ostendorf2025}. This model provides a more accurate representation of bicycle dynamics, including realistic acceleration and deceleration behaviour, as well a better simulation of the various types of cyclists.
 
 \medskip
 
@@ -52,7 +52,7 @@ Having stumbled with the aforementioned challenges, it was considered that the d
 
 \section{Scenario design}\label{sec:scenario_design}
 
-Fusilar este paper!!! \cite{Ostendorf2025} si no es bueno, mirar en arxiv con same name
+Fusilar este paper!!!~\cite{Ostendorf2025} si no es bueno, mirar en arxiv con same name
 
 The area chosen for the simulation scenarios is the city of Copenhagen, Denmark
 Name kbh
@@ -72,13 +72,13 @@ The network scenario is defined geographically as the rectangular area delimited
 \label{fig:area_sat}
 \end{figure}
 
-This particular portion of Copenhagen was selected for its representativeness of the complexity of an actual urban environment with multimodal traffic. It includes streets with high traffic volumes for cars, like Åboulevard, while also for cyclist and pedestrians, as it encompasses the bustling Nørrebrogade thoroughfare, the street with the largest volume of cyclists in the city, all along until reaching the multimodal transit hub of the Nørreport station, the busiest in Denmark \cite{norreport}. Furthermore, its position in the edges of the old city makes it boast a road network of significant sophistication, with special lanes, compound intersections and a great diversity of street types.
+This particular portion of Copenhagen was selected for its representativeness of the complexity of an actual urban environment with multimodal traffic. It includes streets with high traffic volumes for cars, like Åboulevard, while also for cyclist and pedestrians, as it encompasses the bustling Nørrebrogade thoroughfare, the street with the largest volume of cyclists in the city, all along until reaching the multimodal transit hub of the Nørreport station, the busiest in Denmark~\cite{norreport}. Furthermore, its position in the edges of the old city makes it boast a road network of significant sophistication, with special lanes, compound intersections and a great diversity of street types.
 
 From the defined network, smaller portions were extracted to create the single intersection and corridor scenarios.
 
 For the single intersection scenario, the Tagensvej-Blegdamsvej-Fredensgade intersection —from now on, «J1»— was selected. This intersection was chosen for its representativeness of a typical urban intersection in Copenhagen with multimodal traffic, with specific turn lanes, dedicated lanes for cyclists, and pedestrian crossings both with and without traffic islands.
 
-It should be noted that the J1 intersection is a compound one, according to to the definition laid out in Section \ref{subsubsec:intersections}. The intersection is composed of two subintersections, one for the main junction between the four streets, and another for the crossing of bike and pedestrian movements across the right-turn lane used for the car movement from Blegdamsvej to Tagensvej. 
+It should be noted that the J1 intersection is a compound one, according to to the definition laid out in Section~\ref{subsubsec:intersections}. The intersection is composed of two subintersections, one for the main junction between the four streets, and another for the crossing of bike and pedestrian movements across the right-turn lane used for the car movement from Blegdamsvej to Tagensvej. 
 
 % foto y poner en foot footnote k tambien es la portada del capítulo
 \footnote{The image used for the chapter cover also corresponds to a view of the J1 intersection.}
@@ -86,13 +86,13 @@ It should be noted that the J1 intersection is a compound one, according to to t
 
 \begin{figure}[h]
 \includegraphics[width=0.8\linewidth]{Figures/chapter03/net_sumo.png}
-\caption[The resulting network scenario as seen in SUMO netedit.]{The resulting network scenarion as seen in SUMO netedit.}
+\caption[The resulting network scenario as seen in SUMO \texttt{netedit}.]{The resulting network scenarion as seen in SUMO \texttt{netedit}.}
 \label{fig:net_sumo}
 \end{figure}
 
 \subsection{Demand generation}
 \subsubsection{Data sources}
-Traffic count data was generated by the rom the COMPASS system \cite{Paag2019}, explicar columnas etc, corresponding
+Traffic count data was generated by the rom the COMPASS system~\cite{Paag2019}, explicar columnas etc, corresponding
  to \gls{aadt} etc. The data generated corresponds to the model's base
   calculation for the year 2025.
 
@@ -104,11 +104,11 @@ The \gls{aadt} count data was converted to peak hour traffic volumes using
 \end{equation}
   
   The \gls{fhwa}
-  states that in urban areas the $k$ value is placed towards the lower end of the $0.07-0.12$ range \cite{FHWA2018}.
+  states that in urban areas the $k$ value is placed towards the lower end of the $0.07-0.12$ range~\cite{FHWA2018}.
   To obtain a better estimate of the factor, the \gls{aadt} values for several
     locations obtained with COMPASS were assessed against the peak hours observed from actual count data for the
     same locations. A $k$ factor of $0.075$ was found to provide close enough estimates for the different modes.\footnote{
-        The counts assessed correspond to the ones reported in \cite{kk_5}, \cite{kk_11}, \cite{kk_19}, \cite{kk_270}, \cite{kk_614}, \cite{kk_631}, \cite{kk_767},  \cite{kk_972}, \cite{kk_7005}, \cite{kk_7126}, \cite{kk_9691}, \cite{kk_9758}, \cite{kk_10259}, and \cite{kk_Ny}.
+        The counts assessed correspond to the ones reported in~\cite{kk_5},~\cite{kk_11},~\cite{kk_19},~\cite{kk_270},~\cite{kk_614},~\cite{kk_631},~\cite{kk_767}, ~\cite{kk_972},~\cite{kk_7005},~\cite{kk_7126},~\cite{kk_9691},~\cite{kk_9758},~\cite{kk_10259}, and~\cite{kk_Ny}.
     }
 % DECIR Q NETWORK no tiene cruces de peatones mas q los pintaos pero q en calles interiores peatones cruzan a su bola y dificil modelar
 

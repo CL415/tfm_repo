@@ -1,6 +1,9 @@
 # LaTeX output directory
 out_dir/
 
+# Chapter covers
+Figures/cover/
+
 # LaTeX auxiliary files
 *.aux
 *.lof
