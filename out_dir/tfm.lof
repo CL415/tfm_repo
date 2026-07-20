@@ -4,8 +4,22 @@
 \contentsline {figure}{\numberline {2.2}{\ignorespaces A satellite image of the Avinguda de Gabriel Alomar-Passeig Marítim intersection in Palma, Spain, highlighting each sub-intersection.}}{10}{figure.19}%
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces A satellite image of Copenhagen, Denmark, highlighting the network scenario area}}{30}{figure.53}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces The resulting network scenario as seen in SUMO \texttt {netedit}.}}{32}{figure.55}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces A satellite image of Copenhagen, Denmark, highlighting the network scenario area.}}{30}{figure.53}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces A satellite image of the J1 intersection.}}{32}{figure.54}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces A satellite image of the corridor scenario.}}{33}{figure.56}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Intersection exported from OpenStreetMap before and after manual corrections.}}{33}{figure.58}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Typical movement and phase definition for a 4-way intersection.}}{34}{figure.59}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Setup in \texttt {netedit} of a Copenhagen left.}}{34}{figure.60}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces The network scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{35}{figure.61}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces The single intersection scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{36}{figure.62}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces The corridor scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{37}{figure.63}%
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {figure}{\numberline {A.1}{\ignorespaces COMPASS count data for car traffic in the area of interest.}}{45}{figure.83}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces COMPASS count data for bicycle traffic in the area of interest.}}{46}{figure.84}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces COMPASS count data for pedestrian traffic in the area of interest.}}{47}{figure.85}%
+\contentsline {figure}{\numberline {A.4}{\ignorespaces Generated demand for car traffic in the network.}}{48}{figure.87}%
+\contentsline {figure}{\numberline {A.5}{\ignorespaces Assigned car routing weights for car traffic in the network.}}{49}{figure.88}%
+\contentsline {figure}{\numberline {A.6}{\ignorespaces Generated demand for bicycle traffic in the network.}}{50}{figure.89}%
+\contentsline {figure}{\numberline {A.7}{\ignorespaces Generated demand for pedestrian traffic in the network.}}{51}{figure.90}%

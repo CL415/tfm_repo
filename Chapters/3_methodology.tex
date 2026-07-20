@@ -4,7 +4,7 @@
 
 % switch between these depending on page size, or modify directly
 % same for the rest of the chapters
-\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/firstshot_title.png}};
+\tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/method-01.png}};
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
@@ -15,7 +15,7 @@ decir q explicamos simulator aki porque nuestro modelo tiene decisiones influenc
 
 The simulation software chosen is the SUMO traffic simulator~\cite{AlvarezLopez2018}, which is a microscopic and continuous traffic simulator that allows for the simulation of multimodal networks. As a microscopic simulator, SUMO models the behaviour of individual vehicles and pedestrians, allowing for a detailed representation of traffic dynamics by the combination of a variety of specific vehicle and traffic models.
 
-The choice for using SUMO as the simulation environment was mainly motivated by its usage on the reinforcement learning framework that this work builds upon and which is detailed in Section~\ref{sec:reinforcement_learning_framework}; however, several other reasons support this selection.
+The choice for using SUMO as the simulation environment was mainly motivated by its usage on the reinforcement learning framework that this work builds upon and which is detailed in Section~\ref{subsec:reinforcement_learning_framework}; however, several other reasons support this selection.
 
 Firstly, SUMO is open source software, which allows for a better understanding of its inner workings and provides the possibility to modify it freely to adapt it to our needs. This open source nature enables on one hand that the works of the research community can easily be incorporated to it, like advanced vehicle dynamics models or additional scenarios; while it also offers great flexibility for integration with other tools. The latter feature is particularly relevant, as SUMO offers a Python API, the \gls{traci}, which can be used to communicate with a running simulation process.
 
@@ -88,4 +88,6 @@ To normalize the reward values, the positive 95\% percentile of the \verb|total_
 % poner ec
 
 replay-buffer reset hook for IDQN agents and wired it to run at the start of each training episode, so the buffer clears every epoch
+
+decir colisiones
 

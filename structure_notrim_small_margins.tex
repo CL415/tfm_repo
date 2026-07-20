@@ -28,6 +28,7 @@
 \usepackage[scaled]{ulgothic} % para el código
 \usepackage[T1]{fontenc}
 \usepackage{mdframed} % boxed text
+\usepackage{xfrac}
 \usepackage{pdflscape} % landscape tables etc
 \usepackage{afterpage} % page breaks
 \usepackage{longtable} % long tables
@@ -55,6 +56,10 @@
 
 \makeatletter
 \renewcommand{\fnum@figure}{\textsc{\figurename~\thefigure}} % Make the "Figure 1.1" text in small caps
+\makeatother
+
+\makeatletter
+\renewcommand{\fnum@table}{\textsc{\tablename~\thetable}} % Make the "Table 1.1" text in small caps
 \makeatother
 
 % for the indentation of figure and table captions in the list of figures/tables
