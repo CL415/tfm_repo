@@ -55,6 +55,10 @@
 \newglossary{notation}{not}{ntn}{List of Notations} % Define a new glossary type for notations
 %\definecolor{c64}{rgb}{.063,0,.612} % Example color definition, the color can be used with the \color{name} command
 
+\DeclareFontFamily{U}{stix2bb}{}
+\DeclareFontShape{U}{stix2bb}{m}{n} {<-> stix2-mathbb}{}
+\NewDocumentCommand{\indicator}{}{\text{\usefont{U}{stix2bb}{m}{n}1}}
+
 \makeatletter
 \renewcommand{\fnum@figure}{\textsc{\figurename~\thefigure}} % Make the "Figure 1.1" text in small caps
 \makeatother

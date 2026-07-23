@@ -215,9 +215,9 @@ In this experiment, we assessed the learning performance of the proposed models,
 
 \noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted 5400 seconds of simulation time, with traffic demand only generating in the first 3600 seconds so that the generated entities could be cleared from the network before the end of the episode. This measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing.
 
-In all the runs, the step length was set to 10 seconds, and the yellow period between phases established at 3 seconds. The anti-starvation cap was set so that no phase could stay green for more than 60 seconds, and detection distance set to 50 meters for all the models in order to not assume overly optimistic sensor coverage.
+The hyperparameters and settings used for each experiment are detailed in Section~\ref{subsubsec:params}.
 
-The traffic demand simulated in this scenario, resulting from the procedure described in Section \ref{subsec:demand_generation}, is compiled in Table \ref{tab:gene_demands}, which shows the number of entities generated for each mode.
+The traffic demand simulated in this scenario, resulting from the procedure described in Section~\ref{subsec:demand_generation}, is compiled in Table~\ref{tab:gene_demands}, which shows the number of entities generated for each mode.
 
 \medskip
 
@@ -268,13 +268,15 @@ The 16 weight combinations were used to train the models for 100 episodes each, 
 \subsubsection{Parameters and settings} \label{subsubsec:params}
 In general, \gls{rltsc} hyperparameters were not modified from the T-REX framework defaults described in \cite{Nguyen2025}. However, some changes were necessary to adapt the models to the scenarios.
 
+Firstly, the step length was set to 10 seconds, and the yellow period between phases established at 3 seconds. The anti-starvation cap was set so that no phase could stay green for more than 60 seconds, and detection distance reduced to 50 meters for all the models in order to not assume overly optimistic sensor coverage.
+
 The value for the epsilon decay parameter for all the Q-learning based models was modified to align with the step lengths and training episodes of each scenario; and further changes were done to its definition of the start of purely greedy episodes after extensive experimentation: in IDQN it was set to have $\varepsilon=0$ after 80\% of the episodes, while for MPLight and MPLight MM $\varepsilon$ only reached 0 at the end of training. In the case of IDQN MM, the final epsilon was also modified so that after 80\%, $\varepsilon=0.05$ to avoid complete determinism in the agent's behaviour, which was found to be detrimental to performance.
 
 To stabilize Q-value growth during training, the target network update parameter for the IDQN MM model was reduced to 50 and the \texttt{MAX\_GRAD\_NORM} threshold for gradient clipping to 1.0. Additionally, $\gamma$ was reduced to 0.95.
 
 \medskip
 
-\noindent The proposed MM models use weights and reward clipping to balance the different modes in their reward functions and keep training stable. Their values were found through an iterative process analysing step metrics from previous runs, with the intent of keeping the modes' contribution to the reward balanced and using a normalization value so that $\sim75\%$ of the steps had an absolute reward below 1 before clipping. It should be noted that clipping was only necessary in the IDQN MM model. The values used were as follows:
+\noindent The proposed MM models use weights and reward clipping to balance the different modes in their reward functions and keep training stable. Their values were found through an iterative process analysing step metrics from previous runs, with the intent of keeping the modes' contribution to the reward balanced while still considering varying modal demands, and using a normalization value so that $\sim75\%$ of the steps had an absolute reward below 1 before clipping. It should be noted that clipping was only necessary in the IDQN MM model. The values used were as follows:
 
 \begin{table}[]
 \centering
@@ -293,12 +295,12 @@ IDQN MM & 0.059 & 7.981 & 1277.5 & 3 \\ \bottomrule
 
 \subsection{Evaluation metrics}
 
-The evaluation metrics gathered during training to assess model performance were the following:
+This section presents the evaluation metrics gathered during training to assess model performance. The metrics should be understood as equivalent to the ones defined in Section~\ref{subsubsec:eval_metrics}:
 
 \begin{itemize}
-  \item \textbf{Duration} [s]: Corresponds to the \texttt{duration} metric output by SUMO, which is the average trip duration of all the entities in an episode. 
-  \item \textbf{Time Loss} [s]: Refers to the SUMO \texttt{timeLoss} metric, which is the average time lost due to waiting or moving below the desired speed. Can be deemed as a measure of the average delay experienced by all entities in an episode.
-  \item \textbf{Waiting Time} [s]: Pertains to the SUMO \texttt{waitingTime} metric, which measures the time spent stopped by all entities in an episode.
+  \item \textbf{Travel time} [s]: Corresponds to the \texttt{duration} metric output by SUMO, which is the average trip duration of all the entities in an episode. 
+  \item \textbf{Delay} [s]: Refers to the SUMO \texttt{timeLoss} metric, which is the average time lost due to waiting or moving below the desired speed. Can be deemed as a measure of the average delay experienced by all entities in an episode.
+  \item \textbf{Waiting time} [s]: Pertains to the SUMO \texttt{waitingTime} metric, which measures the time spent stopped by all entities in an episode.
   \item \textbf{Queue} [entities]: Indicates the number of entities queued at intersections in an episode. Its gathering is part of the \texttt{Signal} class observation presented in this work, which was described in Section \ref{subsec:state_def}. Hence, it inherits its limitations regarding pedestrian queue measurements.
   \item \textbf{Throughput} [entities/h]: Counts the number of entities that were able to reach their destination in an episode.
   \item \textbf{Modal share of total wait time}: Represents the share that a specific mode had of the total waiting time at traffic lights in an episode. 
@@ -349,7 +351,7 @@ The following plots show the values of the main metrics for all the models acros
 \makebox[\linewidth]{%        to center the image
 \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/duration.png}}
-\captionof{figure}{Average combined duration per epoch.} \label{fig:duration_j1}
+\captionof{figure}{Average combined travel time per epoch.} \label{fig:duration_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
@@ -401,7 +403,7 @@ The following plots show the values of the main metrics for all the models acros
   \captionof{figure}{Average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
 \end{minipage}
 
-\subsection{Experiment 2: Performance in corridor scenario} \label{subsec:perf_c2}
+\subsection{Experiment 1: Performance in corridor scenario} \label{subsec:perf_c2}
 Results for the corridor scenario can also be found in Table~\ref{tab:perf_part1}, listing the best performance achieved during training for each model in the single training run performed.
 
 The same reporting metrics were used as in the single intersection scenario, with the same considerations regarding pedestrian queue measurements. The rest of the results can be assessed as well in Table~\ref{tab:perf_part2}, in Appendix~\ref{ch:app_results}.

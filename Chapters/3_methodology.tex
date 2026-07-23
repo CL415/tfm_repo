@@ -31,9 +31,17 @@ Finally, SUMO is a well-established traffic simulator, which has been used in a 
 
 The model that SUMO uses for pedestrians by default is the \textit{striping model}, which models the interactions of pedestrians with vehicles and themselves. The model achieves high execution speed by only considering close-range interactions along piecewise linear paths. This is done by separating the available space into narrow stripes along the walking direction and only interacting with at most one other traffic object per stripe~\cite{AlvarezLopez2018}.
 
-Bicycles, in the other hand, lack a dedicated model. The options to simulate them are either to do so by treating them as smaller and slower cars, or to behave as a fast pedestrian~\cite{Kaths2023}. While lacking a specific model for bicycles, their simulation in SUMO greatly benefits from its \textit{sublane model}, which allows for the longitudinal division of driving lanes into multiple sub-lanes using lateral dynamics, the width of which can be defined by the user~\cite{AlvarezLopez2018}. This permits to model common behaviours of cyclists, such as riding side by side on a same lane if it is wide enough.
+Pedestrians in SUMO can travel in any lane that allows them in its vehicle permissions attribute, but they also enjoy exclusive map features. Firstly, any lane only allowing pedestrians is considered as a sidewalk, which unlike other SUMO lanes is not bound by directionality, letting pedestrians inside travel freely in any direction. SUMO pedestrians also use crossings to cross lanes used by vehicles, which can be either controlled by traffic signals or uncontrolled. In the case of controlled crossings, pedestrians can only cross when the traffic signal is green for them, while in uncontrolled crossings they can cross at any time, with vehicles yielding to them. Finally, SUMO adds, inside each intersection, pedestrian-only areas that connect the sidewalks of the approach edges among themselves and with the pedestrian crossings in the junction. These are referred to as \texttt{walkingAreas}.
 
-While the default SUMO software does not provide any further models for accurate multimodal simulation at the time of writing, the research community has developed some integrations to bring more realistic models to the simulator.
+\medskip
+
+\noindent Bicycles, in the other hand, lack a dedicated model. The options to simulate them are either to do so by treating them as smaller and slower cars —the current default—, or to behave as a fast pedestrian~\cite{Kaths2023}. While lacking a specific model for bicycles, their simulation in SUMO greatly benefits from its \textit{sublane model}, which allows for the longitudinal division of driving lanes into multiple sub-lanes using lateral dynamics, the width of which can be defined by the user~\cite{AlvarezLopez2018}. This permits to model common behaviours of cyclists, such as riding side by side on a same lane if it is wide enough.
+
+In the rest of aspects, bicycles in SUMO under the default settings behave as small vehicles, bound to lanes that allow them in their vehicle permissions and only moving in a single direction, according to the lane on which they travel.
+
+\medskip
+
+\noindent While the default SUMO software does not provide any further models for accurate multimodal simulation at the time of writing, the research community has developed some integrations to bring more realistic models to the simulator.
 
 In the case of pedestrians, SUMO can be coupled with the pedestrian-specific \gls{jupedsim} software, which uses several microscopic models to provides a more realistic simulation of pedestrian dynamics, especially when large crowds develop~\cite{Chraibi2026}. Among the models it uses, the chosen for the scenario is the collision-free speed model developed by Tordeux \textit{et al.}~\cite{Tordeux2015}.
 
@@ -90,7 +98,7 @@ The included models are the following: % TODO añadir refs a donde se expliquen,
     \item Stochastic: a method that randomly selects the next phase to be activated at each intersection. Not a traditional \gls{tsc} method in any sense, it is included as a baseline to provide a lower bound for the performance of other methods.
     \item Max Pressure: similar to the implementation of Chen \textit{et al.}~\cite{Chen2020} of the method devised by Varaiya~\cite{Varaiya2013}, it selects the next phase to be activated at each intersection based on the pressures for each phase, which is defined as the difference between the number of vehicles waiting at the incoming lanes associated with the phase and the number of vehicles waiting at the outgoing lanes.
     \item Max Wave: the \textit{Greedy} method defined by Chen \textit{et al.}~\cite{Chen2020}, it chooses phases based on the wave of vehicles approaching the intersection, which is calculated as the number of vehicles approaching on the lanes associated with each phase within a certain distance.
-    \item Fixed time: a method that activates each phase for a fixed amount of time, regardless of traffic conditions. It was used as a compromise for the inability of obtaining optimal fixed times for all the intersections due to the difficulties laid out in Section \ref{par:adios_fases}. Two different fixed times were tested, 20 and 40 seconds.
+    \item Fixed time: a method that activates each phase for a fixed amount of time, regardless of traffic conditions. It was used as a compromise for the inability of obtaining optimal fixed times for all the intersections due to the difficulties laid out in Section~\ref{par:adios_fases}. Two different fixed times were tested, 20 and 40 seconds.
 \end{itemize}
 
 \section{Description of the proposed methods} \label{sec:proposed_models}
@@ -113,31 +121,31 @@ F(\pi)=\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\sum_{i\in I}\gamma^{t}r
 
 \noindent where $\theta_i$ denotes the parameters of agent $i$'s policy and $\mathbb{E}$ refers to the averaged return over all possible trajectories across states and actions $\tau=(s_0, a_0, s_1, a_1,...)$ generated by following policy $\pi$ under the environment transition dynamics $T(s_{t+1}|s_t,a_t)$. As the model definition is based on independent agents, the learnt policy is decentralized following $\pi=\{\pi_i \}_{i \in I}$, enabling each agent to independently maximize its own long-term cumulative reward.
 
-The following sections treat in further detail the definitions of the different parts of the described problem.
+The following sections treat in further detail, for each of the proposed methods, the definitions of the different parts of the described problem.
 
-\subsection {Action space} \label{subsec:action_space}
+\subsection{The IDQN MM agent} \label{subsec:idqn_mm}
+
+The first of the proposed agents is an extension of the IDQN agent developed by Ault \textit{et al.}~\cite{Ault2019} for a multimodal setting, which has been named as \textit{IDQN~MM}.
+
+IDQN~MM instantiates one independent Q-learning agent per intersection according to the independent DQN (IDQN) architecture: each agent $i$ learns its own parametrized action-value function $Q(o_i, a_i; \theta_i)$, without explicit communication or parameter sharing with other agents.
+
+\subsubsection {Action space} \label{subsubsec:idqn_action_space}
 
 Each intersection $i$ exposes a discrete action space $a_t^i \in \{0, \dots, G_i - 1\}$, where $G_i$ is the number of predefined green phases at that intersection. Action spaces are, thus, heterogeneous across intersections. An action corresponds to a request for the signal to display the associated green phase.
- 
-There are two circumstances in which action selection is not controlled by the agent:
+
+\medskip
+
+\noindent There are two circumstances in which action selection is not controlled by the agent:
  
 \begin{itemize}
 \item \textbf{Automatic yellow phase insertion:} if the requested phase chosen by the agent differs from the currently active one, the environment does not switch directly; it inserts an automatically generated transitional yellow phase covering exactly the signal groups that move from green to red  between the two phases while not modifying the ones that were red, guaranteeing safe transitions between conflicting movements.
 
-The length of this phase can be defined on a per-scenario basis. The chosen length used at the experiments performed in this work is listed in the relevant section,~\ref{subsec:experimental_setup}.
+The length of this phase can be defined on a per-scenario basis. The chosen length used at the experiments performed in this work is listed in the relevant section,~\ref{subsubsec:params}.
 
 \item \textbf{Anti-starvation cap:} A hyperparameter $H$ was added, setting a bound on how long the same green phase may be held across consecutive decisions. If the policy requests the same phase for $H$ consecutive control steps, the environment overrides the request and forces a switch to the next phase in round-robin order.
 
-This hyperparameter was added after some baseline methods favoured excessively intersection movements with high traffic counts, especially in peak-hour demand scenarios. Similarly, Section~\ref{subsec:experimental_setup} lists the value used in each scenario. 
+This hyperparameter was added after some baseline methods favoured excessively intersection movements with high traffic counts, especially in peak-hour demand scenarios. Similarly, Section~\ref{subsubsec:params} lists the value used in each scenario. 
 \end{itemize}
-
-The rest of the elements of the formulation are different between the two proposed methods, thus they will be described separately.
-
-\subsection{The IDQN MM agent} \label{subsec:idqn_mm}
-
-The first of the proposed agents is an extension of the IDQN agent developed by Ault \textit{et al.}~\cite{Ault2019} for a multimodal setting, which has been named as \textbf{IDQN~MM}.
-
-IDQN~MM instantiates one independent Q-learning agent per intersection according to the independent DQN (IDQN) architecture: each agent $i$ learns its own parametrized action-value function $Q(o_i, a_i; \theta_i)$, without explicit communication or parameter sharing with other agents.
  
 \subsubsection{Multimodal state representation} \label{subsubsec:idqnmm_state}
  
@@ -149,7 +157,7 @@ This state representation is explained further in the following lines.
 
 \noindent \textbf{Range-limited sensing}
  
-\noindent Entities are only considered detected on a lane if their distance to the next downstream traffic light along their route is within a fixed detection range, emulating a fixed-length detector zone rather. The value used in each scenario is reported in Section~\ref{subsec:experimental_setup}.
+\noindent Entities are only considered detected on a lane if their distance to the next downstream traffic light along their route is within a fixed detection range, emulating a fixed-length detector zone rather. The value used in each scenario is reported in Section~\ref{subsubsec:params}.
 
 Because SUMO's built-in per-vehicle waiting-time accumulator is not reliable across successive signals along a route, the agent maintains its own persistent per-vehicle waiting-time dictionary that is incremented locally at each step and cleared on departure.
 
@@ -165,11 +173,13 @@ $\tau_{\text{car},t}^l = \max(0,\ \tau_t^l - \beta_t^l)$, where $\tau_l^t$ is th
  
 \noindent For lane $l$ at intersection $i$, let $\mathcal{G}_t^i$ denote the set of lanes actively served (green) by the phase at time $t$ displayed at signal $i$, with this set being empty during yellow transitions.
 
-The feature vector is defined as
+\medskip
+
+\noindent The feature vector is defined as
  
 \begin{equation}
 \bm{x}_{t}^{i,l} = \left(
-\mathbb{1}[l \in \mathcal{G}_t^i],\;
+\indicator [l \in \mathcal{G}_t^i],\;
 \tau_{\text{car},t}^l,\;
 \beta_t^l,\;
 W_{\text{ped},t}^i\;
@@ -178,12 +188,12 @@ W_{\text{ped},t}^i\;
 
 \noindent where 
 \begin{itemize}
-    \item[] $\mathbb{1}[l \in \mathcal{G}_t^i]$ is used as an indicator function to mark whether lane $l$ pertains to the served lanes $\mathcal{G}_t^i$, in which case it equals 1, else 0;
+    \item[] $\indicator [l \in \mathcal{G}_t^i]$ is used as an indicator function to mark whether lane $l$ pertains to the served lanes $\mathcal{G}_t^i$, in which case it equals 1, else 0;
     \item[] $\tau_{\text{car},t}^l$ and $\beta_t^l$ correspond to the modal waiting times defined some lineas earlier, normalized; and
     \item[] $W_{\text{ped},t}^i$ defines the normalized waiting time of pedestrians associated with the edge containing lane $l$, with its calculation being described more thoroughly in the next epigraph.
 \end{itemize}
 
-\noindent The observant reader will have noticed that the described feature vector only lists four and not nine features as the tensor description advanced. The missing features correspond to modal queue and speed values which are included for evaluation reasons; as these are not used by the IDQN~MM agent, they were omitted from this explanation for simplicity.
+\noindent The observant reader will have noticed that the described feature vector only lists four and not nine features as the tensor description advanced. The missing features correspond to modal queue and speed values which are included for logging the method's performance; as these are not used by the IDQN~MM agent, they were omitted from this explanation for simplicity.
 
 Those are:
 \begin{itemize}
@@ -195,7 +205,7 @@ Those are:
 \noindent \textbf{Pedestrian sensing}
 
 \noindent Pedestrian waiting times are computed at the intersection level rather than on a per-lane basis. First, the set of
-edges controlled by intersection $i$ is obtained by mapping every controlled inbound/outbound lane to its parent edge. Over this edge set, the agent queries SUMO for all currently present pedestrians —using the \gls{traci} call \texttt{getLastStepPersonIDs}—, stores their IDs and, for each, retrieves its instantaneous waiting time. A pedestrian is counted as \textit{waiting} if this waiting time is  positive; $W_{i,ped}^t$ is the sum of waiting time over waiting pedestrians, which resets when pedestrians have been served by a phase. As compound intersections can have successive pedestrian crossings, pedestrian IDs are kept and transferred across edges if these are still within the control of agent $i$.
+edges controlled by intersection $i$ is obtained by mapping every controlled inbound/outbound lane to its parent edge. Over this edge set, the agent queries SUMO for all currently present pedestrians —using the \gls{traci} call \texttt{getLastStepPersonIDs}—, stores their IDs and, for each, retrieves its instantaneous waiting time. A pedestrian is counted as \textit{waiting} if this waiting time is  positive, including when it has physically left the edge to move to the nearby \texttt{walkingArea}; $W_{i,ped}^t$ is the sum of waiting time over waiting pedestrians, which resets when pedestrians have been served by a phase. As compound intersections can have successive pedestrian crossings, pedestrian IDs are kept and transferred across edges if these are still within the control of agent $i$.
 
 Nevertheless, as shown in earlier lines, these pedestrian measures ultimately are included on all the lane feature vectors for the corresponding edge. This approach was chosen deliberately to align with the sensor approach that IDQN applies to cars, which would correspond to approach cameras in a pedestrian detection setting.
  
@@ -215,8 +225,7 @@ C_t^i = \sum_{l \in L_i} \tau_{\text{car},t}^l \;+\; w_{\text{bike}} \sum_{l \in
 r_t^i = \operatorname{clip}\!\left( -\frac{C_t^i - C_{t-1}^i}{\eta},\; -\kappa,\; \kappa \right),
 \end{equation}
 
-\noindent where $\eta$ normalizes the cost delta and the $\pm \kappa$ clip  symmetrically bounds the reward magnitude. A positive reward therefore indicates that the intersection's combined multimodal waiting cost \emph{decreased} relative to
-the previous step.
+\noindent where $\eta$ normalizes the cost delta and the $\pm \kappa$ clip  symmetrically bounds the reward magnitude. A positive reward therefore indicates that the intersection's combined multimodal waiting cost \emph{decreased} relative to the previous step.
 
 Weights and constants are resolved on a per-scenario level. The ones used in the assessments performed in this work are listed in Section~\ref{subsec:experimental_setup}.
 
@@ -238,7 +247,7 @@ $\bar h_t^i = \frac{1}{L_i}\sum_{l} \phi_\theta(\bm{x}_t^{i,l})$, yielding a fix
 $\bar h_i^t$ to $Q(o_i^t, a,;\theta_i)$.
 \end{enumerate}
 
-While the original convolution layer architecture works on simpler intersections —as are the ones normally modelled in the current state of the art \cite{Ault2021}—, the complexity of some of the intersections modelled in the present work is orders of magnitude larger. Pedestrian paths, bike or bus lanes, and especially compound intersections can result in disparate lane orderings that the existent model was not able.
+While the original convolution layer architecture works on simpler intersections —as are the ones normally modelled in the current state of the art \cite{Ault2021}—, the complexity of some of the intersections in the present work scenarios is orders of magnitude larger. Pedestrian paths, bike or bus lanes, and especially compound intersections can result in disparate lane orderings that the existent model was not able to handle.
 
 The chosen approach ensures permutation invariance to avoid this, as the same lane encoder is used on each lane and aggregated in an order-independent way, the resulting Q-function is invariant to the arbitrary ordering in which lanes are enumerated. This accommodates intersections with differing lane counts and topologies, especially when these are compound.
  
@@ -253,6 +262,9 @@ L(\theta_i) = \mathbb{E}\Big[\big(r_t^i + \gamma \max_{a'} Q(o_{t+1}^i, a'; \the
 Optimization is handled by adaptive moment estimation (Adam), with gradient-norm clipping; while exploration is $\varepsilon$-greedy with linear decay. For further training stability, the replay buffer is reset at the start of each training episode.
 
 Honouring the independence claimed on its acronym, every intersection's network parameters, optimizer state, replay buffer, and exploration schedule are entirely separate; no gradient, parameter, or replay data is shared across intersections.
+
+\subsection{The MPLight MM agent} \label{subsec:mplight_mm}
+The second proposed methos is 
 
 \subsection{Handling of vehicles and pedestrians that never reach their destination}
 
