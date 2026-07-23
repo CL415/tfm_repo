@@ -8,17 +8,11 @@
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
-Lorem ipsu
+Lorem ipsum
 
 \section{Scenario design}\label{sec:scenario_design}
 
-Fusilar este paper!!!~\cite{Ostendorf2025} si no es bueno, mirar en arxiv con same name
-
-The area chosen for the simulation scenarios is the city of Copenhagen, Denmark
-Name kbh
-
-
-decir q empezamos con secc tocha de la cual se recortaron la j1 etc para single int, corridor y network
+The area chosen for the simulation scenarios is the city of Copenhagen, Denmark. Copenhagen was chosen for its representativeness of the complexity of an actual urban environment with multimodal traffic, the author's familiarity with the city and the availability of the realistic multimodal traffic data. The scenarios were designed to represent different levels of complexity, from a single intersection to a corridor and finally a network scenario.
 
 \subsection{Road network generation}
 \subsubsection{Definition}
@@ -43,9 +37,11 @@ From the defined network, smaller portions were extracted to create the single i
 
 \noindent For the single intersection scenario, the Tagensvej-Blegdamsvej-Fredensgade intersection —from now on, «J1»— was selected. Between through lanes and turn ones, J1 has three to four lanes on each approaching leg, and one to two of the ones coming out of it. All its approaches have sidewalks, dedicated or shared bike lanes and have pedestrians crossings across.
 
-This intersection was chosen for its representativeness of a typical urban intersection in Copenhagen with multimodal traffic, with specific turn lanes, dedicated lanes for cyclists, and pedestrian crossings both with and without traffic islands.
+This intersection was chosen for its representativeness of a typical urban intersection in Copenhagen with multimodal traffic, with specific turn lanes, dedicated lanes for cyclists, and pedestrian crossings both with and without traffic islands. Its choice was also influenced by the large amount of car traffic it receives, while still handling a non-negligible amount of cyclist and pedestrian traffic.
 
 It should be noted that the J1 intersection is a compound one, according to the the definition laid out in Section~\ref{subsubsec:intersections}. The intersection is composed of two subintersections, one for the main junction between the four streets, and another for the crossing of bike and pedestrian movements across the right-turn lane used for the car movement from Blegdamsvej to Tagensvej. See Figure~\ref{fig:j1_sat} for a better view of the intersection morphology.
+
+% TODO: decir q mas compleja q state of the art
 
 \begin{figure}[h]
 \centering
@@ -64,6 +60,10 @@ It should be noted that the J1 intersection is a compound one, according to the 
 
 Its choice was also deliberate, as it contains Nørrebrogade, the street with the largest volumes of bicycle and pedestrian traffic, and finishes in the old city, just after the public transport hub of the Nørreport Station.
 
+To the best of our knowledge, this corridor scenario is as complete regarding car and pedestrian traffic as the corridor scenarios claiming state-of-the-art quality in the current multimodal \gls{rltsc} literature \cite{Poudel2025}. As far as we are aware of the advancements in the field, the corridor scenario presented in this work is probably the first scenario that combines complex street morphology with realistic bicycle traffic in the realm of multimodal \gls{rltsc}. 
+
+% poner citas
+
 See Figure~\ref{fig:c2_sat} for a bird's-eye view of the corridor.
 
 \begin{figure}[h]
@@ -78,7 +78,7 @@ See Figure~\ref{fig:c2_sat} for a bird's-eye view of the corridor.
 
 SUMO offers a tool named \texttt{netconvert} which can import road and street networks from different sources and convert them into compatible \texttt{.net.xml} files for their usage as SUMO networks.
 
-OpenStreetMap is a collaborative map database maintained by volunteers that offers freely the download of street networks. We used its Overpass API to download the street network for the relevant area, using it as input for \texttt{netconvert}. However, the resulting network was not completely accurate, especially regarding intersections.
+OpenStreetMap is a collaborative map database maintained by volunteers that offers freely the download of street networks. We used its Overpass API to download the street network for the relevant area, using it as input for \texttt{netconvert}. However, the resulting network was not completely accurate, especially regarding intersections. \label{par:adios_fases}
 
 It was required to manually adjust the output to ensure proper representation of the streets, intersections, and their traffic signal configurations. To do so, we compared each lane and intersection in the network with satellite images, manually rectifying them using SUMO's \texttt{netedit} tool. \texttt{netedit} is a program developed by the SUMO team to edit SUMO networks using a GUI along with a wide range of capabilities.
 
@@ -101,6 +101,7 @@ To overcome this, the 25 signalized intersections were given movement and phase 
 \end{figure}
 
 Additionally, further changes to intersections were needed to represent what is known as the \textit{Copenhagen left} for cyclist left turn movements. This is a manoeuvre in which left-turning cyclists are required to go straight along with through automobiles from the same approach, stop at the other side, wait for the green interval for the cross street, and then continue straight to the cross street to finish the manoeuvre, in the shape of a letter «L» \cite{Chen2014}. As these turns are mandatory for cyclists in Denmark \cite{copenleft}, real bike traffic in Copenhagen follows this practice and the city's intersections are built for it, with holding areas for awaiting bikes and traffic signal phasing that considers these two-step movements. Hence, it was a requisite to also ensure that the simulated cyclists turn according to the real-world behaviour.
+
 To represent this manoeuvre, several operations need to be performed for each and every left turn bike movement inside \texttt{netedit}. As this process was not found documented in the literature, instructions are provided so that it can help any reader wishing to create SUMO networks with Copenhagen lefts. Please note that this explanation refers to \texttt{netedit} version 1.25.0. First, the \textit{Connection mode} of \texttt{netedit} shall be entered, in order to show the different connections corresponding to movements in each intersection. Once in it, the relevant bike left movement —probably diagonal— has to be selected with a right click, and the option «Add to selected» chosen in the pop-up menu. With the relevant movement selected, the \texttt{netedit} mode needs to be switched to \textit{Inspect mode}, where a left click in the connection will show its attributes in the left pane. There, the «indirect» checkbox must be activated, which enables the option «Set custom connection shape» when right-clicking the connection. Then, the connection can be modified so that it follows the «L» shape that corresponds to the Copenhagen left, and if it is a shared lane, the vehicle permissions updated to only allow bicycles. Once this is done, the last step is to set the attribute «contPos» in the \textit{Inspect mode} left pane to define the position where the bikes will wait before the second step. The value to be introduced is as metres, counted from the connection start. It is important that, if the intersections is signalized, the priority of this modified movement during green phases is set to «Green-Minor», so that the left-turning bikes yield correctly to straight movements.
 
 \begin{figure}[h]
@@ -110,7 +111,7 @@ To represent this manoeuvre, several operations need to be performed for each an
 \label{fig:setup_indirect}
 \end{figure}
 
-The changes did not limit to intersections only. Again with the help of satellite imagery, bike lanes were added in streets that lacked them and removed from those that did not have them; bike lane widths were increased in streets across the network to correspond to their actual counterparts on the real world; vehicle permissions were adjusted in all the minor streets in the network that allow the roadway to be shared between modes; in the numerous streets that allow cyclists to ride in both directions while cars only have one, contraflow bike lanes were established to represent this configuration; bus lanes were defined where missing and, as also can be seen in Figure~\ref{fig:arreglos_ints}, turn lanes shared with cars on where created in all the intersections requiring.
+The changes did not limit to intersections only. Again with the help of satellite imagery, bike lanes were added in streets that lacked them and removed from those that did not have them; bike lane widths were increased in streets across the network to correspond to their actual counterparts on the real world; vehicle permissions were adjusted in all the minor streets in the network that allow the roadway to be shared between modes; in the numerous streets that allow cyclists to ride in both directions while cars only have one, contraflow bike lanes were established to represent this configuration; bus lanes were defined where missing and, as also can be seen in Figure~\ref{fig:arreglos_ints}, turn lanes shared with cars on where created in all the intersections requiring them. It should be noted that crosswalks were established only where satellite images showed them, albeit it being common for pedestrians in Copenhagen side streets to cross them in undesignated areas and the city's own infrastructure expecting this behaviour. As SUMO is unable to model accurately these undesignated crossings, it was decided not to consider them as a reasonable measure.
 
 \begin{figure}[h]
 \centering
@@ -157,7 +158,7 @@ Using SUMO definitions, a \textit{trip} is an origin-destination edge pair with 
 
 The \texttt{randomTrips} module generates starting and destination points based on a defined distribution. To represent better the through traffic, its fringe factor parameter was increased to enlarge the probability of trips originating or ending on the scenario edges. With the generated trips, \texttt{duarouter} was then used to create routes based on them, using the Dijkstra shortest path algorithm \cite{Dijkstra1959}. Taking advantage of the average speed data for the car traffic, car edge weights were also given to \texttt{duarouter} in order to make route selection more realistic and related with the drivers' cost of time. The calculation of the aforementioned weights is explained along with the edge count data pairing, in the following paragraphs.
 
-Besides the 20\,000 routes outputted by \texttt{duarouter}, \texttt{routeSampler}, we computed the edge counts and weights with a spatial matching procedure that transferred the COMPASS multimodal traffic volumes on an edge-to-edge basis to the SUMO network.
+Besides the 20\,000 routes outputted by \texttt{duarouter} for \texttt{routeSampler}, we computed the edge counts and weights with a spatial matching procedure that transferred the COMPASS multimodal traffic volumes on an edge-to-edge basis to the SUMO network.
 
 For each COMPASS link, the algorithm parsed the link's polyline geometry and reprojected it into the coordinate reference system of the SUMO network, applying a local offset to align it with SUMO's internal coordinate frame. A directional unit vector was computed from the polyline to characterize the link's orientation, and its reverse was also retained enabling the independent pairing to both traversal directions.
 
@@ -173,29 +174,26 @@ Once matched, the directional traffic volumes from the COMPASS dataset were assi
 
 It was the initial intention of this work to use the peak hour demand to represent the simulated scenarios under their worse conditions, however, hardware limitations made necessary to fraction the demand to one quarter of the intended values. The generated demand should then be understood as a realistic representation of off-peak hours Copenhagen traffic.
 
-The obtention of the peak hour volumes from the \gls{aadt} count data was performed using a peak hour $k$ factor so that $\text{Peak hour volume} = k \cdot \text{\gls{aadt}}$.
+The obtention of the peak hour volumes from the \gls{aadt} count data was performed using a peak hour $k$ factor so that $\text{peak hour volume} = k \cdot \text{\gls{aadt}}$.
 
-The \gls{fhwa} states that in urban areas the $k$ value is placed towards the lower end of the $0.07-0.12$ range~\cite{FHWA2018}. To obtain a better estimate of the factor, the \gls{aadt} values for several locations obtained with COMPASS were assessed against the peak hours observed from actual count data for the same locations.\footnote{
-        The counts assessed correspond to the ones reported in~\cite{kk_5},~\cite{kk_11},~\cite{kk_19},~\cite{kk_270},~\cite{kk_614},~\cite{kk_631},~\cite{kk_767}, ~\cite{kk_972},~\cite{kk_7005},~\cite{kk_7126},~\cite{kk_9691},~\cite{kk_9758},~\cite{kk_10259}, and~\cite{kk_Ny}.
-} The $k$ factors found for each mode, and their corresponding fraction, are listed in Table \ref{tab:k_factors}.
+The \gls{fhwa} states that in urban areas the $k$ value is placed towards the lower end of the $0.07-0.12$ range~\cite{FHWA2018}. However, these values are given for a US context, and were not deemed appropriate for the Danish capital, with its multimodal traffic and less car-dependent society. To obtain a better estimate of the factor, the \gls{aadt} values for several locations obtained with COMPASS were assessed against the peak hours observed from actual count data for the same locations.\footnote{
+        The counts assessed correspond to the ones reported in traffic count reports for 14 locations in the area of interest, references \cite{kk_767, kk_9691, kk_9758, kk_972, kk_Ny, kk_7126, kk_90, kk_397, kk_44, kk_614, kk_631, kk_91, kk_11, kk_7005, kk_270, kk_19, kk_5, kk_69} in the bibliography.
+} The averaged $k$ factors found for each mode, and their corresponding fraction, are listed in Table~\ref{tab:k_factors}.
 
 \begin{table}[]
   \centering
-\caption{$k$ factors and their corresponding fraction used for demand generation}
+\caption{$k$ factors and their corresponding fraction used for demand generation.}
 \label{tab:k_factors}
 \begin{tabular}{lccc}
 \hline
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Value}}} & \multicolumn{3}{c}{\textbf{Mode}}                   \\
-\multicolumn{1}{c}{}                                & \textbf{Car} & \textbf{Bike} & \textbf{Pedestrians} \\ \hline
+\cmidrule(l){2-4}
+\multicolumn{1}{c}{}                                & Car & Bike & Pedestrians \\ \hline
 $k$                                                 & 0.0487       & 0.0844        & 0,0548               \\
-\sfrac{1}{4}$k$                                     & 0.0122       & 0.0211        & 0.0137              
-\end{tabular}
-\end{table}
+¼\,$k$                                     & 0.0122       & 0.0211        & 0.0137              \\ \bottomrule
 
-%\begin{equation}
-    
-%\end{equation}
-  
+\end{tabular}
+\end{table}  
 
 \medskip
 
@@ -203,26 +201,270 @@ This process paired count data to 2817 edges in the SUMO network, and visual com
 
 The procedure was performed on each of the scenarios, enabling in this way an accurate representation of the traffic from COMPASS data into all the SUMO simulations performed.
 
-% DECIR Q NETWORK no tiene cruces de peatones mas q los pintaos pero q en calles interiores peatones cruzan a su bola y dificil modelar
+\section{Experiments} \label{sec:experiments}
+\subsection{Experimental setup} \label{subsec:experimental_setup}
 
-% decir q hemos jutnado intersecciones proximas con semaforos pareados en signal groups xq
-%  si no los modelos se volvian locos q no haboa espacio para modelar bien etc vease results de idqn en 420
-% decir q hemos diseñado fases en SUMO manualmente basadas en reales xq las por defecto volvian loco
-% a modelo; en todas, giros a dchas de bicis estan en green minor para repre como ceden paso a peats
+From the scenarios, a series of experiments were performed to assess the performance of the proposed models and understand better how architectural decisions transfer to model performance.
 
-\section{Experiments}
-\subsection{Experimental setup}
+The experiments were run in different workstations of varying equipment, depending on availability: AMD Threadripper 3970X with two Nvidia RTX 2080Ti, AMD Threadripper 3960X with two Nvidia RTX 3080Ti or Intel Core i7-13700H with a single Nvidia RTX 4080 Laptop.
 
-From the scenarios, a series of experiments was performed to assess the performance of the proposed model and understand better 
+\subsubsection{Experiment 1: Performance against baselines} \label{subsubsec:exp_1}
+In this experiment, we assessed the learning performance of the proposed models, along with the \gls{rltsc} and traditional methods laid out in Section \ref{subsec:baseline_models}. The experiment was performed in each of the scenarios.
 
-The experiments were performed in different workstations of varying equipment, depending on availability: AMD Threadripper 3970X with two Nvidia RTX 2080Ti, AMD Threadripper 3960X with two Nvidia RTX 3080Ti or Intel Core i7-13700H with a single Nvidia RTX 4080 Laptop.
+\medskip
 
-decir cantidad de cada modo por exp
+\noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted 5400 seconds of simulation time, with traffic demand only generating in the first 3600 seconds so that the generated entities could be cleared from the network before the end of the episode. This measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing.
+
+In all the runs, the step length was set to 10 seconds, and the yellow period between phases established at 3 seconds. The anti-starvation cap was set so that no phase could stay green for more than 60 seconds, and detection distance set to 50 meters for all the models in order to not assume overly optimistic sensor coverage.
+
+The traffic demand simulated in this scenario, resulting from the procedure described in Section \ref{subsec:demand_generation}, is compiled in Table \ref{tab:gene_demands}, which shows the number of entities generated for each mode.
+
+\medskip
+
+\noindent For the corridor scenario, the value-based methods were trained for 150 episodes, while the policy-gradient methods were trained for 1,400 episodes. In this case, training was not repeated due to computational constraints. Episode length and other settings were kept the same as in the single intersection scenario. For the FMA2C agents, the 5 intersection workers were divided in two managers, one for J10, J11 and J12 and other for J13 and J14, using the nomenclature of Figure \ref{fig:c2_sat}.
+
+The traffic demand simulated in this scenario is compiled, too in Table \ref{tab:gene_demands}, which shows the number of entities generated for each mode.
+
+\medskip
+
+\noindent Unfortunately, it was not possible to perform this experiment in the entire network as a last scenario due to the high computational requirements of the simulation, which made it unfeasible to gather the necessary data for this work. 
+
+\begin{table}[]
+\centering
+\caption{Generated demand for each scenario.}
+\label{tab:gene_demands}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\multirow{2}{*}{\textbf{Scenario}} & \multicolumn{3}{c}{\textbf{Generated demand}} \\ \cmidrule(l){2-4} 
+ & Cars & Bicycles & Pedestrians \\ \midrule
+Single intersection & 5226 & 867 & 742 \\
+Corridor & 3243 & 13417 & 3642 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection{Experiment 2: Mode weights Pareto frontier} \label{subsubsec:exp_2}
+
+Training the proposed models with different weights for the modes in their reward functions allows to explore the Pareto frontier of the multi-objective optimization problem that arises from using the weights to reach optimums. This experiment can provide information about the trade-offs between the modes and the effect that reward weighting can have on model performance.
+
+Due to the high computational cost, this experiment was performed only in the single intersection scenario, for both of the proposed models. First, a $4 \times 4$ grid was created with different weight values for pedestrians and cyclists, using the optimal weights found during training —see Table \ref{tab:weights}— as a starting point. The tested weights are listed in Table \ref{tab:tested_weights}.
+
+\begin{table}[]
+\centering
+\caption{Weights used to define the Pareto frontier weight analysis.}
+\label{tab:tested_weights}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{IDQN MM} & \multicolumn{4}{c}{\textbf{Weights tested}} \\ \midrule
+Bicycles & 0.4 & 0.8 & 1.2 & 3.0 \\
+Pedestrians & 60 & 120 & 200 & 300 \\ \midrule
+\textbf{MPLight MM} &  &  &  &  \\ \midrule
+Bicycles & 1.2 & 1.8 & 2.4 & 3.0 \\
+Pedestrians & 1.5 & 2.5 & 3.5 & 4.5 \\ \bottomrule
+\end{tabular}
+\end{table}
+
+The 16 weight combinations were used to train the models for 100 episodes each, with any other settings set as described for Experiment 1.
+
+\subsubsection{Parameters and settings} \label{subsubsec:params}
+In general, \gls{rltsc} hyperparameters were not modified from the T-REX framework defaults described in \cite{Nguyen2025}. However, some changes were necessary to adapt the models to the scenarios.
+
+The value for the epsilon decay parameter for all the Q-learning based models was modified to align with the step lengths and training episodes of each scenario; and further changes were done to its definition of the start of purely greedy episodes after extensive experimentation: in IDQN it was set to have $\varepsilon=0$ after 80\% of the episodes, while for MPLight and MPLight MM $\varepsilon$ only reached 0 at the end of training. In the case of IDQN MM, the final epsilon was also modified so that after 80\%, $\varepsilon=0.05$ to avoid complete determinism in the agent's behaviour, which was found to be detrimental to performance.
+
+To stabilize Q-value growth during training, the target network update parameter for the IDQN MM model was reduced to 50 and the \texttt{MAX\_GRAD\_NORM} threshold for gradient clipping to 1.0. Additionally, $\gamma$ was reduced to 0.95.
+
+\medskip
+
+\noindent The proposed MM models use weights and reward clipping to balance the different modes in their reward functions and keep training stable. Their values were found through an iterative process analysing step metrics from previous runs, with the intent of keeping the modes' contribution to the reward balanced and using a normalization value so that $\sim75\%$ of the steps had an absolute reward below 1 before clipping. It should be noted that clipping was only necessary in the IDQN MM model. The values used were as follows:
+
+\begin{table}[]
+\centering
+\caption[Values used for weights, clipping and normalization in the MM models.]{Values used for weights, clipping and normalization in the MM models. \textit{B} corresponds to the weight for bikes, \textit{P} to the weight for pedestrians. The normalization value is used to scale the reward before clipping.}
+\label{tab:weights}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Single\\ intersection\end{tabular}}}} & \multicolumn{2}{c}{\textbf{Weights}} & \multirow{2}{*}{\textbf{Normalization}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Clipping\\ value\end{tabular}}} \\ \cmidrule(lr){2-3}
+\multicolumn{1}{c}{} & B & P &  &  \\ \midrule
+IDQN MM & 0.768 & 114.603 & 540.5 & 3 \\
+MPLight MM & 2.267 & 3.091 & 18 & N/A \\ \midrule
+\textbf{Corridor} &  &  &  &  \\ \midrule
+IDQN MM & 0.059 & 7.981 & 1277.5 & 3 \\ \bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Evaluation metrics}
 
-Lorem ipsum
+The evaluation metrics gathered during training to assess model performance were the following:
+
+\begin{itemize}
+  \item \textbf{Duration} [s]: Corresponds to the \texttt{duration} metric output by SUMO, which is the average trip duration of all the entities in an episode. 
+  \item \textbf{Time Loss} [s]: Refers to the SUMO \texttt{timeLoss} metric, which is the average time lost due to waiting or moving below the desired speed. Can be deemed as a measure of the average delay experienced by all entities in an episode.
+  \item \textbf{Waiting Time} [s]: Pertains to the SUMO \texttt{waitingTime} metric, which measures the time spent stopped by all entities in an episode.
+  \item \textbf{Queue} [entities]: Indicates the number of entities queued at intersections in an episode. Its gathering is part of the \texttt{Signal} class observation presented in this work, which was described in Section \ref{subsec:state_def}. Hence, it inherits its limitations regarding pedestrian queue measurements.
+  \item \textbf{Throughput} [entities/h]: Counts the number of entities that were able to reach their destination in an episode.
+  \item \textbf{Modal share of total wait time}: Represents the share that a specific mode had of the total waiting time at traffic lights in an episode. 
+  \item \textbf{Never arrived} [entities/h]: Counts the number of entities that did not reach their destination by the end of the episode, including the half-hour simulation time without demand generation.
+\end{itemize}
+
+The aforementioned metrics were gathered, when appropriate, both for mode-specific and combined values; on a per-step and per-episode totals basis.
 
 \section{Results}
 
-Lorem ipsum
+\subsection{Experiment 1: Performance in single intersection scenario} \label{subsec:perf_part1}
+The superior half of Table~\ref{tab:perf_part1} presents the best performance achieved during training for the single intersection scenario, averaging across the five runs performed for each model. Waiting time and total queue were chosen as the main reporting metrics due to their direct relationship with the proposed models' reward functions, and their ability to reflect the performance of the models in terms of traffic flow and congestion. Nevertheless, the rest of gathered metrics are also given in the Table~\ref{tab:perf_part2}, in Appendix~\ref{ch:app_results}, for completeness.
+
+The values compiled in the table were obtained from the best across-run mean at each episode, after a five-episode rolling average to avoid outliers. The reported mean corresponds not to the smoothed value, but to the actual average of the five runs at that episode.
+
+It is important to note that the values for pedestrian queues were obtained from calculations with the \texttt{getServedPersonCount} approach described in Section \ref{subsec:state_def}, due to the SUMO limitations reported in the same section. Hence, it should be considered that the pedestrian queue values do not correspond to the actual number of pedestrians waiting at an intersection, but to the number of pedestrians \textit{unserved} by the traffic signal phases on each step. The asterisk in the relevant results' entries indicates this fact.
+
+\begin{landscape}
+\begin{table}[]
+\centering
+\caption[Performance of models and baselines during training.]{Performance of models and baselines during training. Bold values correspond to the best performance for each metric. \textit{C}, \textit{B} and \textit{P} designate car, bicycle and pedestrian-specific results, respectively. $\Sigma$ represents combined results. FMA2C architecture impeded the gathering of pedestrian queue data.}
+\label{tab:perf_part1}
+\begin{tabular}{lcccccccccc}
+\toprule
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Single\\ intersection\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Duration\\{}[s]\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Time\\ loss [s]\end{tabular}}} & \multicolumn{4}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Waiting time [s]\end{tabular}}} & \multicolumn{4}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Total queue [ents.]}\end{tabular}} \\
+\cmidrule(r){4-7} \cmidrule(l){8-11}
+\multicolumn{1}{c}{} &  &  & C & B & P & $\Sigma$ & C & B & P$^*$ & $\Sigma$ \\
+\midrule
+Stochastic & 177.8 & 132.7 & 95.02 & 93.73 & 17.81 & 92.04 & 48211.8 & 22179.2 & 4431.8 & 74670.4 \\
+Max Pressure & 143.38 & 100.87 & 109.75 & 35.6 & 24.99 & 82.7 & 29950.2 & 4700.2 & 6020.8 & 41578.2 \\
+Max Wave & 220.96 & 177.39 & 133.04 & 227.25 & 143.8 & 157.3 & 54035 & 27132 & 29367.8 & 110\,534.8 \\
+Fixed time 20 & 119.7 & 78.9 & 65.43 & 19.55 & 16.32 & 51 & 26556.4 & 3234.4 & 4148.8 & 34020.4 \\
+Fixed time 40 & 114.7 & 73.83 & 59.62 & 18.9 & 16.27 & 46.8 & 26282.2 & \textbf{2959.8} & 4126.2 & \textbf{33409.8} \\
+IDQN & 141.58 & 101.43 & 77.22 & 120.66 & 50.24 & 80.29 & 44047.8 & 19365.8 & 10018.4 & 73432 \\
+IDQN MM & 133.66 & 92.29 & 69.42 & 62.51 & 8.69 & 57.85 & 36793.4 & 11326.8 & \textbf{2805.5} & 49749.2 \\
+MPLight & 125.7 & 83.99 & 60.38 & 33.64 & 17.74 & 53.03 & 27236.2 & 5058 & 4379.8 & 38936.2 \\
+MPLight MM & 113.88 & 73.48 & 53.75 & 60.71 & 16.47 & 47.02 & \textbf{25987.2} & 4188.6 & 4150.4 & 36292.2 \\
+IPPO & 113.79 & 72.52 & 57.74 & 30.92 & 16.03 & 50.65 & 26118 & 4325 & 4089 & 37706 \\
+FMA2C & \textbf{86.72} & \textbf{49.02} & \textbf{34.18} & \textbf{16.86} & \textbf{14.84} & \textbf{29.84} & 20859 & 2467 & N/A & 23612 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{landscape}
+
+The following plots show the values of the main metrics for all the models across the training episodes, averaged across the five runs performed. The plots were smoothed with a five-episode rolling average to avoid outliers. More plots can be found in Appendix~\ref{ch:app_results}.
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/duration.png}}
+\captionof{figure}{Average combined duration per epoch.} \label{fig:duration_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/queue_combined.png}}
+  \captionof{figure}{Average accumulated combined queue per epoch.} \label{fig:queue_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/waitingTime.png}}
+  \captionof{figure}{Average combined waiting time per epoch.} \label{fig:waitingTime_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_car.png}}
+  \captionof{figure}{Average waiting time, for cars, per epoch.} \label{fig:waitingTime_cars_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_bike.png}}
+  \captionof{figure}{Average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_pedestrian.png}}
+  \captionof{figure}{Average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_bike.png}}
+  \captionof{figure}{Average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_pedestrian.png}}
+  \captionof{figure}{Average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
+\end{minipage}
+
+\subsection{Experiment 2: Performance in corridor scenario} \label{subsec:perf_c2}
+Results for the corridor scenario can also be found in Table~\ref{tab:perf_part1}, listing the best performance achieved during training for each model in the single training run performed.
+
+The same reporting metrics were used as in the single intersection scenario, with the same considerations regarding pedestrian queue measurements. The rest of the results can be assessed as well in Table~\ref{tab:perf_part2}, in Appendix~\ref{ch:app_results}.
+
+While only a training run was performed for the corridor scenario, the values deemed as best were obtained nevertheless after the same five-episode rolling average to avoid outliers. Again, the reported values correspond not to the smoothed ones, but to the actual value yielded by each model.
+
+\subsection{Experiment 2: Mode weights Pareto frontier, IDQN MM} \label{subsec:pareto_idqn}
+The following plots showcase the results of the Pareto frontier analysis performed for the IDQN MM model in the single intersection scenario. The plots show the total accumulated waiting time for each mode on each axis, with only the Pareto optimal points highlighted.
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_bike.png}}
+  \captionof{figure}{Pareto frontier for car and bicycle total waiting times.}\label{fig:pareto_idqn_cars_bikes_j1}
+\end{minipage}%
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_ped.png}}
+  \captionof{figure}{Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_idqn_cars_pedestrians_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_bike_ped.png}}
+  \captionof{figure}{Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_idqn_bikes_pedestrians_j1}
+\end{minipage}%
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_3d.png}}
+  \captionof{figure}{Pareto frontier for total waiting times across modes.} \label{fig:pareto_idqn_3d_j1}
+\end{minipage}
+
+\subsection{Experiment 2: Mode weights Pareto frontier, MPLight MM} \label{subsec:pareto_mplight}
+The following plots showcase the results of the Pareto frontier analysis performed for the MPLight MM model in the single intersection scenario.
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_bike.png}}
+  \captionof{figure}{Pareto frontier for car and bicycle total waiting times.} \label{fig:pareto_mplight_cars_bikes_j1}
+\end{minipage}%
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_ped.png}}
+  \captionof{figure}{Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_mplight_cars_pedestrians_j1}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_bike_ped.png}}
+  \captionof{figure}{Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_mplight_bikes_pedestrians_j1}
+\end{minipage}%
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_3d.png}}
+  \captionof{figure}{Pareto frontier for total waiting times across modes.} \label{fig:pareto_mplight_3d_j1}
+\end{minipage}

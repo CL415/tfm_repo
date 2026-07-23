@@ -83,7 +83,7 @@ These elements can be adapted to model the \gls{tsc} problem, where the agent is
 
 For a further understanding of these concepts in the context of \gls{rltsc} and specific examples in the literature, the reader can consult the surveys performed by Noaeen \textit{et al.}~\cite{Noaeen2022}, Tréca~\cite{Treca2022}, Koohy \textit{et al.}~\cite{Koohy2022}, Majstorović \textit{et al.}~\cite{Majstorović2023}, Xiao \textit{et al.}~\cite{Xiao2024}, Maheshwari \textit{et al.}~\cite{Maheshwari2025} or Michailidis \textit{et al.}~\cite{Michailidis2025}, which have informed the present work. \label{par:reviews a consultar}
 
-\subsubsection{The Markov decision process}
+\subsubsection{The Markov decision process} \label{subsubsec:mdp}
 In \gls{rl}, the decision process is modelled as a \gls{mdp}, a mathematical model for sequential decision-making that aims to maximize a global objective function $F$ in a given environment. A \gls{mdp} is defined by the quadruple $(S,A,T,R)$, where $S$ and $A$ are the state and action spaces, and $T$ and $R$ are the transition and reward functions, respectively~\cite{Bellman1957}.
 
 At each time step of the decision process, the agent observes the state of the environment $s \in S$ and chooses an action $a \in A$ according to a policy $\pi$. This policy maps each state $s$ and action $a$ to the probability $\pi(s, a)$ of taking action $a$ when in state $s$. After action $a$ is applied, the environment transitions to a new state $s'$, following the transition function $T : S \times A \times S \rightarrow [0, 1]$, defining the probability of transitioning from state $s$ to state $s'$ given action $a$. Simultaneously, the agent receives a scalar reward $r$ determined by a reward function $R(s, a, s')$, which evaluates the quality of the action in relation to the task. The ultimate goal of the agent is to find an optimal policy $\pi^*$ that maximizes the expected cumulative reward over time. To achieve this goal, the agent's learning algorithm uses the transitions quadruples to optimize its decision-making strategy.
@@ -138,7 +138,7 @@ The Markov property allows for a simplification of the decision-making process, 
 \end{enumerate}
 
 \subsubsection{Learning algorithm}
-As was explained in Section~\ref{subsec:TSC_as_a_RL_problem}, the agent learns from its interactions with the environment by trial-and-error and aims in this way to find a policy $\pi^*$ that maximizes the cumulative reward. However, it cannot simply try all available actions $a \in A$ and stick with the highest-rewarding ones, as the reward received after taking an action also depends on the current state of the environment and its effects are not immediately observable. The role of the learning algorithm is to estimate the relative value of state and of state-action couples using a value $V$ and quality $Q$ function, respectively, so then its policy can choose the best action to take based on these estimates. Depending on the algorithm's design, this optimization can occur either directly on the policy currently interacting with the environment (on-policy) or independently by leveraging historical transition data (off-policy).
+As was explained in Section~\ref{subsec:TSC_as_a_RL_problem}, the agent learns from its interactions with the environment by trial-and-error and aims in this way to find a policy $\pi^*$ that maximizes the cumulative reward. However, it cannot simply try all available actions $a \in A$ and stick with the highest-rewarding ones, as the reward received after taking an action also depends on the current state of the environment and its effects are not immediately observable. The role of the learning algorithm is to estimate the relative value of state and of state-action couples using a value $V$ and quality $Q$ function, respectively, so then its policy can choose the best action to take based on these estimates. Depending on the algorithm's design, this optimization can occur eiIn tther directly on the policy currently interacting with the environment (on-policy) or independently by leveraging historical transition data (off-policy).
 
 While a great number of learning techniques have been employed for traffic optimization, such as linear automata, fuzzy logic and classifier systems or model-based reinforcement learning, the most widely used learning algorithms in \gls{rltsc} are Q-learning and its variants, both on single-agent and multi-agent settings.
 
@@ -153,7 +153,7 @@ In \gls{rltsc}, the usual approach is to use an $\varepsilon$-greedy policy, whe
 
 primer paper con q learning:~\cite{Abdulhai2003} ended up being the most widely used learning algorithm in the field, being present in 60\% of the works reviewed by Noaeen \textit{et al.} between 1993 and 2020~\cite{Noaeen2022} is popular for its relative simplicity (since it is model-free) and extensibility
 
-
+\label{subsubsec:idqn}
 \begin{equation}\label{eq:idqn_q}
   L(\theta) = \mathbb{E}_{(s,a,r,s')\sim U(D)}\left[\left(r + \gamma \max_{a'} Q(s',a';\theta^-) - Q(s,a;\theta)\right)^2\right]
 \end{equation}

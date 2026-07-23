@@ -4,22 +4,49 @@
 \contentsline {figure}{\numberline {2.2}{\ignorespaces A satellite image of the Avinguda de Gabriel Alomar-Passeig Marítim intersection in Palma, Spain, highlighting each sub-intersection.}}{10}{figure.19}%
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces A satellite image of Copenhagen, Denmark, highlighting the network scenario area.}}{30}{figure.53}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces A satellite image of the J1 intersection.}}{32}{figure.54}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces A satellite image of the corridor scenario.}}{33}{figure.56}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Intersection exported from OpenStreetMap before and after manual corrections.}}{33}{figure.58}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Typical movement and phase definition for a 4-way intersection.}}{34}{figure.59}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Setup in \texttt {netedit} of a Copenhagen left.}}{34}{figure.60}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces The network scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{35}{figure.61}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces The single intersection scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{36}{figure.62}%
-\contentsline {figure}{\numberline {4.9}{\ignorespaces The corridor scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{37}{figure.63}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces A satellite image of Copenhagen, Denmark, highlighting the network scenario area.}}{38}{figure.71}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces A satellite image of the J1 intersection.}}{40}{figure.72}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces A satellite image of the corridor scenario.}}{41}{figure.74}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Intersection exported from OpenStreetMap before and after manual corrections.}}{41}{figure.76}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Typical movement and phase definition for a 4-way intersection.}}{42}{figure.77}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Setup in \texttt {netedit} of a Copenhagen left.}}{43}{figure.78}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces The network scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{44}{figure.79}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces The single intersection scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{45}{figure.80}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces The corridor scenario as seen in SUMO \texttt {netedit} after the necessary processing.}}{46}{figure.81}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Average combined duration per epoch.}}{53}{figure.100}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Average accumulated combined queue per epoch.}}{53}{figure.101}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Average combined waiting time per epoch.}}{54}{figure.102}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Average waiting time, for cars, per epoch.}}{54}{figure.103}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Average waiting time, for bicycles, per epoch.}}{55}{figure.104}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Average waiting time, for pedestrians, per epoch.}}{55}{figure.105}%
+\contentsline {figure}{\numberline {4.16}{\ignorespaces Average waiting time, for bicycles, per epoch.}}{56}{figure.106}%
+\contentsline {figure}{\numberline {4.17}{\ignorespaces Average waiting time, for pedestrians, per epoch.}}{56}{figure.107}%
+\contentsline {figure}{\numberline {4.18}{\ignorespaces Pareto frontier for car and bicycle total waiting times.}}{57}{figure.110}%
+\contentsline {figure}{\numberline {4.19}{\ignorespaces Pareto frontier for car and pedestrian total waiting times.}}{58}{figure.111}%
+\contentsline {figure}{\numberline {4.20}{\ignorespaces Pareto frontier for bicycle and pedestrian total waiting times.}}{59}{figure.112}%
+\contentsline {figure}{\numberline {4.21}{\ignorespaces Pareto frontier for total waiting times across modes.}}{60}{figure.113}%
+\contentsline {figure}{\numberline {4.22}{\ignorespaces Pareto frontier for car and bicycle total waiting times.}}{61}{figure.115}%
+\contentsline {figure}{\numberline {4.23}{\ignorespaces Pareto frontier for car and pedestrian total waiting times.}}{62}{figure.116}%
+\contentsline {figure}{\numberline {4.24}{\ignorespaces Pareto frontier for bicycle and pedestrian total waiting times.}}{63}{figure.117}%
+\contentsline {figure}{\numberline {4.25}{\ignorespaces Pareto frontier for total waiting times across modes.}}{64}{figure.118}%
 \addvspace {10pt}
 \addvspace {10pt}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {A.1}{\ignorespaces COMPASS count data for car traffic in the area of interest.}}{45}{figure.83}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces COMPASS count data for bicycle traffic in the area of interest.}}{46}{figure.84}%
-\contentsline {figure}{\numberline {A.3}{\ignorespaces COMPASS count data for pedestrian traffic in the area of interest.}}{47}{figure.85}%
-\contentsline {figure}{\numberline {A.4}{\ignorespaces Generated demand for car traffic in the network.}}{48}{figure.87}%
-\contentsline {figure}{\numberline {A.5}{\ignorespaces Assigned car routing weights for car traffic in the network.}}{49}{figure.88}%
-\contentsline {figure}{\numberline {A.6}{\ignorespaces Generated demand for bicycle traffic in the network.}}{50}{figure.89}%
-\contentsline {figure}{\numberline {A.7}{\ignorespaces Generated demand for pedestrian traffic in the network.}}{51}{figure.90}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces COMPASS count data for car traffic in the area of interest.}}{69}{figure.128}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces COMPASS count data for bicycle traffic in the area of interest.}}{70}{figure.129}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces COMPASS count data for pedestrian traffic in the area of interest.}}{71}{figure.130}%
+\contentsline {figure}{\numberline {A.4}{\ignorespaces Generated demand for car traffic in the network.}}{72}{figure.132}%
+\contentsline {figure}{\numberline {A.5}{\ignorespaces Assigned car routing weights for car traffic in the network.}}{73}{figure.133}%
+\contentsline {figure}{\numberline {A.6}{\ignorespaces Generated demand for bicycle traffic in the network.}}{74}{figure.134}%
+\contentsline {figure}{\numberline {A.7}{\ignorespaces Generated demand for pedestrian traffic in the network.}}{75}{figure.135}%
+\addvspace {10pt}
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Average combined time loss per epoch.}}{79}{figure.142}%
+\contentsline {figure}{\numberline {B.2}{\ignorespaces Average combined throughput per epoch.}}{80}{figure.143}%
+\contentsline {figure}{\numberline {B.3}{\ignorespaces Average car throughput per epoch.}}{80}{figure.144}%
+\contentsline {figure}{\numberline {B.4}{\ignorespaces Average bicycle throughput per epoch.}}{81}{figure.145}%
+\contentsline {figure}{\numberline {B.5}{\ignorespaces Average pedestrian throughput per epoch.}}{81}{figure.146}%
+\contentsline {figure}{\numberline {B.6}{\ignorespaces Accumulated waiting time, for cars, per epoch.}}{82}{figure.147}%
+\contentsline {figure}{\numberline {B.7}{\ignorespaces Accumulated waiting time, for bicycles, per epoch.}}{82}{figure.148}%
+\contentsline {figure}{\numberline {B.8}{\ignorespaces Accumulated waiting time, for pedestrians, per epoch.}}{83}{figure.149}%
+\contentsline {figure}{\numberline {B.9}{\ignorespaces Fraction of waiting time due to bicycles, per epoch.}}{83}{figure.150}%
+\contentsline {figure}{\numberline {B.10}{\ignorespaces Fraction of waiting time due to pedestrians, per epoch.}}{84}{figure.151}%

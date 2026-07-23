@@ -41,7 +41,7 @@ For cyclists, the Realistic Bicycle Dynamics Model for SUMO was developed to sim
 
 \medskip
 
-Unfortunately, while performing the experiments it was found that it was not possible to align the usage of these models with the reinforcement learning framework used in this work.
+\noindent Unfortunately, while performing the experiments it was found that it was not possible to align the usage of these models with the reinforcement learning framework used in this work.
 
 For the Realistic Bicycle Dynamics Model, it is built upon an outdated version of SUMO (1.8) and it was found that integrating it into the current was not a trivial task, as the modifications required to the simulator itself were well out of the scope of this thesis.
 
@@ -51,12 +51,208 @@ Having stumbled with the aforementioned challenges, it was considered that the d
 
 \subsection{Reinforcement learning framework} \label{subsec:reinforcement_learning_framework}
 
-Decir q se ha usado el framework de RESCO, explicar est0ados etc
+This work has been developed on top of the T-REX \gls{rltsc} framework presented by Nguyen \textit{et al.}~\cite{Nguyen2025}, which is a Python-based framework that provides a set of tools and libraries for developing and testing \gls{rltsc} methods in combination with SUMO's \gls{traci} interface. It is derived from the RESCO framework released by Ault and Sharon~\cite{Ault2021}.
 
+According to its developers, T-REX is designed primarily as an offline tool to support the training and evaluation of control policies, and \gls{rl}-based methods in particular, by providing realistic traffic dynamics. Its features also include the introduction of disruptions such as lane blockages, rerouting behaviour, and speed adaptation. T-REX is built in four main modules: \textit{Network environment}, \textit{Initializer}, \textit{Deployment} and \textit{RL inferface}. The \textit{Network environment} module initializes the SUMO scenario with the network layout, demand information, signal plans and vehicle attributes; the \textit{Initializer} and \textit{Deployment} modules are responsible for incident simulation and thus unused in the present work; and the \textit{RL interface} module provides an interface for integrating \gls{rl} agents with the simulation environment.
 
+Further implementationdetails about the T-REX framework can be found in the original publication that described it~\cite{Nguyen2025}.
 
+\medskip
 
-\section{Description of the models}
+\noindent In this work, we extended T-REX to systematically train and assess \gls{rltsc} methods in a multimodal setting. The changes made to the framework as part of the development of the proposed methods mainly concern parts of the \gls{rl} formulation and their implementation, as such, these modifications are presented in Section~\ref{sec:proposed_models}.
+
+\subsection{Baseline TSC models} \label{subsec:baseline_models}
+An assorted number of state-of-the-art \gls{rltsc} methods were included in the \gls{rl} framework, as well as several traditional traffic signal control methods. The former were used both as starting point for the development of the multimodal models, and as baselines for experiments to compare the performance of the proposed models against other \gls{rltsc} methods in a multimodal setting. The latter were included solely to provide benchmarks for the mentioned experiments.
+
+While the initial choice of \gls{rltsc} and traditional methods was based on their integration in T-REX framework employed in this work, further reasons informed the selection of the models presented as baselines. The rationale explaining their initial inclusion in the RESCO and T-REX frameworks can be found in the relevant original publications, \cite{Ault2021} and \cite{Nguyen2025}, respectively.
+
+Besides their diversity in learning strategies and coordination levels, and their validation in the literature —see \cite{Ault2019}, \cite{Ault2021}, \cite{Chen2020}, \cite{Ma2020} or \cite{Nguyen2025}—, these models can also provide valuable insights on \gls{rltsc} in a multimodal context. Bicycle traffic and especially pedestrian traffic requires a detection infrastructure much more complex than that used for motorized vehicles, and thus assessing methods with diverse inputs and reward functions can help to bridge the gap between simulation and real-world sensor setups for multimodal \gls{tsc}. The different speeds and behaviour of pedestrians and cyclists compared to cars can also have important implications on affairs such as phase length, signal coordination or state representation, which we deem as relevant topics for the development of \gls{rltsc} methods that account for all street users.
+
+Furthermore, while the presented baseline methods have been proven in maps based on real-world networks, they have not been tested in scenarios with a complexity comparable to the ones used in this work, with multimodal traffic, compound intersections with special lanes and non-conventional traffic behaviours such as Copenhagen left turns. Hence, the performance of these methods can yield, too, acumen on the applicability of \gls{rltsc} methods to real-world street networks.
+
+% TODO añadir comm sobre conclusiones tras leer literatura
+
+The included models are the following: % TODO añadir refs a donde se expliquen, y cita IPPO
+\medskip
+
+\noindent \textbf{\Gls{rltsc} methods}
+
+\begin{itemize}
+    \item Independent Deep Q-Network (IDQN)~\cite{Ault2019}: a single-agent \gls{rltsc} method that uses a \gls{dqn} to learn the optimal policy for each intersection independently. It uses a state representation based on the number of vehicles waiting at each lane, and a reward function based on the total waiting time of vehicles, with lane-level traffic state features aggregated with convolutional layers. Its architecture is explained further in section tal.
+    \item Independent Proximal Policy Optimization (IPPO): a single-agent \gls{rltsc} method that uses a policy gradient method (PPO) to learn the optimal policy for each intersection independently. It uses the same rewards and state representation as IDQN, which enables a good comparison between value-based and policy gradient methods in a multimodal context.
+    \item MPLight~\cite{Chen2020}: a decentralized \gls{rltsc} method that coordinates the traffic signal control of multiple intersections by adding queue pressure into each agent's state representation, enabling it to partially observe neighbouring intersections. With this information, Q-values are estimated for each phase, and their selection done in a phase-competition basis. Its architecture is explained further in section tal.
+    \item FMA2C~\cite{Ma2020}: an extension of the earlier MA2C method~\cite{Chu2019} that applies a feudal reinforcement learning architecture to hierarchically coordinate \gls{tsc} over multiple intersections. Each intersection is controlled by a local agent that learns independently, overseen by a regional manager that coordinates the local agents by establishing top-down goals.
+\end{itemize}
+
+\noindent \textbf{Traditional \gls{tsc} methods and other baselines}
+
+\begin{itemize}
+    \item Stochastic: a method that randomly selects the next phase to be activated at each intersection. Not a traditional \gls{tsc} method in any sense, it is included as a baseline to provide a lower bound for the performance of other methods.
+    \item Max Pressure: similar to the implementation of Chen \textit{et al.}~\cite{Chen2020} of the method devised by Varaiya~\cite{Varaiya2013}, it selects the next phase to be activated at each intersection based on the pressures for each phase, which is defined as the difference between the number of vehicles waiting at the incoming lanes associated with the phase and the number of vehicles waiting at the outgoing lanes.
+    \item Max Wave: the \textit{Greedy} method defined by Chen \textit{et al.}~\cite{Chen2020}, it chooses phases based on the wave of vehicles approaching the intersection, which is calculated as the number of vehicles approaching on the lanes associated with each phase within a certain distance.
+    \item Fixed time: a method that activates each phase for a fixed amount of time, regardless of traffic conditions. It was used as a compromise for the inability of obtaining optimal fixed times for all the intersections due to the difficulties laid out in Section \ref{par:adios_fases}. Two different fixed times were tested, 20 and 40 seconds.
+\end{itemize}
+
+\section{Description of the proposed methods} \label{sec:proposed_models}
+\subsection{Problem formulation} \label{subsec:meth_problem_form}
+We modelled intermodal \acrfull{tsc} as a decentralized, partially
+observable \acrfull{mdp}, which in this work we define by the octuple $\mathcal{M}=(S,A,T,R,\Omega,O,\gamma,I)$.
+
+In the aforementioned tuple, $S,A,T,R$ correspond to the state, action, transition function and reward function definitions described in Section~\ref{subsubsec:mdp}; $\Omega$ denotes a finite set of observations where $o \in \Omega$; $O$ is an observation function defined as $O:S\times A \times \Omega \rightarrow [0,1]$; $\gamma$ represents the discount factor used in Q-learning —see Section~\ref{subsubsec:idqn}—; while $I$ corresponds to the set of signalized intersections in the scenario.
+
+For both of the proposed models, each signalized intersection is controlled independently by an agent $i \in I$ that interacts with the traffic simulation deployed in SUMO via the \gls{traci} interface. At each time step $t$, agent $i$ receives a local observation $o_t^i=O(s_t)$ constructed from features of the lanes and pedestrian crossings it controls, selects a discrete action $a_t^i \in A^i$ corresponding to a predefined signal phase applied for a fixed duration, and subsequently receives a scalar reward $r_t^i$. The environment state evolves, then, according to the joint action of all agents and the underlying traffic dynamics simulated over a simulation step.
+
+Each agent aims to optimize the \gls{tsc} probem through their reward function R. Their goal is to learn an optimal joint policy
+\begin{equation} \label{eq:joint_policy}
+    \pi( \bm{a}_t|\bm{s}_t)=\prod_{i \in I}\pi^i_\theta(a^i_t|o^i_t)
+\end{equation}
+maximizing the expected discounted return
+\begin{equation} \label{eq:discount_return}
+F(\pi)=\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\sum_{i\in I}\gamma^{t}r_{t}^{i}\right],
+\end{equation}
+
+\noindent where $\theta_i$ denotes the parameters of agent $i$'s policy and $\mathbb{E}$ refers to the averaged return over all possible trajectories across states and actions $\tau=(s_0, a_0, s_1, a_1,...)$ generated by following policy $\pi$ under the environment transition dynamics $T(s_{t+1}|s_t,a_t)$. As the model definition is based on independent agents, the learnt policy is decentralized following $\pi=\{\pi_i \}_{i \in I}$, enabling each agent to independently maximize its own long-term cumulative reward.
+
+The following sections treat in further detail the definitions of the different parts of the described problem.
+
+\subsection {Action space} \label{subsec:action_space}
+
+Each intersection $i$ exposes a discrete action space $a_t^i \in \{0, \dots, G_i - 1\}$, where $G_i$ is the number of predefined green phases at that intersection. Action spaces are, thus, heterogeneous across intersections. An action corresponds to a request for the signal to display the associated green phase.
+ 
+There are two circumstances in which action selection is not controlled by the agent:
+ 
+\begin{itemize}
+\item \textbf{Automatic yellow phase insertion:} if the requested phase chosen by the agent differs from the currently active one, the environment does not switch directly; it inserts an automatically generated transitional yellow phase covering exactly the signal groups that move from green to red  between the two phases while not modifying the ones that were red, guaranteeing safe transitions between conflicting movements.
+
+The length of this phase can be defined on a per-scenario basis. The chosen length used at the experiments performed in this work is listed in the relevant section,~\ref{subsec:experimental_setup}.
+
+\item \textbf{Anti-starvation cap:} A hyperparameter $H$ was added, setting a bound on how long the same green phase may be held across consecutive decisions. If the policy requests the same phase for $H$ consecutive control steps, the environment overrides the request and forces a switch to the next phase in round-robin order.
+
+This hyperparameter was added after some baseline methods favoured excessively intersection movements with high traffic counts, especially in peak-hour demand scenarios. Similarly, Section~\ref{subsec:experimental_setup} lists the value used in each scenario. 
+\end{itemize}
+
+The rest of the elements of the formulation are different between the two proposed methods, thus they will be described separately.
+
+\subsection{The IDQN MM agent} \label{subsec:idqn_mm}
+
+The first of the proposed agents is an extension of the IDQN agent developed by Ault \textit{et al.}~\cite{Ault2019} for a multimodal setting, which has been named as \textbf{IDQN~MM}.
+
+IDQN~MM instantiates one independent Q-learning agent per intersection according to the independent DQN (IDQN) architecture: each agent $i$ learns its own parametrized action-value function $Q(o_i, a_i; \theta_i)$, without explicit communication or parameter sharing with other agents.
+ 
+\subsubsection{Multimodal state representation} \label{subsubsec:idqnmm_state}
+ 
+The observation function produces, for each intersection $i$, a tensor $o_t^i$ containing the observations of all the lanes controlled by the intersection, which are described with a series features. As a result, the dimensions of this tensor are $1 \times L_i \times 9$, for $L_i$ is the number of lanes controlled by intersection $i$ and each lane $l \in L_i$ is described by a 9-dimensional feature vector.
+
+This state representation is explained further in the following lines.
+
+\medskip
+
+\noindent \textbf{Range-limited sensing}
+ 
+\noindent Entities are only considered detected on a lane if their distance to the next downstream traffic light along their route is within a fixed detection range, emulating a fixed-length detector zone rather. The value used in each scenario is reported in Section~\ref{subsec:experimental_setup}.
+
+Because SUMO's built-in per-vehicle waiting-time accumulator is not reliable across successive signals along a route, the agent maintains its own persistent per-vehicle waiting-time dictionary that is incremented locally at each step and cleared on departure.
+
+\medskip
+
+\noindent \textbf{Modal waiting time decomposition for vehicles}
+ 
+\noindent Vehicles are classified as bicycles using their vehicle class or entity name. Then, per-lane waiting time is decomposed into two components: a bicycle-only component to be used in bike lanes, $\beta_t^l$, which is the sum of waiting time over detected bicycles; and a shared bicycle-car component for the rest of lanes, 
+$\tau_{\text{car},t}^l = \max(0,\ \tau_t^l - \beta_t^l)$, where $\tau_l^t$ is the lane's total waiting time. This last subtraction  avoids double-counting waiting time in lanes with mixed car and bike traffic.
+\medskip
+
+\noindent \textbf{Per-lane feature vector}
+ 
+\noindent For lane $l$ at intersection $i$, let $\mathcal{G}_t^i$ denote the set of lanes actively served (green) by the phase at time $t$ displayed at signal $i$, with this set being empty during yellow transitions.
+
+The feature vector is defined as
+ 
+\begin{equation}
+\bm{x}_{t}^{i,l} = \left(
+\mathbb{1}[l \in \mathcal{G}_t^i],\;
+\tau_{\text{car},t}^l,\;
+\beta_t^l,\;
+W_{\text{ped},t}^i\;
+\right),
+\end{equation}
+
+\noindent where 
+\begin{itemize}
+    \item[] $\mathbb{1}[l \in \mathcal{G}_t^i]$ is used as an indicator function to mark whether lane $l$ pertains to the served lanes $\mathcal{G}_t^i$, in which case it equals 1, else 0;
+    \item[] $\tau_{\text{car},t}^l$ and $\beta_t^l$ correspond to the modal waiting times defined some lineas earlier, normalized; and
+    \item[] $W_{\text{ped},t}^i$ defines the normalized waiting time of pedestrians associated with the edge containing lane $l$, with its calculation being described more thoroughly in the next epigraph.
+\end{itemize}
+
+\noindent The observant reader will have noticed that the described feature vector only lists four and not nine features as the tensor description advanced. The missing features correspond to modal queue and speed values which are included for evaluation reasons; as these are not used by the IDQN~MM agent, they were omitted from this explanation for simplicity.
+
+Those are:
+\begin{itemize}
+    \item[]$n_{\text{appr}}^l$ is the count of approaching (i.e.\ not currently waiting) vehicles on the lane;
+    \item[]$q_l^t$ and $q_l^{bike,t}$ are the (all-vehicle and bicycle-only) queue counts
+    \item[]$\bar v_l^t$ is the mean speed of detected vehicles on the lane (zero if the lane is empty)
+\end{itemize}
+ 
+\noindent \textbf{Pedestrian sensing}
+
+\noindent Pedestrian waiting times are computed at the intersection level rather than on a per-lane basis. First, the set of
+edges controlled by intersection $i$ is obtained by mapping every controlled inbound/outbound lane to its parent edge. Over this edge set, the agent queries SUMO for all currently present pedestrians —using the \gls{traci} call \texttt{getLastStepPersonIDs}—, stores their IDs and, for each, retrieves its instantaneous waiting time. A pedestrian is counted as \textit{waiting} if this waiting time is  positive; $W_{i,ped}^t$ is the sum of waiting time over waiting pedestrians, which resets when pedestrians have been served by a phase. As compound intersections can have successive pedestrian crossings, pedestrian IDs are kept and transferred across edges if these are still within the control of agent $i$.
+
+Nevertheless, as shown in earlier lines, these pedestrian measures ultimately are included on all the lane feature vectors for the corresponding edge. This approach was chosen deliberately to align with the sensor approach that IDQN applies to cars, which would correspond to approach cameras in a pedestrian detection setting.
+ 
+\subsubsection{Reward function} \label{subsubsec:idqnmm_reward}
+ 
+The reward used by IDQN~MM is a scaled, clipped, negated delta of a weighted multimodal waiting-time cost.
+
+Let the combined waiting-time cost at intersection $i$ and step $t$ be defined as
+
+\begin{equation}
+C_t^i = \sum_{l \in L_i} \tau_{\text{car},t}^l \;+\; w_{\text{bike}} \sum_{l \in L_i} \beta_t^l \;+\; w_{\text{ped}}\, W_{\text{ped},t}^i,
+\end{equation}
+ 
+\noindent with $w_{\text{bike}}$ and $w_{\text{ped}}$ being modal weight hyperparameters used to balance the reward signal across modes. The reward function is then
+ 
+\begin{equation} \label{eq:idqnmm_reward}
+r_t^i = \operatorname{clip}\!\left( -\frac{C_t^i - C_{t-1}^i}{\eta},\; -\kappa,\; \kappa \right),
+\end{equation}
+
+\noindent where $\eta$ normalizes the cost delta and the $\pm \kappa$ clip  symmetrically bounds the reward magnitude. A positive reward therefore indicates that the intersection's combined multimodal waiting cost \emph{decreased} relative to
+the previous step.
+
+Weights and constants are resolved on a per-scenario level. The ones used in the assessments performed in this work are listed in Section~\ref{subsec:experimental_setup}.
+
+The choice for a delta-based reward function instead of the existing IDQN waiting time formulation was made during the development of the method, as the original function quickly became monotonic when agent performance was poor. Furthermore, the delta formulation makes the reward sensitive to local improvement or deterioration rather than to the absolute demand levels of each approach, which helps normalize reward scale across heterogeneously-loaded intersections. Clipping and normalization were added for increased optimization stability.
+ 
+\subsubsection{Function approximation architecture}
+
+Instead of IDQN's original 2D convolution layer architecture, the proposed method relies on its own model architecture, based on a Deep Sets encoder \cite{Zaheer2017}, which has been named as \texttt{LaneWiseModel}.
+
+\texttt{LaneWiseModel} processes each lane's feature vector independently, aggregating across them before action selection:
+ 
+\begin{enumerate}
+\item First, a shared-weight per-lane encoder $\phi_\theta$, a
+two-layer multilayer perceptron (MLP) with rectifier linear unit (ReLU) activations, is applied identically to every lane's feature
+vector $\bm{x}_t^{i,l}$, independent of lane identity or position.
+\item The resulting per-lane embeddings are aggregated by mean pooling over the lane dimension,
+$\bar h_t^i = \frac{1}{L_i}\sum_{l} \phi_\theta(\bm{x}_t^{i,l})$, yielding a fixed-size intersection embedding, independent of the  number of controlled lanes $L_i$ or their order.
+\item A decision head composed of a further two-layer MLP followed by a PyTorch discrete action-value head maps
+$\bar h_i^t$ to $Q(o_i^t, a,;\theta_i)$.
+\end{enumerate}
+
+While the original convolution layer architecture works on simpler intersections —as are the ones normally modelled in the current state of the art \cite{Ault2021}—, the complexity of some of the intersections modelled in the present work is orders of magnitude larger. Pedestrian paths, bike or bus lanes, and especially compound intersections can result in disparate lane orderings that the existent model was not able.
+
+The chosen approach ensures permutation invariance to avoid this, as the same lane encoder is used on each lane and aggregated in an order-independent way, the resulting Q-function is invariant to the arbitrary ordering in which lanes are enumerated. This accommodates intersections with differing lane counts and topologies, especially when these are compound.
+ 
+\subsubsection{Learning Algorithm} \label{subsubsec:idqn_learn_algo}
+ 
+Each agent is trained with the standard off-policy deep Q-learning algorithm that IDQN used, with its objective being defined as
+\begin{equation} \label{ec:idqnmm_obj}
+L(\theta_i) = \mathbb{E}\Big[\big(r_t^i + \gamma \max_{a'} Q(o_{t+1}^i, a'; \theta_i^{-}) - Q(o_t^i, a_t^i; \theta_i)\big)^2\Big],
+\end{equation}
+\noindent where $\theta_i$ is the periodically-optimized target network and $\gamma$ the discount factor, which is used to determine the importance of future rewards compared to immediate ones.
+
+Optimization is handled by adaptive moment estimation (Adam), with gradient-norm clipping; while exploration is $\varepsilon$-greedy with linear decay. For further training stability, the replay buffer is reset at the start of each training episode.
+
+Honouring the independence claimed on its acronym, every intersection's network parameters, optimizer state, replay buffer, and exploration schedule are entirely separate; no gradient, parameter, or replay data is shared across intersections.
 
 \subsection{Handling of vehicles and pedestrians that never reach their destination}
 
@@ -81,13 +277,15 @@ The reward function used by the IDQN algorithm (see tal) analyses at each step
 
 % DEFINIR una vez tengamos bien
 
-To normalize the reward values, the positive 95\% percentile of the \verb|total_wait|
- delta values observed during the training process was chosen, along with a clipping
- to the range $[-p, p]$, where experimentation determined 3 as the best value for $p$:
+Finally, experimentation showed that the best results were obtained by performing weighting and normalization of the reward values with the iterative process laid out in Section \ref{subsubsec:params}. Table \ref{tab:weights} in the mentioned section shows the final values used.
  
 % poner ec
 
-replay-buffer reset hook for IDQN agents and wired it to run at the start of each training episode, so the buffer clears every epoch
+replay-buffer reset hook for IDQN agents and wired it to run at the start of each training episode, so the buffer clears every , ojo q epoch y episode not the same
 
 decir colisiones
 
+
+\subsection{State definition} \label{subsec:state_def}
+para mplight:
+we do not use $n_{i,ped,wait}^t$ because we cannot pair to phases the number of peds waiting at a given crossing so we have a pressure
