@@ -18,7 +18,7 @@ The area chosen for the simulation scenarios is the city of Copenhagen, Denmark.
 \subsubsection{Definition}
 
 
-The network scenario is defined geographically as the rectangular area delimited by the following thoroughfares: in the northeast, the Sølvgade-Fredensgade axis; in the northwest, the Blegdamsvej-Fælledvej-Blågardsgade direction; southwesterly the Åboulevard-Gyldenløvesgade-H. C. Andersens Boulevard; and southeasterly by the Nørre Voldgade-Øster Voldgade streets. The area contains dozens of intersections, of which 25 are signalized. Figure \ref{fig:area_sat} displays the area of interest along with the signalized junctions, oriented north.
+The network scenario is defined geographically as the rectangular area delimited by the following thoroughfares: in the northeast, the Sølvgade-Fredensgade axis; in the northwest, the Blegdamsvej-Fælledvej-Blågardsgade direction; southwesterly the Åboulevard-Gyldenløvesgade-H. C. Andersens Boulevard; and southeasterly by the Nørre Voldgade-Øster Voldgade streets. The area contains 1677 intersections, of which 25 are signalized. Figure \ref{fig:area_sat} displays the area of interest along with the signalized junctions, oriented north.
 
 \begin{figure}[h]
 \centering
@@ -189,7 +189,7 @@ The \gls{fhwa} states that in urban areas the $k$ value is placed towards the lo
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{Value}}} & \multicolumn{3}{c}{\textbf{Mode}}                   \\
 \cmidrule(l){2-4}
 \multicolumn{1}{c}{}                                & Car & Bike & Pedestrians \\ \hline
-$k$                                                 & 0.0487       & 0.0844        & 0,0548               \\
+$k$                                                 & 0.0487       & 0.0844        & 0.0548               \\
 ¼\,$k$                                     & 0.0122       & 0.0211        & 0.0137              \\ \bottomrule
 
 \end{tabular}
@@ -287,7 +287,7 @@ To stabilize Q-value growth during training, the target network update parameter
 \multicolumn{1}{c}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Single\\ intersection\end{tabular}}}} & \multicolumn{2}{c}{\textbf{Weights}} & \multirow{2}{*}{\textbf{Normalization}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Clipping\\ value\end{tabular}}} \\ \cmidrule(lr){2-3}
 \multicolumn{1}{c}{} & B & P &  &  \\ \midrule
 IDQN MM & 0.768 & 114.603 & 540.5 & 3 \\
-MPLight MM & 2.267 & 3.091 & 18 & N/A \\ \midrule
+MPLight MM & 2.267 & 3.091 & N/A & 18 \\ \midrule
 \textbf{Corridor} &  &  &  &  \\ \midrule
 IDQN MM & 0.059 & 7.981 & 1277.5 & 3 \\ \bottomrule
 \end{tabular}
@@ -316,16 +316,16 @@ The superior half of Table~\ref{tab:perf_part1} presents the best performance ac
 
 The values compiled in the table were obtained from the best across-run mean at each episode, after a five-episode rolling average to avoid outliers. The reported mean corresponds not to the smoothed value, but to the actual average of the five runs at that episode.
 
-It is important to note that the values for pedestrian queues were obtained from calculations with the \texttt{getServedPersonCount} approach described in Section \ref{subsec:state_def}, due to the SUMO limitations reported in the same section. Hence, it should be considered that the pedestrian queue values do not correspond to the actual number of pedestrians waiting at an intersection, but to the number of pedestrians \textit{unserved} by the traffic signal phases on each step. The asterisk in the relevant results' entries indicates this fact.
+It is important to note that the values for pedestrian queues were obtained from calculations with the \texttt{getServedPersonCount} approach described in Section~\ref{subsubsec:mp_state}, due to the SUMO limitations reported in the same section. Hence, it should be considered that the pedestrian queue values do not correspond to the actual total number of pedestrians waiting at an intersection, but to the number of pedestrians \textit{unserved} by the traffic signal phases on each step. The asterisk in the relevant results' entries indicates this fact. We were not able to integrate the pedestrian queue gathering into the architecture of the FMA2C, hence, its values are not reported in the table.
 
 \begin{landscape}
 \begin{table}[]
 \centering
-\caption[Performance of models and baselines during training.]{Performance of models and baselines during training. Bold values correspond to the best performance for each metric. \textit{C}, \textit{B} and \textit{P} designate car, bicycle and pedestrian-specific results, respectively. $\Sigma$ represents combined results. FMA2C architecture impeded the gathering of pedestrian queue data.}
+\caption[Performance of models and baselines during training.]{Performance of models and baselines during training. Bold values correspond to the best performance for each metric. \textit{C}, \textit{B} and \textit{P} designate car, bicycle and pedestrian-specific results, respectively. $\Sigma$ represents combined results.}
 \label{tab:perf_part1}
 \begin{tabular}{lcccccccccc}
 \toprule
-\multicolumn{1}{c}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Single\\ intersection\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Duration\\{}[s]\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Time\\ loss [s]\end{tabular}}} & \multicolumn{4}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Waiting time [s]\end{tabular}}} & \multicolumn{4}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Total queue [ents.]}\end{tabular}} \\
+\multicolumn{1}{c}{\multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Single\\ intersection\end{tabular}}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Travel\\{}time [s]\end{tabular}}} & \multirow{2}{*}{\textbf{\begin{tabular}[c]{@{}c@{}}Delay\\{}[s]\end{tabular}}} & \multicolumn{4}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Waiting time [s]\end{tabular}}} & \multicolumn{4}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Total queue [ents.]}\end{tabular}} \\
 \cmidrule(r){4-7} \cmidrule(l){8-11}
 \multicolumn{1}{c}{} &  &  & C & B & P & $\Sigma$ & C & B & P$^*$ & $\Sigma$ \\
 \midrule
@@ -340,9 +340,20 @@ MPLight & 125.7 & 83.99 & 60.38 & 33.64 & 17.74 & 53.03 & 27236.2 & 5058 & 4379.
 MPLight MM & 113.88 & 73.48 & 53.75 & 60.71 & 16.47 & 47.02 & \textbf{25987.2} & 4188.6 & 4150.4 & 36292.2 \\
 IPPO & 113.79 & 72.52 & 57.74 & 30.92 & 16.03 & 50.65 & 26118 & 4325 & 4089 & 37706 \\
 FMA2C & \textbf{86.72} & \textbf{49.02} & \textbf{34.18} & \textbf{16.86} & \textbf{14.84} & \textbf{29.84} & 20859 & 2467 & N/A & 23612 \\
-\bottomrule
+\midrule
+\textbf{Corridor} &  &  &  &  &  &  &  &  &  &  \\ \midrule
+Max Pressure & 273 & 219.64 & 135.77 & 207.95 & 209.43 & 197.28 & 245795 & 199781 & N/A & 445576 \\
+Max Wave & 289.23 & 235.81 & 140.59 & 234.25 & 205.1 & 214.45 & 227992 & 193001 & N/A & 420993 \\
+Fixed time 20 & 190.28 & 139.17 & 48.21 & 124.4 & 33.44 & 99.78 & 155509 & 137797 & N/A & 293306 \\
+Fixed time 40 & 192.13 & 140.94 & 48.81 & 126.79 & 38.49 & 100.86 & 166871 & 146965 & N/A & 312795 \\
+IDQN & 171.26 & 119.7 & 68.84 & 112.8 & \textbf{22.15} & 94.69 & 137943 & 121912 & N/A & 259855 \\
+IDQN MM & 157.72 & 106.43 & 39.73 & 95.75 & 22.28 & 76.65 & 92726 & 84658 & N/A & 177384 \\
+MPLight & 158.85 & 107.3 & 37.17 & 110.1 & 26.2 & 81.81 & 81499 & 74609 & N/A & 156108 \\
+IPPO & 158.49 & 106.8 & 52.96 & 108.95 & 26.8 & 86.78 & 82633 & 67675 & N/A & 150308 \\
+FMA2C & \textbf{129.46} & \textbf{78.47} & \textbf{35.48} & \textbf{60.26} & 36.09 & \textbf{53.54} & \textbf{59558} & \textbf{52155} & N/A & \textbf{111713} \\ \bottomrule
 \end{tabular}
 \end{table}
+
 \end{landscape}
 
 The following plots show the values of the main metrics for all the models across the training episodes, averaged across the five runs performed. The plots were smoothed with a five-episode rolling average to avoid outliers. More plots can be found in Appendix~\ref{ch:app_results}.
@@ -351,64 +362,124 @@ The following plots show the values of the main metrics for all the models acros
 \makebox[\linewidth]{%        to center the image
 \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/duration.png}}
-\captionof{figure}{Average combined travel time per epoch.} \label{fig:duration_j1}
+\captionof{figure}{Single intersection: average combined travel time per epoch.} \label{fig:duration_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/queue_combined.png}}
-  \captionof{figure}{Average accumulated combined queue per epoch.} \label{fig:queue_j1}
+  \captionof{figure}{Single intersection: average accumulated combined queue per epoch.} \label{fig:queue_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/waitingTime.png}}
-  \captionof{figure}{Average combined waiting time per epoch.} \label{fig:waitingTime_j1}
+  \captionof{figure}{Single intersection: average combined waiting time per epoch.} \label{fig:waitingTime_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_car.png}}
-  \captionof{figure}{Average waiting time, for cars, per epoch.} \label{fig:waitingTime_cars_j1}
+  \captionof{figure}{Single intersection: average waiting time, for cars, per epoch.} \label{fig:waitingTime_cars_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_bike.png}}
-  \captionof{figure}{Average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
+  \captionof{figure}{Single intersection: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_pedestrian.png}}
-  \captionof{figure}{Average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
+  \captionof{figure}{Single intersection: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
 \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_bike.png}}
-  \captionof{figure}{Average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
+  \captionof{figure}{Single intersection: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_pedestrian.png}}
-  \captionof{figure}{Average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
+  \captionof{figure}{Single intersection: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
 \end{minipage}
 
 \subsection{Experiment 1: Performance in corridor scenario} \label{subsec:perf_c2}
-Results for the corridor scenario can also be found in Table~\ref{tab:perf_part1}, listing the best performance achieved during training for each model in the single training run performed.
+Results for the corridor scenario can also be found in Table~\ref{tab:perf_part1} some pages earlier, listing the best performance achieved during training for each model in the single training run performed.
 
 The same reporting metrics were used as in the single intersection scenario, with the same considerations regarding pedestrian queue measurements. The rest of the results can be assessed as well in Table~\ref{tab:perf_part2}, in Appendix~\ref{ch:app_results}.
 
 While only a training run was performed for the corridor scenario, the values deemed as best were obtained nevertheless after the same five-episode rolling average to avoid outliers. Again, the reported values correspond not to the smoothed ones, but to the actual value yielded by each model.
+
+Unfortunately, the issues presented in Section~\ref{subsubsec:mp_state} with pedestrian queue observation impeded the gathering of pedestrian queue data for the corridor scenario in any model. MPLight MM was not trained in this scenario due to this circumstance.
+
+The following plots show the values of the main metrics for all the models across the training episodes. The plots were smoothed with a five-episode rolling average to avoid outliers. More plots can be found in Appendix~\ref{ch:app_results}.
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+\includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/duration.png}}
+\captionof{figure}{Corridor: average combined travel time per epoch.} \label{fig:duration_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/queue_combined.png}}
+  \captionof{figure}{Corridor: average accumulated combined queue per epoch.} \label{fig:queue_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/waitingTime.png}}
+  \captionof{figure}{Corridor: average combined waiting time per epoch.} \label{fig:waitingTime_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_car.png}}
+  \captionof{figure}{Corridor: average waiting time, for cars, per epoch.} \label{fig:waitingTime_cars_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_bike.png}}
+  \captionof{figure}{Corridor: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_pedestrian.png}}
+  \captionof{figure}{Corridor: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_bike.png}}
+  \captionof{figure}{Corridor: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_pedestrian.png}}
+  \captionof{figure}{Corridor: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_c2}
+\end{minipage}
 
 \subsection{Experiment 2: Mode weights Pareto frontier, IDQN MM} \label{subsec:pareto_idqn}
 The following plots showcase the results of the Pareto frontier analysis performed for the IDQN MM model in the single intersection scenario. The plots show the total accumulated waiting time for each mode on each axis, with only the Pareto optimal points highlighted.
@@ -417,27 +488,27 @@ The following plots showcase the results of the Pareto frontier analysis perform
 \makebox[\linewidth]{%        to center the image
 \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_bike.png}}
-  \captionof{figure}{Pareto frontier for car and bicycle total waiting times.}\label{fig:pareto_idqn_cars_bikes_j1}
+  \captionof{figure}{Single intersection, IDQN~MM: Pareto frontier for car and bicycle total waiting times.}\label{fig:pareto_idqn_cars_bikes_j1}
 \end{minipage}%
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_ped.png}}
-  \captionof{figure}{Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_idqn_cars_pedestrians_j1}
+  \captionof{figure}{Single intersection, IDQN~MM: Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_idqn_cars_pedestrians_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
 \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_bike_ped.png}}
-  \captionof{figure}{Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_idqn_bikes_pedestrians_j1}
+  \captionof{figure}{Single intersection, IDQN~MM: Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_idqn_bikes_pedestrians_j1}
 \end{minipage}%
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_3d.png}}
-  \captionof{figure}{Pareto frontier for total waiting times across modes.} \label{fig:pareto_idqn_3d_j1}
+  \captionof{figure}{Single intersection, IDQN~MM: Pareto frontier for total waiting times across modes.} \label{fig:pareto_idqn_3d_j1}
 \end{minipage}
 
 \subsection{Experiment 2: Mode weights Pareto frontier, MPLight MM} \label{subsec:pareto_mplight}
@@ -447,26 +518,26 @@ The following plots showcase the results of the Pareto frontier analysis perform
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_bike.png}}
-  \captionof{figure}{Pareto frontier for car and bicycle total waiting times.} \label{fig:pareto_mplight_cars_bikes_j1}
+  \captionof{figure}{Single intersection, MPLight~MM: Pareto frontier for car and bicycle total waiting times.} \label{fig:pareto_mplight_cars_bikes_j1}
 \end{minipage}%
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_car_ped.png}}
-  \captionof{figure}{Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_mplight_cars_pedestrians_j1}
+  \captionof{figure}{Single intersection, MPLight MM: Pareto frontier for car and pedestrian total waiting times.} \label{fig:pareto_mplight_cars_pedestrians_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_2d_bike_ped.png}}
-  \captionof{figure}{Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_mplight_bikes_pedestrians_j1}
+  \captionof{figure}{Single intersection, MPLight~MM: Pareto frontier for bicycle and pedestrian total waiting times.} \label{fig:pareto_mplight_bikes_pedestrians_j1}
 \end{minipage}%
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/pareto_idqn/pareto_3d.png}}
-  \captionof{figure}{Pareto frontier for total waiting times across modes.} \label{fig:pareto_mplight_3d_j1}
+  \captionof{figure}{Single intersection, MPLight~MM: Pareto frontier for total waiting times across modes.} \label{fig:pareto_mplight_3d_j1}
 \end{minipage}

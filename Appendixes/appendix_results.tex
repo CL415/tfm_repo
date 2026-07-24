@@ -33,7 +33,17 @@ MPLight & 3436.6 & \textbf{867} & \textbf{742} & 5045.6 & 41.6 & \textbf{0} & \t
 MPLight MM & 3758.8 & \textbf{867} & \textbf{742} & 5367.8 & 33 & \textbf{0} & \textbf{0} \\
 IPPO & 3619 & \textbf{867} & \textbf{742} & 5228 & 33 & \textbf{0} & \textbf{0} \\
 FMA2C & \textbf{4772} & \textbf{867} & \textbf{742} & \textbf{6381} & \textbf{32} & \textbf{0} & \textbf{0} \\
-\bottomrule
+\midrule
+\textbf{Corridor} &  &  &  &  &  &  &  \\ \midrule
+Max Pressure & 2111 & 10176 & 3616 & 15885 & 34 & 449 & 26 \\
+Max Wave & 2040 & 10077 & 3630 & 15721 & 35 & 466 & 12 \\
+Fixed time 20 & 3202 & 12506 & \textbf{3642} & 19346 & 18 & 305 & \textbf{0} \\
+Fixed time 40 & 3204 & 12477 & \textbf{3642} & 19305 & 19 & 357 & \textbf{0} \\
+IDQN & 3193 & 11962 & \textbf{3642} & 18639 & \textbf{1} & 193 & \textbf{0} \\
+IDQN MM & 3198 & 12703 & \textbf{3642} & 19538 & 16 & 136 & \textbf{0} \\
+MPLight & 3195 & 12391 & \textbf{3642} & 19170 & 11 & 171 & \textbf{0} \\
+IPPO & 3146 & 12157 & \textbf{3642} & 18954 & 9 & 277 & \textbf{0} \\
+FMA2C & \textbf{3213} & \textbf{12974} & \textbf{3642} & \textbf{19848} & 18 & \textbf{57} & \textbf{0} \\ \bottomrule
 \end{tabular}
 \end{table}
 \end{landscape}
@@ -49,49 +59,106 @@ FMA2C & \textbf{4772} & \textbf{867} & \textbf{742} & \textbf{6381} & \textbf{32
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_combined.png}
-  \caption{Average combined throughput per epoch.} \label{fig:throughput_j1}
+  \caption{Single intersection: average combined throughput per epoch.} \label{fig:throughput_j1}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_car.png}
-  \caption{Average car throughput per epoch.} \label{fig:throughput_cars_j1}
+  \caption{Single intersection: average car throughput per epoch.} \label{fig:throughput_cars_j1}
 \end{figure}%
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_bike.png}
-  \caption{Average bicycle throughput per epoch.} \label{fig:throughput_bikes_j1}
+  \caption{Single intersection: average bicycle throughput per epoch.} \label{fig:throughput_bikes_j1}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_pedestrian.png}
-  \caption{Average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_j1}
+  \caption{Single intersection: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_j1}
 \end{figure}%
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_car.png}
-  \caption{Accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_j1}
+  \caption{Single intersection: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_j1}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_bike.png}
-  \caption{Accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_j1}
+  \caption{Single intersection: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_j1}
 \end{figure}%
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_pedestrian.png}
-  \caption{Accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_j1}
+  \caption{Single intersection: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_j1}
 \end{figure}
 
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_bike.png}
-  \caption{Fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_j1}
+  \caption{Single intersection: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_j1}
 \end{figure}%
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_ped.png}
-  \caption{Fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_j1}
+  \caption{Single intersection: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_j1}
+\end{figure}
+
+\subsubsection{Corridor scenario}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/timeLoss.png}
+  \captionof{figure}{Corridor: average combined time loss per epoch.} \label{fig:timeLoss_c2}
+\end{figure}%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_combined.png}
+  \caption{Corridor: average combined throughput per epoch.} \label{fig:throughput_c2}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_car.png}
+  \caption{Corridor: average car throughput per epoch.} \label{fig:throughput_cars_c2}
+\end{figure}%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_bike.png}
+  \caption{Corridor: average bicycle throughput per epoch.} \label{fig:throughput_bikes_c2}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_pedestrian.png}
+  \caption{Corridor: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_c2}
+\end{figure}%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_car.png}
+  \caption{Corridor: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_c2}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_bike.png}
+  \caption{Corridor: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_c2}
+\end{figure}%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_pedestrian.png}
+  \caption{Corridor: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_c2}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_bike.png}
+  \caption{Corridor: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_c2}
+\end{figure}%
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_ped.png}
+  \caption{Corridor: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_c2}
 \end{figure}

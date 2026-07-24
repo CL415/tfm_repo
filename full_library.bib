@@ -319,14 +319,76 @@ keywords = {Deep reinforcement learning, Traffic light, Cyclists, Waiting time, 
 abstract = {Cyclists prefer to use infrastructures that separate them from motorized traffic. Using a traffic light to segregate car and bike flows, with the addition of bike-specific green phases, is a lightweight and cheap solution that can be deployed dynamically to assess the opportunity of a heavier infrastructure such as a separate bike lane. To compensate for the increased waiting time induced by these new phases, we introduce in this paper a deep reinforcement learning solution that adapts the green phase cycle of a traffic light to the traffic. Vehicle counter data are used to compare the DRL approach with the actuated traffic light control algorithm over whole days. Results show that DRL achieves better minimization of vehicle waiting time at every hours. Our DRL approach is also robust to moderate changes in bike traffic. The code used for this paper is available at : https://github.com/LucasMagnana/A-DRL-solution-to-help-reduce-the-cost-in-waiting-time-of-securing-a-traffic-light-for-cyclists}
 }
 
+@inproceedings{Zheng2019,
+author = {Zheng, Guanjie and Xiong, Yuanhao and Zang, Xinshi and Feng, Jie and Wei, Hua and Zhang, Huichu and Li, Yong and Xu, Kai and Li, Zhenhui},
+title = {Learning Phase Competition for Traffic Signal Control},
+year = {2019},
+isbn = {9781450369763},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3357384.3357900},
+doi = {10.1145/3357384.3357900},
+abstract = {Increasingly available city data and advanced learning techniques have empowered people to improve the efficiency of our city functions. Among them, improving urban transportation efficiency is one of the most prominent topics. Recent studies have proposed to use reinforcement learning (RL) for traffic signal control. Different from traditional transportation approaches which rely heavily on prior knowledge, RL can learn directly from the feedback. However, without a careful model design, existing RL methods typically take a long time to converge and the learned models may fail to adapt to new scenarios. For example, a model trained well for morning traffic may not work for the afternoon traffic because the traffic flow could be reversed, resulting in very different state representation. In this paper, we propose a novel design called FRAP, which is based on the intuitive principle of phase competition in traffic signal control: when two traffic signals conflict, priority should be given to one with larger traffic movement (i.e., higher demand). Through the phase competition modeling, our model achieves invariance to symmetrical cases such as flipping and rotation in traffic flow. By conducting comprehensive experiments, we demonstrate that our model finds better solutions than existing RL methods in the complicated all-phase selection problem, converges much faster during training, and achieves superior generalizability for different road structures and traffic conditions.},
+booktitle = {Proceedings of the 28th ACM International Conference on Information and Knowledge Management},
+pages = {1963–1972},
+numpages = {10},
+keywords = {urban data, traffic signal control, reinforcement learning},
+location = {Beijing, China},
+series = {CIKM '19}
+}
+
+@inproceedings{Wei2018,
+author = {Wei, Hua and Zheng, Guanjie and Yao, Huaxiu and Li, Zhenhui},
+year = {2018},
+month = {07},
+pages = {2496-2505},
+title = {IntelliLight: A Reinforcement Learning Approach for Intelligent Traffic Light Control},
+doi = {10.1145/3219819.3220096}
+}
+
+@article{Tan2019,
+  title={Cooperative deep reinforcement learning for large-scale traffic grid signal control},
+  author={Tan, Tian and Bao, Feng and Deng, Yue and Jin, Alex and Dai, Qionghai and Wang, Jie},
+  journal={IEEE transactions on cybernetics},
+  volume={50},
+  number={6},
+  pages={2687--2700},
+  year={2019},
+  publisher={IEEE}
+}
+@inproceedings{Torabi2020,
+author = {Torabi, Behnam and Zalila-Wenkstern, Rym and Saylor, Robert and Ryan, Patrick},
+title = {Deployment of a Plug-In Multi-Agent System for Traffic Signal Timing},
+year = {2020},
+isbn = {9781450375184},
+publisher = {International Foundation for Autonomous Agents and Multiagent Systems},
+address = {Richland, SC},
+abstract = {In this paper we discuss the deployment of DALI, a multiagent traffic signal timing system. Intersection controllers are augmented with agents which communicate with one another through direct links. The agents collaboratively adapt signal timings by considering the feedback of all agents affected by a change. DALI was deployed in the City of Richardson's Waterview Parkway corridor at three major intersections. The data collected for a three week period shows that on average, DALI reduced delay by 40.12\%.},
+booktitle = {Proceedings of the 19th International Conference on Autonomous Agents and MultiAgent Systems},
+pages = {1386–1394},
+numpages = {9},
+keywords = {traffic signal timing, intelligent transportation systems, deployed multi-agent systems},
+location = {Auckland, New Zealand},
+series = {AAMAS '20}
+}
+
+@inproceedings{Torabi2018,
+author = {Torabi, Behnam and Zalila-Wenkstern, Rym and Saylor, Robert},
+year = {2018},
+month = {09},
+pages = {1-8},
+title = {A Self-Adaptive Collaborative Multi-Agent based Traffic Signal Timing System},
+doi = {10.1109/ISC2.2018.8656659}
+}
+
 @ARTICLE{Zhang2025,
   author={Zhang, Xinyu and Wu, Zuohan and Zhang, Chen Jason and Zheng, Libin and Cheng, Peng and Yin, Jian and Shahabi, Cyrus},
   journal={IEEE Transactions on Knowledge and Data Engineering}, 
-  title={VPLight: A Reinforcement Learning Approach for Traffic Signal Control with Pedestrian Dynamics}, 
-  year={2025},
-  volume={},
-  number={},
-  pages={1-14},
+  title={VPLight: A Reinforcement Learning Approach for Traffic Signal Control With Pedestrian Dynamics}, 
+  year={2026},
+  volume={38},
+  number={3},
+  pages={2079-2093},
   keywords={Pedestrians;Roads;Legged locomotion;Feature extraction;Vehicle dynamics;Green products;Traffic control;Spatiotemporal phenomena;Graphical models;Dynamic scheduling;Traffic Signal Control;Reinforcement Learning;Traffic Data Mining},
   doi={10.1109/TKDE.2025.3641213}}
 

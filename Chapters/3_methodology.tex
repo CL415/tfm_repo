@@ -78,6 +78,8 @@ Besides their diversity in learning strategies and coordination levels, and thei
 
 Furthermore, while the presented baseline methods have been proven in maps based on real-world networks, they have not been tested in scenarios with a complexity comparable to the ones used in this work, with multimodal traffic, compound intersections with special lanes and non-conventional traffic behaviours such as Copenhagen left turns. Hence, the performance of these methods can yield, too, acumen on the applicability of \gls{rltsc} methods to real-world street networks.
 
+Finally, while the baseline methods used in this work were \textit{not} modified to account for multimodal traffic, they have not been modified \textit{either} to ignore it. As will be described as part of the proposed models' definition in further pages —see Section~\ref{sec:proposed_models}—, the T-REX observation functions that relay traffic information were extended to include pedestrians and cyclists; hence, using the same observation tensor, baseline methods can still receive bike traffic data —for SUMO treats both cars and bicycles as vehicles— and optimize including it, without architectural changes. However, the lack of modifications also results on the methods aggregating bicycle and car traffic together, thus treating them equivalently. In this way, the possibility of integrating bicycle traffic into existing \gls{rltsc} architectures can also be studied, as well as the behaviour of mixed bicycle and car traffic in a \gls{rltsc} context.
+
 % TODO añadir comm sobre conclusiones tras leer literatura
 
 The included models are the following: % TODO añadir refs a donde se expliquen, y cita IPPO
@@ -87,7 +89,7 @@ The included models are the following: % TODO añadir refs a donde se expliquen,
 
 \begin{itemize}
     \item Independent Deep Q-Network (IDQN)~\cite{Ault2019}: a single-agent \gls{rltsc} method that uses a \gls{dqn} to learn the optimal policy for each intersection independently. It uses a state representation based on the number of vehicles waiting at each lane, and a reward function based on the total waiting time of vehicles, with lane-level traffic state features aggregated with convolutional layers. Its architecture is explained further in section tal.
-    \item Independent Proximal Policy Optimization (IPPO): a single-agent \gls{rltsc} method that uses a policy gradient method (PPO) to learn the optimal policy for each intersection independently. It uses the same rewards and state representation as IDQN, which enables a good comparison between value-based and policy gradient methods in a multimodal context.
+    \item Independent Proximal Policy Optimization (IPPO)~\cite{Ault2019}: a single-agent \gls{rltsc} method that uses a policy gradient method (PPO) to learn the optimal policy for each intersection independently. It uses the same rewards and state representation as IDQN, which enables a good comparison between value-based and policy gradient methods in a multimodal context.
     \item MPLight~\cite{Chen2020}: a decentralized \gls{rltsc} method that coordinates the traffic signal control of multiple intersections by adding queue pressure into each agent's state representation, enabling it to partially observe neighbouring intersections. With this information, Q-values are estimated for each phase, and their selection done in a phase-competition basis. Its architecture is explained further in section tal.
     \item FMA2C~\cite{Ma2020}: an extension of the earlier MA2C method~\cite{Chu2019} that applies a feudal reinforcement learning architecture to hierarchically coordinate \gls{tsc} over multiple intersections. Each intersection is controlled by a local agent that learns independently, overseen by a regional manager that coordinates the local agents by establishing top-down goals.
 \end{itemize}
@@ -231,7 +233,7 @@ Weights and constants are resolved on a per-scenario level. The ones used in the
 
 The choice for a delta-based reward function instead of the existing IDQN waiting time formulation was made during the development of the method, as the original function quickly became monotonic when agent performance was poor. Furthermore, the delta formulation makes the reward sensitive to local improvement or deterioration rather than to the absolute demand levels of each approach, which helps normalize reward scale across heterogeneously-loaded intersections. Clipping and normalization were added for increased optimization stability.
  
-\subsubsection{Function approximation architecture}
+\subsubsection{Function approximation architecture} \label{subsubsec:idqnmm_architecture}
 
 Instead of IDQN's original 2D convolution layer architecture, the proposed method relies on its own model architecture, based on a Deep Sets encoder \cite{Zaheer2017}, which has been named as \texttt{LaneWiseModel}.
 
@@ -264,40 +266,110 @@ Optimization is handled by adaptive moment estimation (Adam), with gradient-norm
 Honouring the independence claimed on its acronym, every intersection's network parameters, optimizer state, replay buffer, and exploration schedule are entirely separate; no gradient, parameter, or replay data is shared across intersections.
 
 \subsection{The MPLight MM agent} \label{subsec:mplight_mm}
-The second proposed methos is 
+The second proposed method is an extension of the MPLight agent described by Chen \textit{et al.}~\cite{Chen2020}, adapted for a multimodal context. It receives the name of \textit{MPLight~MM}.
 
-\subsection{Handling of vehicles and pedestrians that never reach their destination}
+\medskip 
 
-During the different development phases, it was observed that part of the
- vehicles and pedestrians simulated never reached their destinations, sometimes
- simply because the simulation ended while they were on-route, but in most of
- the cases as a result of becoming stuck due to traffic congestion.
+\noindent Whereas IDQN~MM instantiates one fully independent Q-learning agent per intersection, MPLight~MM is a \textit{shared-parameter} multi-agent formulation; as such, it is similar but also bears some differences.
 
-While several fixes in scenario design resulted in significant improvements in
- this regard, a non-negligible amount of simulated persons still never reached
- their destinations, especially when agents performed poorly or where in early
- training stages.
+Identically as IDQN~MM, every intersection, and thus every agent $i$, inputs its local state $o_t^i$ at time $t$ to a Q-network. However, while in the case of IDQN~MM this Q-network is a per-intersection copy, isolated and separate of the networks of the other intersections, for MPLight~MM the Q-network used is a single unified one, with identical weights across agents.
+ 
+\subsubsection{Action space} \label{subsubsec:mp_action_space}
+ 
+Due to the clashes between SUMO output limitations and the architecture of the original MPLight which will be explained in the following sections, the action space of MPLight~MM does not limit itself to a set of green phases, relying instead in a representation of demand groupings that allows the mapping between queues and traffic signal phases.
 
-The reward function used by the IDQN algorithm (see tal) analyses at each step
- the \verb|total_wait| value, and thus it quickly became monotonic as the
- stuck vehicles kept accumulating time and thus penalising the agent for
- failures it could no longer fix. To address this, a different reward function
- was formulated, using the delta of the \verb|total_wait| value between steps.
+\medskip 
+
+\noindent In MPLight~MM, all positions in controlled links that are given a green light in exactly the same subset of intersection $i$'s phases \textit{and} are not part of different sub-intersections are grouped together in a movement $m_i$. This yields, for each intersection $i$. a movement set $M_i =\{0,\dots,m_i-1\}$ along with inbound and outbound lane groupings associated to it, $L_i^{\text{in}}(m)$ and $L_i^{\text{out}}(m)$. This movement set $M_i$ is, in MPLight's original architecture, defined by a fixed template that does not vary its dimensions; in this proposed method, $M_i$ can adapt to intersections of differing geometries and signal plans.
+ 
+For each green phase of intersection $i$, its two dominant served movements are identified and recorded as a phase pair $h = (m_a, m_b) \in M_i \times {M_i}$. Because MPLight~MM shares one Q-network with all intersections, all phase pairs produced this way across every intersection are concatenated into a single global, network-wide list $\Pi = (\varpi_0, \dots, \varpi_{N-1})$. As a result, the shared Q-network's action space can be defined as $\{0,\dots,N-1\}$, where $N$ corresponds the size of the phase pair list $\Pi$.
+
+Each intersection $i$ only ever gets to select among its own subset of actions $\mathcal{N}_i \subseteq \{0,\dots,N-1\}$ of the action space, containing its own local phases, as $|\mathcal{N}_i| = G_i$. Hence, action selection and exploration are masked to $\mathcal{N}_i$ at decision time.
+ 
+\subsubsection{Multimodal state representation} \label{subsubsec:mp_state}
+ 
+To handle the monitoring of queues, the state function departs from IDQN~MM's per-lane representation and instead exposes, per intersection $i$, a fixed-width vector organized by movement and by global phase pair rather than by individual lane. 
+
+For movement $m$, the queue pressures are computed following the inbound minus downstream pressure definition used in the original MPLight formulation, but classifying by mode and using the movement-derived lane mappings instead of a fixed direction template. This translates mathematically to
+ 
+\begin{align}
+\mathrm{car}_t^i(m) &= \sum_{l \in L_i^{\mathrm{in}}(m)} \big(q_{l,t} - q_{l,t}^{\mathrm{bike}}\big) \;- \sum_{l' \in L_i^{\mathrm{out}}(m)} \big(q_{l',t} - q_{l',t}^{\mathrm{bike}}\big), \text{ and}\\
+\mathrm{bike}_t^i(m) &= \sum_{l \in L_i^{\mathrm{in}}(m)} q_{l,t}^{\mathrm{bike}} \;- \sum_{l' \in L_i^{\mathrm{out}}(m)} q_{l',t}^{\mathrm{bike}},
+\end{align}
+ 
+\noindent where $q_{l,t}$, $q_{l,t}^{\mathrm{bike}}$ are the queue counts on lane $l$ at
+time $t$, for all vehicles and for bikes only, respectively. The subtraction performed to calculate car counts is done to handle lanes with mixed traffic without double counting. It is relevant to mention that this counting process is performed taking into account the detection distance and modal classification steps explained in IDQN MM's state representation, in Section~\ref{subsubsec:idqnmm_state}
+
+\medskip 
+
+\noindent Pedestrian demand, on the other hand, is not attached to a movement due to SUMO limitations.
+
+Ideally, pedestrians waiting on the \texttt{waitingAreas} associated to a given crossing would get their counts used to calculate pressures for the relevant phase, as is done with vehicles. Unfortunately, SUMO does not offer a method to easily count the pedestrians waiting to cross a specific zebra crossing in a scalable way across different intersections. As was seen in the review of the state of the art in multimodal \gls{rltsc}, in Section~\ref{subsec:rlformtsc}, some works in the literature have tackled this problem with a whole pedestrian detection module overriding the simulator limitations \cite{Zhang2025}; however, these approaches greatly surpass the scope of this work.
+
+As a reasonable replacement, pedestrian queues are collected with a method that SUMO does offer: \texttt{getServedPersonCount}. When inputted a SUMO phase index, this \gls{traci} call returns the number of waiting pedestrians that would be served by the given phase if it were green, and the difference in these values is what MPLight~MM uses as an equivalent to find the pedestrian pressure $p_t^i(n)$, and by proxy, all pedestrian queue metrics collected during the monitoring of other methods. As pedestrian crossings are not associated with phase pairs as vehicle movements are, $p_t^i(n)$ is directly attached to each global phase pair.
+
+We are aware of the caveats that this avenue entails. Firstly, it is \textit{too perfect}: sensor setups for pedestrians are far away from perfect and it is not feasible to detect, at every moment, the exact number of pedestrians waiting for a specific traffic signal phase, especially when crossings are close to each other and thus people waiting for different phases share the same space. To add up to it, a more prosaic reason: repeated calls to the \texttt{getServedPersonCount} on large scenarios causes a segmentation fault in SUMO, and it was not possible to debug it during the development of MPLight~MM.
+
+It was decided to adopt \texttt{getServedPersonCount} while not diminishing these warnings, accepting the fact that no pedestrian queues can be collected with it in larger scenarios and as a consequence, that the MPLight~MM method will not be assessed in those.
+
+\medskip
+
+\noindent Having stated these considerations, the full state vector can be defined finally as
+
 \begin{equation}
-    r_t = \verb|total_wait|_{t-1} - \verb|total_wait|_t
+o_t^i = \Big(\mathrm{phase}_t^i,\; \mathrm{car}_t^i(0), \mathrm{bike}_t^i(0),\; \dots,\; \mathrm{car}_t^i(M{-}1), \mathrm{bike}_t^i(M{-}1),\; p_t^i(0), \dots, p_t^i(N{-}1)\Big),
 \end{equation}
 
-% DEFINIR una vez tengamos bien
-
-Finally, experimentation showed that the best results were obtained by performing weighting and normalization of the reward values with the iterative process laid out in Section \ref{subsubsec:params}. Table \ref{tab:weights} in the mentioned section shows the final values used.
+\noindent where $\mathrm{phase}_t^i$ is intersection $i$'s currently active local SUMO phase index; and $M$ corresponds to the largest movement count over the network following $M = \max_i M_i$, so that the other smaller movements can be zero-padded. In this way, the shared Q-learning network receives inputs of equal width across movements.
  
-% poner ec
+\subsubsection{Reward function} \label{subsubsec:mp_reward}
 
-replay-buffer reset hook for IDQN agents and wired it to run at the start of each training episode, so the buffer clears every , ojo q epoch y episode not the same
+The reward function for MPLight~MM is chiefly a version of the one used in the original MPLight, an instantaneous, intersection-level, negated pressure, with a modal split and the addition of weights in a way analogous to IDQN~MM —which was presented in Section~\ref{subsubsec:idqnmm_reward}—:
+ 
+\begin{equation}
+r_t^i = -\Big( \mathrm{car}_t^i + w_{bike}\, \mathrm{bike}_t^i + w_{ped}\, \tilde p_t^i \Big),
+\end{equation}
+ 
+\noindent where $\tilde p_t^i$  is the total pedestrian pressure computed as explained in the previous section,  clipped \emph{before} weighting at a fixed ceiling hyperparameter $\bar P$ for enhanced stability. Akin to IDQN~MM, weights and other settings are resolved on a per-scenario level and compiled in the relevant section,~\ref{subsubsec:params}.
+ 
+\subsubsection{Function approximation architecture}
+ 
+The original MPLight relies for Q-learning approximation in the FRAP competition-graph architecture developed by Zheng \textit{et al.} specifically for \gls{rltsc}~\cite{Zheng2019}. This work proposes an extension of this architecture, modified for the handling of multimodal traffic, which has been given the name of \texttt{FRAP\_MM}.
 
-decir colisiones
+The central inductive bias of FRAP is that the value of choosing a given phase pair depends on how its served movements' demand compares against \textit{every other} phase pair's demand, particularly those pairs that compete with it for a shared movement; the architecture therefore embeds every phase pair's demand and then explicitly scores every ordered pair of phase pairs together.
+ 
+\medskip
 
+\noindent First, for each movement $m \in \{0,\dots,M-1\}$, two elements are computed and concatenated into a per-movement representation $h_t^i(m)$: an indicator expressing whether $m$ is one of the two movements requested by the phase pair served at time $t$, and a demand embedding of that movement's car/bike pressure pair. This process is done via a sigmoid-activated phase embedding, a sigmoid-activated linear demand embedding, and a ReLU-activated linear layer combining the two; a structure defined already by the original FRAP demand embedding. The only difference that \texttt{FRAP\_MM} presents is its widening of the demand input, becoming 2-dimensional due to the modal split ($\mathrm{car}_t^i(m), \mathrm{bike}_t^i(m)$) rather than a single queue value.
+ 
+\medskip
 
-\subsection{State definition} \label{subsec:state_def}
-para mplight:
-we do not use $n_{i,ped,wait}^t$ because we cannot pair to phases the number of peds waiting at a given crossing so we have a pressure
+\noindent As was foretold, pedestrian pressure is injected at the phase-pair level. For pair $n = (m_a, m_b)$, the combined movement demand is formed as in MPLight's FRAP, while the pedestrian pressure for that same phase pair is mapped through a small linear embedding and added to form the combined representation
+\begin{equation}
+z_t^i(n) = h_t^i(m_a) + h_t^i(m_b) + \mathrm{ReLU}\big(p_t^{i\text{, emb}}(n)\big),
+\end{equation}
+
+\noindent All further steps of the model, mainly dealing with the competition graph component, are unmodified from the original FRAP architecture present in MPLight, so their exposition is deemed unnecessary.\footnote{The inquisitive reader can follow the internal processes of FRAP in the paper that describes it,~\cite{Zheng2019}.}
+ 
+\subsubsection{Learning algorithm}
+\label{subsubsec:mplight-learning}
+ 
+Training follows the same off-policy DQN structure described for IDQN~MM in Section~\ref{subsubsec:idqn_learn_algo} (target network, replay buffer, Adam, gradient clipping, $\varepsilon$-greedy exploration), but with several changes reflecting its shared-parameter conception. For they stem mainly from MPLight's original architecture, its listing in this work is summarized. For more details about it, the reader can look up the original paper by Chen \textit{et al.}~\cite{Chen2020}.
+
+\medskip
+
+\noindent \textbf{Shared DQN architecture}
+
+\noindent All $i \in I$ intersections' local states are packed into a single batch at every control step and passed through the single shared, instead of the fully independent procedure that IDQN~MM follows.
+
+\medskip
+
+\noindent \textbf{Action masking}
+
+\noindent As each intersection $i$ can only execute its own local phases, greedy action selection and $\varepsilon$-greedy exploration are limited to $i$'s own subset of actions $\mathcal{N}_i$ rather than the full global one $\{0,\dots,N-1\}$.
+
+\medskip
+
+\noindent \textbf{Exploration and update scalability}
+
+\noindent The linear $\varepsilon$-decay schedule is stretched by the number of intersections, the target-network update interval is scaled by the number of agents and the optimizer update interval is set to the agent number. This measure keeps exploration and update intervals in a reasonable ratio in respect to the data.
