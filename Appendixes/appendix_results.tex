@@ -49,116 +49,138 @@ FMA2C & \textbf{3213} & \textbf{12974} & \textbf{3642} & \textbf{19848} & 18 & \
 \end{landscape}
 
 \subsection*{Additional plots}
-\subsubsection{Single intersection scenario}
+\subsubsection*{Single intersection scenario}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/timeLoss.png}
-  \captionof{figure}{Average combined time loss per epoch.} \label{fig:timeLoss_j1}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_combined.png}
-  \caption{Single intersection: average combined throughput per epoch.} \label{fig:throughput_j1}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+\includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/timeLoss.png}}
+\captionof{figure}{Single intersection: average combined delay per epoch.} \label{fig:timeLoss_j1}
+\end{minipage}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_car.png}
-  \caption{Single intersection: average car throughput per epoch.} \label{fig:throughput_cars_j1}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_bike.png}
-  \caption{Single intersection: average bicycle throughput per epoch.} \label{fig:throughput_bikes_j1}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_combined.png}}
+  \captionof{figure}{Single intersection: average combined throughput per epoch.} \label{fig:throughput_j1}
+\end{minipage}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_pedestrian.png}
-  \caption{Single intersection: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_j1}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_car.png}
-  \caption{Single intersection: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_j1}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_car.png}}
+  \captionof{figure}{Single intersection: average car throughput per epoch.} \label{fig:throughput_cars_j1}
+\end{minipage}%
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_bike.png}
-  \caption{Single intersection: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_j1}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_pedestrian.png}
-  \caption{Single intersection: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_j1}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_bike.png}}
+  \captionof{figure}{Single intersection: average bicycle throughput per epoch.} \label{fig:throughput_bikes_j1}
+\end{minipage}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_bike.png}
-  \caption{Single intersection: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_j1}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_ped.png}
-  \caption{Single intersection: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_j1}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/throughput_pedestrian.png}}
+  \captionof{figure}{Single intersection: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_j1}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_car.png}}
+  \captionof{figure}{Single intersection: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_j1}
+\end{minipage}
 
-\subsubsection{Corridor scenario}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_bike.png}}
+  \captionof{figure}{Single intersection: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_j1}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_total_smoothed_pedestrian.png}}
+  \captionof{figure}{Single intersection: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_j1}
+\end{minipage}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/timeLoss.png}
-  \captionof{figure}{Corridor: average combined time loss per epoch.} \label{fig:timeLoss_c2}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_combined.png}
-  \caption{Corridor: average combined throughput per epoch.} \label{fig:throughput_c2}
-\end{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_bike.png}}
+  \captionof{figure}{Single intersection: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_j1}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+\centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/episode_wait_frac_ped.png}}
+  \captionof{figure}{Single intersection: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_j1}
+\end{minipage}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_car.png}
-  \caption{Corridor: average car throughput per epoch.} \label{fig:throughput_cars_c2}
-\end{figure}%
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_bike.png}
-  \caption{Corridor: average bicycle throughput per epoch.} \label{fig:throughput_bikes_c2}
-\end{figure}
+\subsubsection*{Corridor scenario}
 
-\begin{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_pedestrian.png}
-  \caption{Corridor: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_c2}
-\end{figure}%
-\begin{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/timeLoss.png}}
+  \captionof{figure}{Corridor: average combined delay per epoch.} \label{fig:timeLoss_c2}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_car.png}
-  \caption{Corridor: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_c2}
-\end{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_combined.png}}
+  \captionof{figure}{Corridor: average combined throughput per epoch.} \label{fig:throughput_c2}
+\end{minipage}
 
-\begin{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_bike.png}
-  \caption{Corridor: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_c2}
-\end{figure}%
-\begin{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_car.png}}
+  \captionof{figure}{Corridor: average car throughput per epoch.} \label{fig:throughput_cars_c2}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_pedestrian.png}
-  \caption{Corridor: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_c2}
-\end{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_bike.png}}
+  \captionof{figure}{Corridor: average bicycle throughput per epoch.} \label{fig:throughput_bikes_c2}
+\end{minipage}
 
-\begin{figure}
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_bike.png}
-  \caption{Corridor: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_c2}
-\end{figure}%
-\begin{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/throughput_pedestrian.png}}
+  \captionof{figure}{Corridor: average pedestrian throughput per epoch.} \label{fig:throughput_pedestrians_c2}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_ped.png}
-  \caption{Corridor: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_c2}
-\end{figure}
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_car.png}}
+  \captionof{figure}{Corridor: accumulated waiting time, for cars, per epoch.} \label{fig:total_wait_cars_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_bike.png}}
+  \captionof{figure}{Corridor: accumulated waiting time, for bicycles, per epoch.} \label{fig:total_wait_bikes_c2}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_total_smoothed_pedestrian.png}}
+  \captionof{figure}{Corridor: accumulated waiting time, for pedestrians, per epoch.} \label{fig:total_wait_pedestrians_c2}
+\end{minipage}
+
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_bike.png}}
+  \captionof{figure}{Corridor: fraction of waiting time due to bicycles, per epoch.} \label{fig:frac_wait_bikes_c2}
+\end{minipage}%
+\begin{minipage}{\linewidth}% to keep image and caption on one page
+\makebox[\linewidth]{%        to center the image
+  \centering
+  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/episode_wait_frac_ped.png}}
+  \captionof{figure}{Corridor: fraction of waiting time due to pedestrians, per epoch.} \label{fig:frac_wait_pedestrians_c2}
+\end{minipage}

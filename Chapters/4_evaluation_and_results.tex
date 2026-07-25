@@ -213,7 +213,7 @@ In this experiment, we assessed the learning performance of the proposed models,
 
 \medskip
 
-\noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted 5400 seconds of simulation time, with traffic demand only generating in the first 3600 seconds so that the generated entities could be cleared from the network before the end of the episode. This measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing.
+\noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted two hours (5400\,seconds) of simulation time, with traffic demand only generating in the first hour so that the generated entities could be cleared from the network before the end of the episode. This cooldown measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing methods.
 
 The hyperparameters and settings used for each experiment are detailed in Section~\ref{subsubsec:params}.
 
@@ -235,7 +235,7 @@ The traffic demand simulated in this scenario is compiled, too in Table \ref{tab
 \label{tab:gene_demands}
 \begin{tabular}{@{}lccc@{}}
 \toprule
-\multirow{2}{*}{\textbf{Scenario}} & \multicolumn{3}{c}{\textbf{Generated demand}} \\ \cmidrule(l){2-4} 
+\multirow{2}{*}{\textbf{Scenario}} & \multicolumn{3}{c}{\textbf{Generated demand [entities/hour]}} \\ \cmidrule(l){2-4} 
  & Cars & Bicycles & Pedestrians \\ \midrule
 Single intersection & 5226 & 867 & 742 \\
 Corridor & 3243 & 13417 & 3642 \\ \bottomrule
@@ -400,20 +400,6 @@ The following plots show the values of the main metrics for all the models acros
   \captionof{figure}{Single intersection: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
 \end{minipage}
 
-\begin{minipage}{\linewidth}% to keep image and caption on one page
-\makebox[\linewidth]{%        to center the image
-\centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_bike.png}}
-  \captionof{figure}{Single intersection: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_j1}
-\end{minipage}
-
-\begin{minipage}{\linewidth}% to keep image and caption on one page
-\makebox[\linewidth]{%        to center the image
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/wait_average_pedestrian.png}}
-  \captionof{figure}{Single intersection: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_j1}
-\end{minipage}
-
 \subsection{Experiment 1: Performance in corridor scenario} \label{subsec:perf_c2}
 Results for the corridor scenario can also be found in Table~\ref{tab:perf_part1} some pages earlier, listing the best performance achieved during training for each model in the single training run performed.
 
@@ -443,7 +429,7 @@ The following plots show the values of the main metrics for all the models acros
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/waitingTime.png}}
-  \captionof{figure}{Corridor: average combined waiting time per epoch.} \label{fig:waitingTime_c2}
+  \captionof{figure}{Corridor: average combined waiting time per epoch. \\ $^*$ The combined queue does not include pedestrians.} \label{fig:waitingTime_c2}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
@@ -456,20 +442,6 @@ The following plots show the values of the main metrics for all the models acros
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_bike.png}}
-  \captionof{figure}{Corridor: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_c2}
-\end{minipage}
-
-\begin{minipage}{\linewidth}% to keep image and caption on one page
-\makebox[\linewidth]{%        to center the image
-  \centering
-  \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_pedestrian.png}}
-  \captionof{figure}{Corridor: average waiting time, for pedestrians, per epoch.} \label{fig:waitingTime_pedestrians_c2}
-\end{minipage}
-
-\begin{minipage}{\linewidth}% to keep image and caption on one page
-\makebox[\linewidth]{%        to center the image
-\centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/wait_average_bike.png}}
   \captionof{figure}{Corridor: average waiting time, for bicycles, per epoch.} \label{fig:waitingTime_bikes_c2}
 \end{minipage}

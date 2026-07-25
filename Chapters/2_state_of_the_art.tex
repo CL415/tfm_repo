@@ -252,15 +252,16 @@ multi-agent systems,\footnote{
   Similarly, the work of Vilarinho \textit{et al.}~\cite{Vilarinho2017} can be a good starting point to consult applications of multi-agent systems to multimodal \gls{tsc}.
   }
 genetic algorithms\footnote{
-  For more about the application of genetic algorithms to multimodal \gls{tsc}, it is worth mentioning the pioneering 2009 work of Turky \textit{et al.}~\cite{Turky2009} as a relevant onset for further research.
+  For more about the application of genetic algorithms to multimodal \gls{tsc}, it is worth mentioning the pioneering 2009 work of Turky \textit{et al.}~\cite{Turky2009} as a relevant onset for further research. The reader may find interesting the works of Gao \textit{et al.}~\cite{Gao2021} and Zhang \textit{et al.}~\cite{Zhang2021}.
   }
 or \acrfull{rl}. The latter is the focus of the next section, \ref{subsec:rlformtsc}, which provides a general review of the current state of the art of \gls{rltsc} with an accent on multimodal traffic. For a deeper overview of \gls{rltsc} research, the reader can refer to the surveys listed the end of Section~\ref{par:reviews a consultar}, at page~\pageref{par:reviews a consultar}.
-
 
 \label{par:maxpressure}
 Among the many developments on decentralized control algorithms, which continue to this day, it is worth mentioning the work of Varaiya in 2013~\cite{Varaiya2013}, who proposed the Max Pressure control method. Taking advantage from the backpressure algorithm used in communication networks, Varaiya suggested a decentralized method that uses local car queue information along with turn ratios to obtain a phase pressure, which then is used to select the phase with the highest pressure. Max Pressure is able in this way to optimize \gls{tsc} for car throughput without requiring demand data. While its application to the field has its caveats, the method has ever since become a topic of research —by itself or in combination with other methods—, and a baseline for many subsequent works, especially for those of \gls{rltsc}.
 
 Max Pressure has also been extended for multimodal traffic, specifically, for pedestrians. Chen \textit{et al.}~\cite{Chen2020b} extended the method to include pedestrians for the first time in 2020, while Xu \textit{et al.}~\cite{Xu2024} proposed further improvements by designing dynamic queueing models for both pedestrians and cars, developing a conflict region constructor and testing their method in the Sioux Falls network in the VISSIM simulator. A similar approach, albeit with a different architecture, was taken by Liu \textit{et al.}~\cite{Liu2024}, which evaluated their method on a grid network using the SUMO simulator. Overall, the mentioned papers showed that Max Pressure can be extended to multimodal traffic, but also that the design of the method is not trivial and requires significant investments in sensors and data collection for it to be a feasible solution in practice.
+
+The 2020s have also seen the emergence of Large Language Models (LLMs) as a new tool for \gls{tsc}. While their application is still in its infancy, some works have already been published in the literature~\cite{Lai2024, Da2024, Yuan2025}.
 
 All in all, the state of the art in multimodal \gls{tsc} has slowly shifted away from vehicle-centric methods into more inclusive approaches, closer to its original multimodal conception. However, the gap between the solutions proposed in the literature and their practical implementation is significant, as reviews show that methods only considering vehicles are still common in cities worldwide.
 
@@ -329,7 +330,7 @@ It would not be until 2017 that the first work that considers multimodal traffic
 
 \noindent In the following years, \gls{rltsc} progress would show promising strides, but again, only for cars.
 
-In 2018, Torabi \textit{et al.}~\cite{Torabi2018} presented DALI, a decentralized, a \gls{marl} framework built around the idea of being easily installable into existing \gls{atcs} controllers in the city of Richardson, in the United States. For this reason, the \gls{rl} agents optimize instead controller parameters, such as the congestion detection sensitivity or the collaboration scope between intersections. The authors tested their model in one of the largest simulation scenarios to date inside their MATISSE microscopic simulator, outperforming both SCATS and MARLIN on a network with 128 signalized intersections. Two years later, the authors would go on and bring DALI into practical use at three intersections in the city, reporting a 40\% reduction in delay in a three week period~\cite{Torabi2020}.
+In 2018, Torabi \textit{et al.}~\cite{Torabi2018} presented DALI, a decentralized \gls{marl} framework built around the idea of being easily installable into existing \gls{atcs} controllers in the city of Richardson, in the United States. For this reason, the \gls{rl} agents optimize instead controller parameters, such as the congestion detection sensitivity or the collaboration scope between intersections. The authors tested their model in one of the largest simulation scenarios to date inside their MATISSE microscopic simulator, outperforming both SCATS and MARLIN on a network with 128 signalized intersections. Two years later, the authors would go on and bring DALI into practical use at three intersections in the city, reporting a 40\% reduction in delay in a three week period~\cite{Torabi2020}.
 
 Wei \textit{et al.}~\cite{Wei2019} proposed in 2019 a model called CoLight, which used graph attentional networks to handle the communication between intersection agents for the first time. Instead of relying only in proximity, CoLight assigned \textit{attention weights} to the neighbouring intersections, prioritizing those with a larger impact in traffic flow, with each agent relying on Q-learning to take decisions. This new architecture enabled significant scalability, which is showcased in the scenarios with real traffic data that the researchers chose for testing in the CityFlow simulator: Jinan and Hangzhou, China with 12 and 16 intersections, respectively, and part of the Manhattan street grid in New York, United States, with 196 intersections. The authors reported that CoLight outperformed multiple competing methods for vehicle travel time: fixed time, Max Pressure and a number of \gls{rl} models, with the work of van der Pol~\cite{vanderPol2016} among them.
 
@@ -351,104 +352,62 @@ In April of that year, Chen \textit{et al.}~\cite{Chen2020} described MPLight, a
 
 Only a month later, in the 19th International Conference on Autonomous Agents and Multiagent Systems (AAMAS 2020), two other consequential works in the context of this thesis would be presented to the public.
 
-The first of them is the presentation given by Ault \textit{et al.}~\cite{Ault2020}. The researchers pointed out the lack of interpretability of the neural networks in which most contemporary \gls{rltsc} relied on, and how it dampened the trust of transportation agencies on their adoption in real-world scenarios. To address this issue, the authors proposed a series of interpretable polynomial control functions —thus easily auditable by humans— and tested variants of the \gls{dqn} algorithm to train them. Assessment was performed by comparing performance in the SUMO simulator, with a scenario encompassing a single intersection in Utah, United States, with real traffic data. Among the tested DQN methods, Deep Regulatable Hardmax Q-Learning —which tuned the policy wieghts directly towards $\text{argmax}_a$ equivalency between the regulatable control function and the Q-network—, offered comparable performance to the black-box DQN signal controller, achieving a 19.4\% reduction in delay. This method is among the ones that would later be included in the RESCO framework of the same authors~\cite{Ault2021}, and by proxy in the T-REX one~\cite{Nguyen2023}, being renamed as IDQN. As a result, it is one of the methods used as a baseline in this thesis, and also as a foundation for the proposed methods.
+The first of them is the presentation given by Ault \textit{et al.}~\cite{Ault2020}. The researchers pointed out the lack of interpretability of the neural networks in which most contemporary \gls{rltsc} relied on, and how it dampened the trust of transportation agencies on their adoption in real-world scenarios. To address this issue, the authors proposed a series of interpretable polynomial control functions —thus easily auditable by humans— and tested variants of the \gls{dqn} algorithm to train them. Assessment was performed by comparing performance in the SUMO simulator, with a scenario encompassing a single intersection in Utah, United States, with real traffic data. Among the tested DQN methods, Deep Regulatable Hardmax Q-Learning —which tuned the policy wieghts directly towards $\text{argmax}_a$ equivalency between the regulatable control function and the Q-network—, offered comparable performance to the black-box DQN signal controller, achieving a 19.4\% reduction in delay. This method is among the ones that would later be included in the RESCO framework of the same authors~\cite{Ault2021}, and by proxy in the T-REX one~\cite{Nguyen2025}, being renamed as IDQN. As a result, it is one of the methods used as a baseline in this thesis, and also as a foundation for the proposed methods.
 
 Furthermore, the policy-gradient DQN approach tested in the same work, IPPO,while not as performant as IDQN, was also included in RESCO and deemed as a promising baseline for the present work.
 
-The other presentation is from Ma and Wu~\cite{Ma2020}. The two researchers proposed a hierarchical \gls{marl} method, which they named FMA2C, which extended the previous MA2C method~\cite{Chu2019} with a feudal hierarchical structure. FMA2C divides the network into regions, each 
+The other presentation is from Ma and Wu~\cite{Ma2020}. The two researchers proposed a hierarchical \gls{marl} method, which they named FMA2C, which extended the previous MA2C method~\cite{Chu2019} with a feudal hierarchical structure. FMA2C divides the network into regions, each responsibility of regional manager agent, while each intersection inside is controlled by a local worker agent. Network-wide coordination is handled via decision-making in the high level by the manager agents. Their decisions are translated into goals for the local agents, who with their actions try to achieve the goals of their managers. The authors tested their model in the same SUMO scenarios as the ones tested in the MA2C paper, a 25-intersection grid and a portion of Monaco, and against the same methods, along with MA2C itself. FMA2C outmatched all the other methods in several metrics. This good performance induced the method being chosen as a state-of-the-art baseline in the literature, including the RESCO and T-REX frameworks~\cite{Ault2021}~\cite{Nguyen2023}. Thus, FMA2C is also used as a baseline in this thesis.
 
-an extension of the earlier MA2C method~\cite{Chu2019} that applies a feudal reinforcement learning architecture to hierarchically coordinate \gls{tsc} over multiple intersections. Each intersection is controlled by a local agent that learns independently, overseen by a regional manager that coordinates the local agents by establishing top-down goals.
+\medskip
 
-corredor solo coches~\cite{Guo2023}
-corredor coches y buses no peds~\cite{Yu2023}
-Network en seul y oversaturated conditions~\cite{Lee2023}
+\noindent The year 2020 also brought, finally, the next progress that we have been able to locate in the literature regarding multimodal \gls{rltsc} since 2017. Wu~\textit{et al.}~\cite{Wu2020} proposed a \gls{marl} system founded in a structured actor-critic architecture. Building upon policy gradient methods, their proposed algorithm MARDDPG uses a centralized training and decentralized execution paradigm. The centralized training with critic networks allows each agent to learn the policies of other agents, while the decentralized execution enables each actor agent to make decisions independently while still working towards a global optimum. The authors also used Long Short-Term Memory (LSTM) networks to capture hidden state information, and shared parameters in actor networks to speed up the training process and reduce memory footprint. 
 
-Lai, Xu et al. (2023) — First systematic use of LLMs as TSC decision agents (chain-of-thought reasoning).
-Da, Mei et al. (2024b) — LLM-based sim-to-real prompt-transfer framework for RL-TSC.
-Yuan, Lai y Liu (2025) — CoLMLight: cooperative LLM-agent framework for network-wide TSC coordination.
+Interestingly, MARDDPG was developed for a multimodal setting instead of focusing only on cars as the research in the previous years, taking both pedestrians and buses into account for a simple grid scenario. Pedestrian integration is simple, with an aggregation of total waiting time of pedestrians in all directions of each intersection being used as part of a weighted multimodal reward, and also as a metric. The authors reported how MARDDPG outperformed several traditional \gls{tsc} and contemporary \gls{rl} methods, including the previously mentioned IDQN~\cite{Ault2019}, for car metrics and the total pedestrian waiting time. It should be noted, however, that this total pedestrian counting approach does not consider the location of pedestrians nor their crossing direction.
 
-\cite{Huang2024} y desarrollado en~\cite{Huang2026}, networks default, Despite its potential, the real-world application of RL-based controllers is constrained by low sample efficiency and high computational demands. To address these challenges, we propose DTLight, a simple yet powerful lightweight Decision Transformer (DT)-based offline-to-online TSC method that can learn policy from pre-collected offline datasets while maintaining the capability to refine policy with minimal online interactions.
+The following year, Zhang and Fricker~\cite{Zhang2021c} studied multimodal \gls{rltsc} for a different setting: a single crosswalk scenario across a street. The authors used a simple \gls{dqn} agent to control the traffic light, choosing between two phases of fixed duration as its action space, using pedestrian and vehicle queues for state representation and a reward function summing up modal delays. The authors tested their model in SUMO with realistic demand generated by Poisson processes, and compared it against fixed time and pedestrian activation approaches, reporting better performance in average waiting times for both cars and pedestrians when pedestrian demand was high.
 
-Du, Wang et al. (2024) — FELight: fairness-aware RL-TSC balancing equity and efficiency.
-Gu, Zhu et al. (2024b) — pi-Light: interpretable programmatic policies via domain-specific language + MCTS.
-Cai, Fang y Xu (2025) — XLight: interpretable MARL with provable reward–travel-time equivalence.
+In 2022, Zhu \textit{et al.}~\cite{Zhu2022} brought forward CAMABRL, a new \gls{marl} that adopted an architecture based in broad reinforcement learning (BRL): each intersection is controlled by a local agent, which transmits its state to a central context-aware evaluation broad learning system (BLS) network which provides the parameters for action selection; after its execution, the agent obtains the corresponding reward and transitions to the next state, which is sent to another central BLS network, in charge of targets, which updates the connection weights of the first. It is worth mentioning that phase selection in CAMABRL is cyclic, reducing the action choice to continuing or switching to the next phase in a predefined cycle. Additionally, LSTM is used to capture temporary dependencies, and shares parameters across intersections. Pedestrian integration is done via a weighted multimodal reward, counting the waiting time of pedestrians in each sidewalk of the intersection.
 
-2 ints solo coches pero CNN+DRL~\cite{Faqir2025}
+The authors tested their model in SUMO in a series of grid scenarios reflecting portions of Chinese cities, with semi-synthetic vehicle and pedestrian demand, and compared it against conventional \gls{tsc} and contemporary \gls{rl} methods, including \gls{dqn} approaches and MARDDPG~\cite{Wu2020}. The authors reported that CAMABRL outperformed the baselines in average vehicle waiting time and queue length, while becoming tied with a DQN-based method —the work of Zhang \textit{et al.} \cite{Zhang2021b}, which did not observe pedestrians— in average pedestrian waiting time.
 
-network level sin peds~\cite{Luo2025},~\cite{Elharoun2025}
+A different approach on the multimodal \gls{rltsc} problem was presented by Han \textit{et al.}~\cite{Han2022}. The authors proposed the combination of a \gls{d3qn} with experience pool storage used for better training efficiency. The researchers extended \gls{dtse}, which had been used before for vehicle observation by dividing the roadway in a grid in which to store vehicle position, to also encompass the sidewalks and in this way form a multimodal state vector. In addition, the authors also defined states to allow for the observation of red light time for pedestrians and green light time for vehicles, allowing in this way hybrid phase selection. In this case, reward design was based in the substracting, to vehicle throughput, the sum of pedestrian waiting times, time exceeding a maximum pedestrian red time threshold and time under a minimum vehicle green time threshold.
 
-Network no peds~\cite{Nie2025}
-network en grid en SUMO, tmb es framework~\cite{Jia2025}
+The authors tested their model in two single-intersection scenarios in the SUMO simulator, using real-world traffic counts of an intersection in Fuzhou, China, and compared it against fixed time, Webster and dueling \gls{dqn} methods. The results showed reductions of waiting time and pedestrian queues of up to 40\% and 61\%, respectively, in comparison with the second best performing method, the dueling DQN. To our best knowledge, this work by Han \textit{et al.} is the first to consider pedestrian location in the state representation, nevertheless, it only focuses in the sidewalks of the edges and thus can only detect pedestrians arriving to the intersection, but not those waiting in each intersection corner.
 
-network level sin peds habla usa dqn~\cite{Wang2025b}
+Yazdani \textit{et al.}~\cite{Yazdani2023} suggested a \gls{d3qn} algorithm with experience replay to optimize single intersection scenarios. Their proposal included a state definition observing vehicle and pedestrian positions with a \gls{dtse} matrix —which did include intersection corners— along with their speeds in a different matrix, distinct action selection depending on the presence of pedestrians, and a detailed reward definition based in pedestrian and vehicle weighted delay, considering cross-box delays, residual queues from previous cycles. Their simulation in VISSIM of a single intersection from Melbourne, Australia, was used to test their model against SCATS and a simple \gls{dqn} implementation. The authors reported that without pedestrians, their method outperformed the alternatives in average travel time for cars, but when pedestrian demand was added, the prominence of their proposal against the baselines in pedestrian average travel time was at the expense of car travel time. Additionally, the researchers did a second experiment in which they added jaywalking behaviour to the simulation, and found that their method was the only one of the assessed able to adapt to the new conditions.
 
-grids sin peds pero considerando fairness para patas coches~\cite{Liu2025d}
-grids sin peds citao por tener graph nsk~\cite{Shang2025}
-grids sin peds buses no fairness tho~\cite{Liu2025e}
-also networkk overcomeando movidas~\cite{Du2025}
+\medskip
 
-corredor coches y buses no peds~\cite{Othman2025}
-corredor china~\cite{Liu2025}, also~\cite{Fan2025} y~\cite{Liu2025b}
-corredor no peds~\cite{Zhu2025}
-algo alternativo a RL???~\cite{Wu2025}
-grids tochas no peds~\cite{Zhang2025c}
+\noindent By this point in the review of the state of the art, it will have become apparent to the reader the outright absence of cyclists in the \gls{rltsc} works assessed so far. 
 
-\cite{Wang2026} Grid en beijing, xikita, Traditional methods cannot effectively coordinate multi-intersections with different signal timing time. This has led to the introduction of a novel clock consistency mechanism the operation of which is implemented through a Multi-Agent Coordinated Reinforcement Learning (MACRL) algorithm.
+Despite all our efforts, the only paper that we have been able to locate that considers cyclists in a \gls{rltsc} context is the 2024 publication of Magnana \textit{et al.}~\cite{Magnana2024}. The authors chose a D3QN base model, with \gls{dtse} to detect queing bikes and cars in their lanes, a simple reward function summing up modal queue counts and a set of predefined green phases as actions to be chosen by the agent, with distinct specific phases for bike and car lanes. Their scenario consisted of a single intersection, with a single car and bike lane in each direction, simulated in SUMO with hourly car and bike traffic counts from Paris, France, modelled as a Poisson process. Besides, the authors noted that left turning bicycles, because of the lack of a realistic behaviour model in SUMO, were behaving as cars and thus yielding to all other traffic, which they deemed as unrealistic. According to the authors, the only solution available in SUMO to this issue would have been to add a left-turn phase, which they claimed would «increase the intersection's complexity without increasing its realism», so they decided to avoid it altogether by prohibiting all cars from doing left turns. The authors compared their D3QN approach against fixed time and an \gls{atcs} method, reporting better performance in mean waiting times for both cars and bicycles.
 
+The work of Magnana \textit{et al.}, although a pioneering effort in the field, is very limited in its scope, focusing in a single intersection of very simple design, simulating demand unrealistically with Poisson processes and refusing to tackle the problem of left-turning bicycles with unnatural restrictions.
 
-obvs menciona a compis
+\medskip
 
-review lit 2021~\cite{Wei2021}
-BUENA REVIEW DE LA LIT DE RL AS OF 2024: 
-\cite{Xiao2024}
-Review of lit para mixed traffic flows: 2023,~\cite{Majstorović2023} mencionar de pasada y au xq mixed es vehiculos autonomos, verifica q no haya nada con peds tho
-REVIEW DE LIT EN 2025:~\cite{Maheshwari2025}
+Returning to multimodal \gls{rltsc} research considering pedestrians, the paper of Kumarasamy \textit{et al.}~\cite{Kumarasamy2024} is worth mentioning. Their work applied a decentralized graph-based \gls{marl} method to a 11-intersection corridor in Chattanooga, United States, simulated in VISSIM with multimodal peak hour real-world demand. The authors designed an architecture in which each intersection is controlled by an Advantage Actor-Critic (A2C) agent, which observes the state of its own intersection and those of its immediate neighbours, and selects actions based on a policy network and under a set of safety constraints. The state space records modal waiting times along with the current phase index, while the reward function is weighted to combine vehicle and pedestrian waiting times, with penalizations for stopping. The authors reported improvements over several \gls{atcs} baselines. This work would be later extended by the same team~\cite{Kumarasamy2025}, with some improvements and further tests against a pedestrian-recall \gls{atcs} baseline deployed in the field, which it outperformed with a 60\% reduction in pedestrian waiting time and a 56\% improvement in car delays. 
 
-% MULTIMODALLL ==========================================
+Rong \textit{et al.}~\cite{Rong2024} proposed a different \gls{marl} method, founded in a \gls{d3qn} base model along with an experience matrix for agent coordination. Their state representation is very similar to the \gls{dtse} implemented by Han \textit{et al.}~\cite{Han2022}, while its reward is  the substraction of the square root of pedestrian red signal duration (with a tolerable red light excedence penalization) to the automobile throughput. The algorithm was tested in a simple grid network in the SUMO simulator, in which it achieved a 33\% and 71\% reduction in car waiting time and pedestrian waiting time, respectively, over to the second best among both traditional baselines and conventional \gls{dqn}.
 
-solo una interesecc con peds~\cite{Wu2020}
+\medskip
+\noindent The last year has been prolific in multimodal \gls{rltsc} research.
 
-Nondominated Sorting Genetic Algorithm II (NO ACCESS tho) for ebikes worked well~\cite{Gao2021}
+In January, Huang and Fu~\cite{Huang2025} presented SPVSL, a method based on the DDPG algorithm that combines deterministic policy gradients into \gls{dqn} in an actor-critic architecture. To improve training stability, noise was added to the action by means of a twin delayed DDPG approach. State representation followed an implementation akin to Yazdani \textit{et al.}'s~\cite{Yazdani2023} albeit without corner consideration, while reward design is based in the weighted total of both modal queues and waiting times. The proposed method outperformed a fixed time approach in a simple, synthetic, single intersection scenario in SUMO. Nevertheless, the authors ackowledged shortcomings in stability during the training process.
 
-network en grid~\cite{Zhang2021}, idem y tmb es framework~\cite{Jia2025}
-Network level e interesante:~\cite{Zhang2025} (en vd es de 2021)
+Nayeri \textit{et al.}~\cite{Nayeri2025} proposed a hierarchical strategy, with two agents for each intersection: the primary one optimizes green phase durations, while the second determines the use of an extra flashing light phase during low-traffic periods. The authors relied in counts of distorted pressure —the classical pressure definition of \cite{Varaiya2013} with the addition of a distortion factor to reflect better incoming traffic—, and the number of pedestrians waiting at each crossing, in the corners of the intersection. The agents themselves were \gls{d3qn}s with prioritized experience replay, multi-step learning and noisy net exploration. The authors tested their model in a two single intersection scenarios, one synthetic and other simulating an intersection in Tehran, Iran, with real data corresponding to a day of traffic, against fixed time and a number of contemporary \gls{rltsc} alternatives, including \gls{d3qn}, Presslight \cite{Wei2019b} and PPO. For different traffic flows, the researchers reported improvements in several metrics across modes, especially under low traffic conditions in which the extra flashing phase would activate. It is worth mentioning that this work is among the first dealing with intersection designs of some complexity beyond the classical four-legged topologies predominant in the literature.
 
-network siux falls con peds~\cite{Xu2022}
+In April, Poudel \textit{et al.}~\cite{Poudel2025} brought forward a single-agent multi-intersection architecture to handle joint car and pedestrian optimization along a street corridor. Their agent, built on PPO, uses for each intersection an occupancy vector covering automobile and pedestrian queues, which together are merged into a single state representation, while the action space is divided in two components containing predefined phases: one for intersections and other for mid-street zebra crossings, returning in this way an 8-component as action. The reward that the researchers designed is called \textit{Exponentially Increasing Maximum Wait Aggregated Queue}, and consists in a sum of exponential functions of waiting times and queue, different between zebra crossing signals and junction ones. The method was tested with the SUMO simulator on a corridor scenario based in an university area in Charlotte, United States, against a fixed time method. Demand data was obtained using Wi-Fi logs and video monitoring for pedestrians and vehicles, respectively. According to the authors, their method resulted in better waiting times both for pedestrians and cars in respect to fixed time.
 
-comparacion de metodos en sumo:~\cite{Louw2022}
+Zhang \textit{et al.}~\cite{Zhang2025} presented TS-PVL, a two-stage, single-intersection \gls{rltsc} method. Its first stage uses \gls{d3qn} for signal scheduling, while the second applies a speed planning model vehicle dynamics using the signal timings from the first to guide pedestrian and autonomous vehicle flows. The authors chose a \gls{dtse} very similar to the one designed  by Han \textit{et al.}~\cite{Han2022} to obtain queue counts, an action space allowing acyclic phase selection and a reward made from the weighed sum of cumulative waiting times across modes. The researchers assessed their model against several baselines, including fixed time, Webster's, \gls{atcs} and Max Pressure, with a simulation in SUMO of an intersection in Changsha, China, with real traffic demand obtained from the usage of YOLOv7 in 2 hours of video. Furthermore, while not specifying how they implemented it, the researchers implemented jaywalking in their simulation. The authors reported a decreases vehicle delays and stop frequency, with an additional reduction of vehicle-pedestrian conflicts and jaywalking occurence.
 
-solo una interesecc con peds~\cite{Zhu2022} 
-
-solo una interescc con peds~\cite{Han2022}
-
-solo una intersecc pero primero q considera loc de peds, also peque review de research con peds so far~\cite{Han2022}
-
-solo con una intesecc pero SUMO y CICLISTAS, deep reinf learning~\cite{Magnana2024}
-
-corredor con demanda ped sintetica~\cite{Kumarasamy2024}, leer bien y mirar citados y quienes lo citan
-desarrolla mas~\cite{Kumarasamy2025}, idem
-
-network sencillita con peds~\cite{Rong2024}
-
-solo una interesecc con peds~\cite{Huang2025}
-
-solo una interescc con peds~\cite{Chen2025}
-solo una interescc con peds~\cite{Nayeri2025}
-solo una interescc con peds~\cite{Sleiman2025}
-
+solo una interescc con peds ~\cite{Chen2025} jun
 RL solutions WITH PEDS constrained to intersections:~\cite{Wang2025} (considering large intersections with pedestrian
-two-stage crosswalks)
-
-solo una intersecc pero con peds, sumo y vehs autonomos~\cite{Zhang2025b}
-
-network xikita si considera peats pero con green duration nsk; also itneresante en RL~\cite{Fuhao2025}
-
+two-stage crosswalks) sept
+network xikita si considera peats pero con green duration nsk; also itneresante en RL Yu \textit{et al.}~\cite{Fuhao2025} sept
  PEDS~\cite{Zeng2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
-
-pedestrians con camaras nsk creo q no es RL~\cite{Raza2025}
-
-corredor con DEMANDA PED REAL!!!~\cite{Poudel2025}, LEER BIEN Y MIRAR CITADOS y QUIENES LO CITAN
-
+Network level e interesante:~\cite{Zhang2025} 8 dic
+solo una interescc con peds~\cite{Sleiman2025} 26 dic
 \cite{Nam2026} una sola intersecc pero muy interesante, a la vanguardia de peds rn Y ESTAO DEL ARTEEEE as of 2026666
 
 % ORDEN asta aki

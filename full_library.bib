@@ -337,6 +337,48 @@ location = {Beijing, China},
 series = {CIKM '19}
 }
 
+@misc{Lai2024,
+      title={LLMLight: Large Language Models as Traffic Signal Control Agents}, 
+      author={Siqi Lai and Zhao Xu and Weijia Zhang and Hao Liu and Hui Xiong},
+      year={2024},
+      eprint={2312.16044},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2312.16044}, 
+}
+
+@misc{Yuan2025,
+      title={CoLLMLight: Cooperative Large Language Model Agents for Network-Wide Traffic Signal Control}, 
+      author={Zirui Yuan and Siqi Lai and Hao Liu},
+      year={2025},
+      eprint={2503.11739},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2503.11739}, 
+}
+
+@misc{Da2024,
+      title={Prompt to Transfer: Sim-to-Real Transfer for Traffic Signal Control with Prompt Learning}, 
+      author={Longchao Da and Minquan Gao and Hao Mei and Hua Wei},
+      year={2024},
+      eprint={2308.14284},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2308.14284}, 
+}
+
+@ARTICLE{Zhang2021b,
+  author={Zhang, Chengwei and Jin, Shan and Xue, Wanli and Xie, Xiaofei and Chen, Shengyong and Chen, Rong},
+  journal={IEEE Transactions on Vehicular Technology}, 
+  title={Independent Reinforcement Learning for Weakly Cooperative Multiagent Traffic Control Problem}, 
+  year={2021},
+  volume={70},
+  number={8},
+  pages={7426-7436},
+  keywords={Training;Games;Reinforcement learning;Roads;Markov processes;Urban areas;Trajectory;Multiagent learning;Independent reinforcement learning;Cooperative Markov game;Traffic signal control},
+  doi={10.1109/TVT.2021.3090796}}
+
+
 @inproceedings{Wei2018,
 author = {Wei, Hua and Zheng, Guanjie and Yao, Huaxiu and Li, Zhenhui},
 year = {2018},
@@ -1053,7 +1095,7 @@ journal = {Transportation Research Record},
 volume = {0},
 number = {0},
 pages = {03611981251384965},
-year = {0},
+year = {2025},
 doi = {10.1177/03611981251384965},
 }
 
@@ -2092,4 +2134,72 @@ series = {KDD '19}
   timestamp    = {Mon, 13 Aug 2018 16:46:16 +0200},
   biburl       = {https://dblp.org/rec/journals/corr/ZaheerKRPSS17.bib},
   bibsource    = {dblp computer science bibliography, https://dblp.org}
+}
+
+@INPROCEEDINGS{Zhang2021c,
+  author={Zhang, Yunchang and Fricker, Jon},
+  booktitle={2021 7th International Conference on Models and Technologies for Intelligent Transportation Systems (MT-ITS)}, 
+  title={Investigating Smart Traffic Signal Controllers at Signalized Crosswalks: A Reinforcement Learning Approach}, 
+  year={2021},
+  volume={},
+  number={},
+  pages={1-6},
+  keywords={Training;Measurement;Solid modeling;Process control;Reinforcement learning;Traffic control;Delays;Pedestrians;Signalized crosswalk;Traffic signal control;Reinforcement learning},
+  doi={10.1109/MT-ITS49943.2021.9529320}}
+
+@article{Yazdani2023,
+title = {Intelligent vehicle pedestrian light (IVPL): A deep reinforcement learning approach for traffic signal control},
+journal = {Transportation Research Part C: Emerging Technologies},
+volume = {149},
+pages = {103991},
+year = {2023},
+issn = {0968-090X},
+doi = {https://doi.org/10.1016/j.trc.2022.103991},
+url = {https://www.sciencedirect.com/science/article/pii/S0968090X22004041},
+author = {Mobin Yazdani and Majid Sarvi and Saeed {Asadi Bagloee} and Neema Nassir and Jeff Price and Hossein Parineh},
+keywords = {Reinforcement learning, Deep learning, Adaptive traffic signal control, Mixed traffic environment, Pedestrian crossing signal},
+abstract = {Deep reinforcement learning (RL) has been widely studied in traffic signal control. Despite the promising results that indicate the superiority of deep RL in terms of the quality of solution and optimality over fixed time signal control, the real-world multi-modal traffic flows, especially pedestrians, are not properly considered nor sufficiently investigated. This study presents a novel deep RL-based adaptive traffic signal model to control the vehicles and pedestrian flows by allocating an equitable green time to each, aiming at minimizing “total user delays” as opposed to “total vehicle delays” dominantly being used in the literature. Our proposed intelligent vehicle pedestrian light (IVPL) method can perform in the absence or presence of pedestrians, especially when there is jaywalking at the intersection, interrupting vehicle flows. To this end, an extended reward function is designed to capture delays due to vehicle-to-vehicle, vehicle-to-pedestrian, and pedestrian-to-pedestrian interactions, as well as red-light delays for vehicles and pedestrians. To evaluate the performance of IVPL, a microsimulation model of an intersection in city of Melbourne is used as a case-study. The real traffic signal parameters of an existing operation system (SCATS) are employed, and the simulation is calibrated using video-based camera data and loop detectors data collected at intersection. The experimental results demonstrate the superiority of the proposed model over fully actuated traffic signal, not only in terms of the quality of optimal solution, but also considering the fact that the proposed model can minimize the “total user delays”.}
+}
+
+@ARTICLE{Du2024,
+author={Du, Xinqi and Li, Ziyue and Long, Cheng and Xing, Yongheng and Yu, Philip S. and Chen, Hechang},
+journal={ IEEE Transactions on Knowledge \& Data Engineering },
+title={{ FELight: Fairness-Aware Traffic Signal Control via Sample-Efficient Reinforcement Learning }},
+year={2024},
+volume={36},
+number={09},
+ISSN={1558-2191},
+pages={4678-4692},
+abstract={ Traffic congestion is becoming an increasingly prominent problem, and intelligent traffic signal control methods can effectively alleviate it. Recently, there has been a growing trend of applying reinforcement learning to traffic signal control for adaptive signal scheduling. However, most existing methods focus on improving traffic performance while neglecting the issue of scheduling fairness, resulting in long waiting time for some vehicles. Some works attempt to address fairness issues but often sacrifice transport performance. Furthermore, existing methods overlook the challenge of sample efficiency, especially when dealing with diversity-limited traffic data. Therefore, we propose a Fairness-aware and sample-Efficient traffic signal control method called FELight. Specifically, we first design a novel fairness metric and integrate it into decision process to penalize cases with high latency by setting a threshold for activating the fairness mechanism. Theoretical comparison with other fairness works proves why and when our fairness could bring advantages. Moreover, counterfactual data augmentation is employed to enrich interaction data, enhancing the sample efficiency of FELight. Self-supervised state representation is introduced to extract informative features from raw states, further improving sample efficiency. Experiments on real traffic datasets demonstrate that FELight provides relatively fairer traffic signal control without compromising performance compared to state-of-the-art approaches. },
+keywords={Reinforcement learning;Throughput;Vehicle dynamics;Schedules;Dynamic scheduling;Data augmentation;Computer science},
+doi={10.1109/TKDE.2024.3376745},
+url = {https://doi.ieeecomputersociety.org/10.1109/TKDE.2024.3376745},
+publisher={IEEE Computer Society},
+address={Los Alamitos, CA, USA},
+month=sep}
+
+@article{Cai2025,
+author = {Cai, Sibin and Fang, Jie and Xu, Mengyun},
+year = {2025},
+month = {02},
+pages = {126938},
+title = {XLight: An interpretable multi-agent reinforcement learning approach for traffic signal control},
+volume = {273},
+journal = {Expert Systems with Applications},
+doi = {10.1016/j.eswa.2025.126938}
+}
+
+
+@article{Shahhoseini2018,
+title = {Pedestrian crowd dynamics in merging sections: Revisiting the “faster-is-slower” phenomenon},
+journal = {Physica A: Statistical Mechanics and its Applications},
+volume = {491},
+pages = {101-111},
+year = {2018},
+issn = {0378-4371},
+doi = {https://doi.org/10.1016/j.physa.2017.09.003},
+url = {https://www.sciencedirect.com/science/article/pii/S0378437117308956},
+author = {Zahra Shahhoseini and Majid Sarvi and Meead Saberi},
+keywords = {Crowd dynamics, Faster-is-slower, Merging flows, Emergency evacuations, Pedestrian crowd, Clogging, Collective movement, Crowd, Laboratory experiment, Collective walking, High density experiment, High speed experiment},
+abstract = {The study of the discharge of active or self-driven matter in narrow passages has become of the growing interest in a variety of fields. The question has particularly important practical applications for the safety of pedestrian human flows notably in emergency scenarios. It has been suggested predominantly through simulation in some theoretical studies as well as through few experimentations that under certain circumstances, an elevated vigour to escape may exacerbate the outflow and cause further delay although the experimental evidence is rather mixed. The dimensions of this complex phenomenon known as the “faster-is slower” effect are of crucial importance to be understood owing to its potential practical implications for the emergency management. The contextual requirements of observing this phenomenon are yet to be identified. It is not clear whether a “do not speed up” policy is universally beneficial and advisable in an evacuation scenario. Here for the first time we experimentally examine this phenomenon in relation to the pedestrian flows at merging sections as a common geometric feature of crowd egress. Various merging angles and three different speed regimes were examined in high-density laboratory experiments. The measurements of flow interruptions and egress efficiency all indicated that the pedestrians were discharged faster when moving at elevated speed levels. We also observed clear dependencies between the discharge rate and the physical layout of the merging with certain designs clearly outperforming others. But regardless of the design, we observed faster throughput and greater avalanche sizes when we instructed pedestrians to run. Our results give the suggestion that observation of the faster-is-slower effect may necessitate certain critical conditions including passages being overly narrow relative to the size of participles (pedestrians) to create long-lasting blockages. The faster-is-slower assumption may not be universal and there may be circumstances where faster is, in fact, faster for evacuees. In the light of these findings, we suggest that it is important to identify and formulate those conditions so they can be disentangled from one another in the models. Misguided overgeneralisations may have unintended adverse ramifications for the safe evacuation management, and this highlights the need for further exploration of this phenomenon.}
 }

@@ -28,7 +28,7 @@ individual intersections.
 Does FRAP's competition-graph structure even make sense for an always-on movement?
 
 You hit this directly with — a movement that's never gated by phase choice doesn't fit FRAP's "mutually competing phase pairs" assumption at all.
-That's a structural question, not just an implementation detail: is forcing always-on movements into the same embedding space as competing ones actually doing anything useful, or is it dead weight the network learns to ignore? You could test this by literally zeroing that embedding's gradient and checking if performance changes.
+That's a structural question, not just an implementation detail: is forcing always-on movements into the same embedding space as competing ones actually doing anything useful, or is it dead weight the network learns to ignore? You could test this by literally zeroing that embedding's gradient and checking if performance changes. -> frap no puede con fases siempre verdes
 
 
 sobre usar pressure peds en fases no activas as queue en grafs:
@@ -61,3 +61,9 @@ por muy sofisticados q sean nuestras observaciones, seguimos ataos a limitacione
 no se modifico otros agentes, probar ablacion
 
 frap symmetrically invariant arch was way easier to integrate 
+
+need realistic model for peds: Although these studies incorporate pedestrians flow in signal timing, there is not any research in the literature that identifies the
+realistic interactions between vehicles and pedestrians for a deep RL-based signalized intersection. In fact, the pedestrian bi-directional
+flows at the intersection crosswalk poses a great impact on the walking speed of pedestrians. The greater number of pedestrians, the
+lower walking speeds \cite{Shahhoseini2018}. This leads to additional delays for turning vehicles as pedestrians are given the right of
+way to safely cross the roa
