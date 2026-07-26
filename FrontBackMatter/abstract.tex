@@ -6,18 +6,7 @@
 
 \vspace{1cm}
 
-Reinforcement learning can provide robust algorithms for traffic signal control.
- However, these approaches usually focus exclusively on automobiles, not
- accounting for other road users like pedestrians and cyclists. This limitation
- undermines their applicability to real scenarios and neglects the relevance of
- active mobility modes in transportation systems. This thesis aims to extend the
- reinforcement learning framework developed by Rodrigues and Lima Azevedo (2019)
- to include pedestrian and cyclist agents.
-The thesis will design realistic multimodal traffic scenarios in SUMO, adapt RL
- representations to incorporate pedestrians and cyclists, and redefine the
- reward function to consider all users. The expected outcome is the development
- of a more realistic framework that enables a greater understanding of urban
- mobility.
+Reinforcement learning can provide robust algorithms for traffic signal control. However, these approaches usually focus exclusively on automobiles, not accounting for other road users like pedestrians and cyclists. This limitation undermines their applicability to real scenarios and neglects the relevance of active mobility modes in transportation systems. This thesis addresses this gap by developing and evaluating reinforcement learning methods for multimodal traffic signal control (RL-TSC) that explicitly integrate pedestrian and cyclist traffic alongside vehicular flows. To do so, we construct a set of realistic simulation scenarios based on the city of Copenhagen, featuring accurate intersection layouts, diverse infrastructure elements, and multimodal traffic demand derived from real data; we adapt and extend existing RL-based TSC methods to serve as baselines capable of handling cyclist traffic; and we propose two novel RL-TSC methods that jointly consider pedestrians and cyclists. The simulation assessments performed demonstrate the potential of incorporating multimodal traffic into RL-TSC, while also revealing the challenges that arise from the increased complexity of the problem.
 
 \vspace{2cm}
 
@@ -25,38 +14,16 @@ The thesis will design realistic multimodal traffic scenarios in SUMO, adapt RL
 
 \vspace{1cm}
 
-El \textit{reinforcement learning} (RL, aprendizaje por refuerzo) puede
- proporcionar algoritmos robustos para el control de semáforos. Sin embargo,
- estas aproximaciones suelen centrarse exclusivamente en automóviles, no
- considerando a otros usuarios como peatones y ciclistas. Esta limitación
- socava su aplicabilidad a escenarios reales y no tiene en cuenta la
- relevancia de los modos de movilidad activa en los sistemas de transporte.
- Esta tesis pretende extender el marco de \textit{reinforcement learning} desarrollado
- por Rodrigues y Lima Azevedo (2019) para incluir agentes peatonales y
- ciclistas. El trabajo diseñará escenarios realistas de tráfico multimodal en
- SUMO, adaptará representaciones de RL para incorporar a peatones y ciclistas,
- y redefinirá la función de recompensa para considerar a todos los usuarios.
- El modelo resultante será evaluado en escenarios reales. El objetivo esperado
- es el desarrollo de un marco más realista que permita una mejor comprensión
- de la movilidad urbana.
+El \textit{reinforcement learning} (RL, aprendizaje por refuerzo) puede proporcionar algoritmos robustos para el control de semáforos. Sin embargo, estas aproximaciones suelen centrarse exclusivamente en automóviles, no considerando a otros usuarios como peatones y ciclistas. Esta limitación socava su aplicabilidad a escenarios reales y no tiene en cuenta la relevancia de los modos de movilidad activa en los sistemas de transporte. Este trabajo final de máster aborda este problema desarrollando y evaluando métodos de \textit{reinforcement learning} para el control de semáforos multimodal (RL-TSC) que integran explícitamente el tráfico peatonal y ciclista junto con los flujos vehiculares. Para ello, se define un conjunto de escenarios realistas basados en la ciudad de Copenhague para simulación, contando con una representación fiel de intersecciones y otros elementos de la infraestructura y demanda de tráfico multimodal derivada de datos reales; se adaptan y amplían métodos existentes de RL-TSC para que consideren el tráfico ciclista, siendo usados como referencia; y se proponen dos nuevos métodos de RL-TSC que consideran conjuntamente a peatones y ciclistas. Las evaluaciones realizadas con simulación demuestran el potencial de incorporar el tráfico multimodal al ámbito del RL-TSC, al tiempo que revelan los desafíos que surgen debido a la mayor complejidad del problema.
+
 
 \vspace{2cm}
-
+\newpage
 \noindent{\LARGE Abstrakt}
 
 \vspace{1cm}
 
-Forstærkningslæring (RL) kan give robuste algoritmer til trafiksignalstyring. Disse
- tilgange fokuserer dog normalt udelukkende på biler og tager ikke højde for
- andre trafikanter som fodgængere og cyklister. Denne begrænsning underminerer
- deres anvendelighed i virkelige scenarier og negligerer relevansen af aktive
- mobilitetsformer i transportsystemer. Denne afhandling sigter mod at udvide
- rammen for forstærkningslæring udviklet af Rodrigues og Lima Azevedo (2019)
- til at omfatte fodgængere og cyklister. Afhandlingen vil designe realistiske
- multimodale trafikscenarier i SUMO, tilpasse RL repræsentationer til at
- inkorporere fodgængere og cyklister og omdefinere belønningsfunktionen til at
- tage alle brugere i betragtning. Det forventede resultat er udviklingen af en
- mere realistisk ramme, der muliggør en større forståelse af bymobilitet.
+Forstærkningslæring (RL) kan give robuste algoritmer til trafiksignalstyring. Disse metoder fokuserer dog normalt udelukkende på biler og tager ikke højde for andre trafikanter som fodgængere og cyklister. Denne begrænsning underminerer deres anvendelighed i virkelige scenarier og negligerer relevansen af aktive mobilitetsformer i transportsystemer. Denne afhandling adresserer dette problem ved at udvikle og evaluere forstærkningslæringsmetoder til multimodal trafiksignalstyring (RL-TSC), der eksplicit integrerer fodgænger- og cyklisttrafik sammen med køretøjsstrømme. For at gøre dette konstruerer vi et sæt realistiske simuleringsscenarier baseret på Københavns Kommune med nøjagtige krydslayouts, forskellige infrastrukturelementer og multimodal trafikefterspørgsel afledt af reelle data; vi tilpasser og udvider eksisterende RL-baserede TSC-metoder til at fungere som basislinjer, der er i stand til at håndtere cyklisttrafik; og vi foreslår to nye RL-TSC-metoder, der i fællesskab tager højde for fodgængere og cyklister. De udførte simuleringsvurderinger demonstrerer potentialet ved at inkorporere multimodal trafik i RL-TSC, samtidig med at de afslører de udfordringer, der opstår som følge af problemets øgede kompleksitet.
 
 \vspace{2cm}
 
@@ -64,20 +31,7 @@ Forstærkningslæring (RL) kan give robuste algoritmer til trafiksignalstyring. 
 
 \vspace{1cm}
 
-El \textit{reinforcement learning} (RL, aprenentage per reforç) pot
- proporcionar algoritmes robusts per el control de semàfors. No obstant,
- aquestes aproximacions solen centrar-se exclusivament en automòbils, no
- considerant altres usuaris como vianants i ciclistes. Aquesta limitació
- menyscava l'aplicabilitat a escenaris reals i no té en compte la
- rellevància dels modes de mobilitat activa als sistemes de transport.
- Aquesta tesis pretén extendre el marc de \textit{reinforcement learning}
- desenvolupat per Rodrigues i Lima Azevedo (2019) per a incloure agents
- de vianants i ciclistes. El treball dissenyarà escenaris realistes de trànsit
- multimodal a SUMO, adaptarà representacions de RL per a incorporar a vianants
- i ciclistes, i redefinirà la funció de recompensa per a considerar tots els
- usuarios. El model resultant serà aval·luat a escenaris reals. L'objectiu
- esperat és el desenvolupament d'un marc més realista que permita una millor
- comprensió de la mobilitat urbana.
+El \textit{reinforcement learning} (RL, aprenentage per reforç) pot proporcionar algoritmes robusts per el control de semàfors. No obstant, aquestes aproximacions solen centrar-se exclusivament en automòbils, no considerant altres usuaris como vianants i ciclistes. Aquesta limitació menyscava l'aplicabilitat a escenaris reals i no té en compte la rellevància dels modes de mobilitat activa als sistemes de transport. Aquest treball de final de màster aborda aquest problema desenvolupant i avaluant mètodes de \textit{reinforcement learning} per al control de semàfors multimodal (RL-TSC) que integren explícitament el trànsit de vianants i ciclistes juntament amb els fluxos de vehicles. Amb aquest objectiu, es defineix un conjunt d'escenaris realistes basats en la ciutat de Copenhague per a simulació, comptant amb una representació fidel de cruïlles i altres elements de la infraestructura, i demanda de trànsit multimodal derivada de dades reals; s'adapten i amplien mètodes existents de RL-TSC perquè considerin el trànsit ciclista, sent empleats com a referència; i es proposen dos nous mètodes de RL-TSC que consideren conjuntament vianants i ciclistes. Les avaluacions realitzades amb simulació demostren el potencial d'incorporar el trànsit multimodal a l'àmbit del RL-TSC, alhora que revelen els reptes que sorgeixen a causa de la major complexitat del problema.
 
 \clearpage
 %\cleartoverso % Force a break to an even page

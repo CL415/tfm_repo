@@ -8,62 +8,96 @@
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
-Lorem ipsum
+\vspace*{100pt}
 
-\section{Interpretation of results}
+\noindent This chapter discusses the results of the experiments performed and their implications for \gls{rltsc} research and urban mobility. The discussion is structured around the research questions posed in Section~\ref{sec:rqs}, while also addressing the limitations of this work and future research directions.
 
-Lorem ipsum
+\section{Interpretation of results} \label{sec:interpretation}
 
-\section{Implications for urban mobility}
+\subsection{Experiment 1}
 
-Lorem ipsum
+The first immediate insight from the results is an affirmative answer to \hyperref[sec:rqs]{RQ1}: despite the obstacles encountered, it was possible to develop the selected areas into realistic scenarios for traffic simulation and conduct simulation experiments for \gls{rltsc}. This proves that while the development of realistic scenarios is a complex and time-consuming task, it is a worthy avenue in which the state of the art could be advanced, moving away from overly simplistic representations that do not reflect the complexity of real-world urban infrastructure and its users.
 
-% sobre optimizar pa intereseccs sueltas:
-40Chapter2:TRANSYT-7FApplicationsTRANSYT-7FUsersGuide
-the cycle length should be long enough to facilitate traffic progression. This constraint often requires a
-background cycle length that is somewhat higher than the cycle lengths that would minimize delay at the
-individual intersections.
+\medskip
 
-% en j1 hay un mov siempre verde; la bici recta on top de 01.02
-Does FRAP's competition-graph structure even make sense for an always-on movement?
+\noindent It is also evident that the extended, full multimodal, proposed methods deliver a broad improvement across metrics in respect to their own baselines. Both \textit{MM} extensions outperformed their base methods in travel time and delay in all the tested scenarios: IDQN~MM results in reductions of a 5.6\% and a 9\% in travel time and delay, respectively, in the single intersection scenario, and a 7.9\% and a 11.1\% in the corridor scenario; while MPLight~MM improves a 9.4\% and a 12.5\% these same metrics in the only scenario in which it was possible to assess it, the single intersection one. 
 
-You hit this directly with — a movement that's never gated by phase choice doesn't fit FRAP's "mutually competing phase pairs" assumption at all.
-That's a structural question, not just an implementation detail: is forcing always-on movements into the same embedding space as competing ones actually doing anything useful, or is it dead weight the network learns to ignore? You could test this by literally zeroing that embedding's gradient and checking if performance changes. -> frap no puede con fases siempre verdes
+Total waiting time and queue length also show better results across scenarios for both proposals: IDQN~MM yields decreases of a 27.9\% and a 32.3\% in total waiting time and queue length, respectively, in the single intersection scenario, and a 19.1\% and a 31.2\% in the corridor scenario; while MPLight~MM's improvements are a 12.5\% and a 6.8\%, respectively, in the single intersection scenario.
 
+\medskip
 
-sobre usar pressure peds en fases no activas as queue en grafs:
- if two different phase-pairs serve overlapping pedestrian groups, excluding only the currently active one won't stop double-counting across the other, still-unserved pairs. This fix addresses "currently being served shouldn't count as waiting" but not cross-pair overlap.
+\noindent Another apparent observation is that, from all the tested methods, FMA2C leads decisively on almost every metric in both scenarios, despite only receiving car and bike observations as the other baselines and lacking information about pedestrians. While this may be partially explained by the relatively low pedestrian demand in relation to the other modes in both scenarios, it is also a testament to the merits of FMA2C's architecture, which besides its obvious feudal coordination capabilities may be especially relevant for complex intersections with disparate topologies and phase definitions as the ones in the tested scenarios. It should be noted, however, that its training —along with IPPO— requireds 1400 epochs, in comparison with the other models.
+
+Despite its overall dominance, FMA2C's performance in pedestrian waiting times is not as good, with IDQN~MM being patently the superior method in the single intersection scenario, while the plots and best-epoch results show IDQN, IDQN~MM and MPLight as the better performing ones in the corridor scenario. This underscores that aggregate metrics may hide modal flaws and trade-offs that deserve consideration.
+
+In either case, both the results from the fully multimodal proposed methods and the baselines without pedestrian observations provide an answer to \hyperref[sec:rqs]{RQ2} and \hyperref[sec:rqs]{RQ3}, showing that it is possible to extend existing methods to account for multimodal traffic flows to different extents, and that these extensions can yield good performance in complex and realistic multimodal scenarios.
+
+\medskip
+
+\noindent Focusing in these pedestrian gains, an interesting observation is how the impressive results of IDQN~MM in pedestrian waiting times in the single intersection scenario —an 82.7\% reduction— do not translate to the corridor scenario, where the baseline IDQN is tied instead. The Deep Sets approach followed to keep observations permutation-invariant for the complex single intersection may not have the same leverage once intersections are not as complicated topologically —the corridor did not include any compound intersection— and distributed in space.
+
+On the other hand, the general performance of IDQN, despite our best efforts, is very unstable in both scenarios, which puts context into the good results that its fully multimodal extension achieves, possibly as a result of the architectural improvements performed on it. Similarly, while showcasing reasonably good results in the single intersection scenario, MPLight's metrics in the corridor one also display a high variance, standing out against the stable descent of IDQN~MM.
+
+Among all the modes, the one showing the most stability during training across the different methods is the automobile, which is explained by it being the original mode for which the original methods and frameworks were designed. This circumstance suggests two things: first, that the usage of most of the baselines in car-only simulation for complex scenarios could be perfectly feasible; and second, that the integration of other modes into existing methods can cause reward drift and instability when not implemented carefully. In either case, the improvements of the two proposed methods in car waiting times in respect to their baselines showcase that accounting for multimodal traffic does not necessarily entail worse performances with an adequate usage of reward weights; rather, it can ultimately yield better performance than treating all traffic like a single mode, as was the case of the baselines.
+
+The plots showing the modal share of total waiting time underscore the strength of IDQN~MM in its treatment of pedestrians: while the other methods progressively neglects them to favour the other modes, IDQN~MM is able to keep a more balanced distribution of waiting times across modes. This contrasts with the good balance in this regard provided by MPLight~MM regarding automobile traffic, which may be a result of the alternative approach followed to gather pedestrian queues around SUMO limitations, explained in page~\pageref{par:putosumo}.
+
+\noindent Finally, it is worth mentioning the good performance of the simple fixed times baselines, outpeforming in some metrics both the traditional and \gls{rltsc} methods. It should be noted that, by design, their relatively short cycles were designed with multimodal traffic in mind to provide a fair comparison; it is possible that implementing fixed timings with a car-based method such as Webster's would result in worse performances for these baselines.
+
+\subsection{Experiment 2}
+
+The considerations to weights mentioned in the previous section were explored more thoroughly in this second experiment.
+
+To start with, the Pareto frontier exploration performed to IDQN~MM and MPLight~MM in the single intersection scenario shows that the frontier for both models is small, with MPLight~MM's being slightly wider and more three-dimensional: its frontier spreads across a much wider range on every axis. MPLight~MM's frontier ranges from 1814\,s to 6797\,s in car waiting times, bike waiting times span from 164\,s to 809\,s, and pedestrian waiting tomes from 20\,s to 117\,s. IDQN's frontier, in contrast, has car waiting times in the range of 2237-4273\,s, 1148-2229\,s for bicycle waiting times, and a narrow range of 5.2-6.0s for pedestrian waiting times.
+
+While in the IDQN~MM case the frontier stays mostly two-objective, showing the largest trade-offs between car and bike weights, MPLight~MM's frontier shows a more three-objective behaviour, with aspread five to six times larger. As a result, increasing its pedestrian weight does have more effect in pedestrian waiting times, but at the cost of the other modes. For example, 1.8 and 2.5 for bike and pedestrian weights, respectively, yield a pedestrian waiting time of 20.1\,s, but at the cost of 6797.2\,s of car waiting times, respectively. The asymmetry observed could plausibly be tied to the different architecture of both models, with MPLight~MM depending on a proxy for true pedestrian pressure.
+
+\medskip
+
+\noindent For both models, the Pareto frontier exploration displays non-monotonic failure points rather than smooth degradation. However, there is not a clear pattern in this instability, and thus it is not possible to draw strong conclusions on its origin. It shall be mentioned that these inconsistent points could be due to the stochastic nature of the training process, especially when considering that only a single run was performed for each weight combination.
+
+As a last remark to frame this discussion correctly, it should be noted that both models were assessed in a single intersection scenario, where any multi-agent capabilities is unused. Besides, the inherently different nature of weight magnitudes is important to consider when comparing both models, as IDQN~MM's ranges cover temporal deltas while MPLight~MM's operate on queue-pressure differences; not by chance there is a difference of two orders of magnitude in the pedestrian weights between both.
+
+In either case, these last results, along with the previous discussion, provide an answer to \hyperref[sec:rqs]{RQ4}, showing that the weights of the reward function can indeed have an impact on balancing the performance of the different modes, albeit further research is needed in the topic.
+
+\section{Implications for urban mobility} 
+
+One relevant finding from the results is that the fully multimodal proposed methods did not just help pedestrians and cyclists; also improving car metrics in respect to their baselines. This undercuts the common assumption that prioritizing non-car modes will necessarily be at drivers' expense and provides a technical argument to justify investing in multimodal infrastructure. Furthermore, if pedestrian and cyclist flows are perceived as efficient by the public, some drivers may be incentivized to switch to these modes, further improving the overall traffic situation for all users.
+
+The contrast that FMA2C's performance in aggregate metrics in comparison to pedestrian waiting times highlights the importance of considering the different modes separately, and not just in aggregate. Choosing to evaluate the performance of \gls{tsc} systems with gross or single-mode metrics may unknowingly disregard part of the traffic.
+
+Furthermore, the overall good results in car metrics —the mode the underlying architectures were originally built around— can be interpreted as an echo of the concerns raised in Section \ref{subsec:bckg_sota} regarding the traditional prevalence of the car in \gls{tsc} research and traffic engineering in general. A true multimodal approach to urban mobility should not just limit itself to an acritical inclusion of other modes to existing systems, but rather an earnest analysis of demand, existing infrastructure and policies.
+
+Finally, the answering of research question \hyperref[sec:rqs]{RQ1} —that it is indeed feasible to develop realistic scenarios for \gls{rltsc}— has a corollary for \gls{rltsc} and urban mobility research in general: decisions about \gls{tsc} phase design or model architecture that are currently validated on simplified models may lack precisely the topological complexities —compound intersections, uneven modal demand...— that posed some of the greater challenges in this thesis. The development of better simulation tools that can accurately reflect realistic networks could meaningfully change which approaches to the topic look promising on paper before time and effort is spent exploring a method of no use in a real setting.
 
 \section{Limitations of the study}
 
-% del wahlstedt pero aplicable aki
-Both Utopia/Spot and ImFlow need additional loopdetectors, placed at different locations in both systems, and at
-least ImFlow also requires other signal controller hardware
-than currently existing in the studied signal system. This
-would have required substantial costs in a field test, costs
-which were saved with the simulation approach.
-However, a simulation environment can never capture the
-whole of reality and the impacts of irregularities as parking
-cars, irregular vehicle movement at detector loops, detector
-errors and communication problems etc. which are not
-captured in the simulations. Field tests are necessary to
-confirm the positive simulation results.
+Despite our best efforts to overcome them, we shall acknowledge that out work has several limitations.
 
-demanda era solo 1/4, decir q mejor hardware nos podria haber permitido simular peores condiciones y congestion
+\medskip
 
-no tenemos modelo bicis ergo son cutres
+First, as it was already ackowledged in Section~\ref{subsubsec:demand_modelling}, this work only simulated one fourth of the actual peak hour demand, hence the results should be interpreted as a representation of off-peak traffic conditions. The hardware limitations that led to this decision also prevented us from simulating the complete network scenario, and also limited the number of runs that could be performed in the corridor one. It is especially relevant to note that none of the scenarios which could be assessed had a significantly higer pedestrian demand in respect to the other modes, which has been identified in the literature as the most challenging for \gls{rltsc} methods~\cite{Zhang2025}.
 
-V2Infra comms con vehiculos coebcatdos, research q hay etc 
-decir q cambios en state def y actions etc ya mejoran baselines y todo
+Although the existing models are deemed as a reasonable compromise, the lack of state-of-the-art pedestrian and cyclist simulation models in the SUMO base distribution and the difficulties encountered in integrating them impeded their usage, which could have provided a more realistic representation of these modes. The lack of a more realistic bicycle model also prevented us from assessing how the heterogeneity of bicycle traffic affects the performance of \gls{rltsc} methods.
 
-por muy sofisticados q sean nuestras observaciones, seguimos ataos a limitaciones de sumo: no solo bug de served peds, toda la movida de detectar por carriles q se rompe cuando hay una junction antes para repre cambio de ancho... necesitamos deteccion similar a realidad, como camaras o espiras con sus limitaciones y no perfecta dentro de su mundo ideal super pequeñode lo cotnratrio acabamos como en prefacio
+It was not possible either to develop fixed time baselines using the methods in the literature due to the number of intersections and the time constraints, although it is possible that those would have put the proposed methods in a better light, if we consider their general performance in other works. It was not possible either to find minimum crossing times for pedestrians and cyclists to be used as constraints due to the amount and variety of crossings in the scenarios. Their inclusion would have certainly been beneficial to the safety of the proposed methods.
 
-no se modifico otros agentes, probar ablacion
+Besides not being able to fully extend more models, time constraints also prevented us from performing ablation on the proposed and baseline methods, like modifying the baselines to be car-only or testing the effect of architectural changes in a more precise way. Furthermore, parameter tuning followed mainly a previous-performance approach, and a more thorough exploration of the hyperparameter space could have yielded better values.
 
-frap symmetrically invariant arch was way easier to integrate 
+The assumptions regarding detection of entities in the scenarios due to SUMO simulations are a common limitation in the \gls{rltsc} literature and this work is no exception. Ordinary elements of real world networks, such as a street width change to add turn lanes before a junction, can break the commonly used observation methods, which explains why most researchers choose simplistic scenarios. While we tried to address this problem, SUMO limitations still made impossible the proper observation of entities in some parts of the network, such as \texttt{walkingAreas}. Another usual limitation in the literature is the assumption of perfect and extensive detection of vehicles and pedestrians, which in the real world requires complex and expensive sensor setups. This work tried to address it using shorter detection distances as the usual to be more conservative in this regard, but the problems with SUMO pedestrian detection before crossings forced this thesis to choose an overly optimistic pedestrian detection method as a compromise. An accurate representation of imperfect, real-world detection setup of pedestrians would have been greatly beneficial to the research and a significant contribution by itself.
 
-need realistic model for peds: Although these studies incorporate pedestrians flow in signal timing, there is not any research in the literature that identifies the
-realistic interactions between vehicles and pedestrians for a deep RL-based signalized intersection. In fact, the pedestrian bi-directional
-flows at the intersection crosswalk poses a great impact on the walking speed of pedestrians. The greater number of pedestrians, the
-lower walking speeds \cite{Shahhoseini2018}. This leads to additional delays for turning vehicles as pedestrians are given the right of
-way to safely cross the roa
+Fiinally, and as is inherent with any simulation scenario, it is impossible to capture the whole of reality and the intricacies of real-world multimodal traffic, which is impacted by factors such as vehicle-pedestrian interactions, parking or idling behaviours, incident situations, irregular movements at detectors, sensor errors and communication problems, etc.
+
+\section{Future work}
+
+Firstly, as the current scenarios have proven that assessing \gls{rltsc} in simulations of realistic urban scenarios is complex but feasible, future work should focus on their expansion and improvement. As was proven in the \hyperref[subsec:rlformtsc]{review of the state of the art}, there is a gap in the availability of full-scale multimodal scenarios reflecting the real-world in a realistic manner, and their development could be a valuable contribution to the field. The scenarios developed in this work could be expanded to include more intersections, more complex topologies, and more diverse traffic demands, including public transport or autonomous vehicles.
+
+In either case, for realism to improve further, the pedestrian and cyclist simulation models used in the assessments should go beyond the current capabilities of SUMO. State-of-the-art microsimulation models for SUMO already do exist, but they are not yet fully integrated into the main SUMO distribution. The inclusion of these models in SUMO future releases would empower decisively research efforts.
+
+From the results discussed in Section~\ref{sec:interpretation}, the FMA2C model and its architecture display a great potential for further progress regarding full multimodal integration, and have already proven their worth in complex scenarios as the ones tested in this work.
+
+On the other hand, while the proposed methods have proven to be effective in the scenarios tested, there is still room for improvement. First, further assessments —desirably with better hardware— are needed to gain a greater understanding of the models' performance, as the intended evaluations could not be fully completed due to temporal and computational constraints. Future work could also focus on exploring better state representations —especially pedestrian detection—, different base model architectures, hyperparameter tuning, and training strategies to further enhance the performance of the models. Additionally, some promising advancements shown in other \gls{rltsc} works outside the multimodal space could be adopted. Advanced multi-agent architectures, robustness against incidents or the inclusion of further modes such as public transport or autonomous vehicles could be explored.
+
+The results also put an accent on the importance of the reward function design, and how it can be used to balance the performance of the different modes. Future work could focus on improving the understanding of how weights influence model performance under different designs, so that better formulations can be developed. While balancing different modal demands is essential for multimodal \gls{rltsc}, a better grasp on weights and reward function design can additionally enable a proper consideration of external factors such as the environmental impact of each mode or the number of persons transported.
+
+The issues gathering pedestrian queues explained in page~\pageref{par:putosumo} have also undescored the limitations that SUMO still displays regarding pedestrian simulation, and how it can affect the performance of \gls{rltsc} methods. Research in the topic would greatly benefit from improvements in the output of pedestrian data in SUMO, especially in ways that can reasonably simulate real-world sensor setups.

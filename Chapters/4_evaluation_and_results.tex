@@ -8,11 +8,14 @@
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
-Lorem ipsum
+\vspace*{100pt}
+
+\noindent This fourth chapter of the thesis handles the evaluation of the proposed multimodal \gls{rltsc} methods in order to answer the research questions, as well as the presentation and discussion of the results obtained. It begins with a detailed description of the simulation scenarios developed for the city of Copenhagen, Denmark, including the road network generation and demand generation processes. An explanation of the evaluation methodology follows, along with the metrics used for comparison and the experimental setup. After that, their results are laid out, showcasing the performance of the proposed methods and the chosen baselines.
 
 \section{Scenario design}\label{sec:scenario_design}
 
-The area chosen for the simulation scenarios is the city of Copenhagen, Denmark. Copenhagen was chosen for its representativeness of the complexity of an actual urban environment with multimodal traffic, the author's familiarity with the city and the availability of the realistic multimodal traffic data. The scenarios were designed to represent different levels of complexity, from a single intersection to a corridor and finally a network scenario.
+In order to address the first of the \hyperref[sec:rqs]{research question}, the area selected for the simulation scenarios is a portion of the city of Copenhagen, Denmark. Copenhagen was chosen for its representativeness of the complexity of an actual urban environment with multimodal traffic, the author's familiarity with the city and the availability of the realistic multimodal traffic data.
+The scenarios were designed to represent different levels of complexity, from a single intersection to a corridor and finally a network scenario.
 
 \subsection{Road network generation}
 \subsubsection{Definition}
@@ -142,7 +145,7 @@ COMPASS data is organized on a per-link basis, with entries for different stretc
 
 Figures \ref{fig:compass_car}, \ref{fig:compass_bike} and \ref{fig:compass_ped}, which can be examined in Appendix \ref{app:visual_compass}, show the COMPASS count data for the different modes in the area of interest.
 
-\subsubsection{Demand modelling}
+\subsubsection{Demand modelling} \label{subsubsec:demand_modelling}
 
 To generate SUMO demand from the data, the SUMO tool \texttt{routeSampler} was chosen.
 
@@ -170,7 +173,7 @@ Once matched, the directional traffic volumes from the COMPASS dataset were assi
 
 \medskip
 
-\noindent The mentioned factors used to compute hourly flows were calculated so that the assigned demand was that of a quarter of the peak hour demand.
+\noindent The mentioned factors used to compute hourly flows were calculated so that the assigned demand was that of a fourth of the peak hour demand.
 
 It was the initial intention of this work to use the peak hour demand to represent the simulated scenarios under their worse conditions, however, hardware limitations made necessary to fraction the demand to one quarter of the intended values. The generated demand should then be understood as a realistic representation of off-peak hours Copenhagen traffic.
 
@@ -197,7 +200,7 @@ $k$                                                 & 0.0487       & 0.0844     
 
 \medskip
 
-This process paired count data to 2817 edges in the SUMO network, and visual comparison proved a reasonable accuracy for the generated demand. The reader can compare the COMPASS data over a map of the relevant area with the generated demand in Appendix \ref{ch:app_gene}.
+\noindent This process paired count data to 2817 edges in the SUMO network, and visual comparison proved a reasonable accuracy for the generated demand. The reader can compare the COMPASS data over a map of the relevant area with the generated demand in Appendix \ref{ch:app_gene}.
 
 The procedure was performed on each of the scenarios, enabling in this way an accurate representation of the traffic from COMPASS data into all the SUMO simulations performed.
 
@@ -213,11 +216,11 @@ In this experiment, we assessed the learning performance of the proposed models,
 
 \medskip
 
-\noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted two hours (5400\,seconds) of simulation time, with traffic demand only generating in the first hour so that the generated entities could be cleared from the network before the end of the episode. This cooldown measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing methods.
+\noindent For the single intersection scenario, all the value-based methods —including the proposed models— were trained for 100 episodes, while the policy-gradient methods were trained for 1400 episodes. Training was repeated five times using different random seeds to minimize the effect of stochasticity in the results. Each episode lasted two hours (5400\,seconds) of simulation time, with traffic demand only generating in the first hour so that the generated entities could be cleared from the network before the end of the episode. This cooldown measure was taken to avoid gridlocked traffic tainting the episode metrics of badly performing methods. As a further measure, if traffic became \textit{stuck} inside the box of an intersection due to the presence of another entity was allowed to move through the obstruction after being \textit{stuck} more than 10 seconds. This behaviour was deemed a reasonable approximation of the real-world behaviour of street users, who would try to navigate around the obstruction in a real setting.
 
 The hyperparameters and settings used for each experiment are detailed in Section~\ref{subsubsec:params}.
 
-The traffic demand simulated in this scenario, resulting from the procedure described in Section~\ref{subsec:demand_generation}, is compiled in Table~\ref{tab:gene_demands}, which shows the number of entities generated for each mode.
+The traffic demand simulated in this scenario, which was obtained with the procedure described in Section~\ref{subsec:demand_generation}, is compiled in Table~\ref{tab:gene_demands}, which shows the number of entities generated for each mode.
 
 \medskip
 
@@ -246,7 +249,9 @@ Corridor & 3243 & 13417 & 3642 \\ \bottomrule
 
 Training the proposed models with different weights for the modes in their reward functions allows to explore the Pareto frontier of the multi-objective optimization problem that arises from using the weights to reach optimums. This experiment can provide information about the trade-offs between the modes and the effect that reward weighting can have on model performance.
 
-Due to the high computational cost, this experiment was performed only in the single intersection scenario, for both of the proposed models. First, a $4 \times 4$ grid was created with different weight values for pedestrians and cyclists, using the optimal weights found during training —see Table \ref{tab:weights}— as a starting point. The tested weights are listed in Table \ref{tab:tested_weights}.
+Due to the high computational cost, this experiment was performed only in the single intersection scenario, for both of the proposed models. Nevertheless, this scenario is probably the most relevant one for this experiment, as its demand is overwhelmingly dominated by car traffic, hence the trade-off effect of the weights on the modal performance can be better observed.
+
+To carry out this analysis, a $4 \times 4$ grid was created with different weight values for pedestrians and cyclists, using the optimal weights found during training —see Table \ref{tab:weights}— as a starting point. The tested weights are listed in Table \ref{tab:tested_weights}.
 
 \begin{table}[]
 \centering
@@ -255,7 +260,7 @@ Due to the high computational cost, this experiment was performed only in the si
 \begin{tabular}{@{}lcccc@{}}
 \toprule
 \textbf{IDQN MM} & \multicolumn{4}{c}{\textbf{Weights tested}} \\ \midrule
-Bicycles & 0.4 & 0.8 & 1.2 & 3.0 \\
+Bicycles & 0.4 & 0.8 & 1.2 & 1.6 \\
 Pedestrians & 60 & 120 & 200 & 300 \\ \midrule
 \textbf{MPLight MM} &  &  &  &  \\ \midrule
 Bicycles & 1.2 & 1.8 & 2.4 & 3.0 \\
@@ -301,7 +306,7 @@ This section presents the evaluation metrics gathered during training to assess 
   \item \textbf{Travel time} [s]: Corresponds to the \texttt{duration} metric output by SUMO, which is the average trip duration of all the entities in an episode. 
   \item \textbf{Delay} [s]: Refers to the SUMO \texttt{timeLoss} metric, which is the average time lost due to waiting or moving below the desired speed. Can be deemed as a measure of the average delay experienced by all entities in an episode.
   \item \textbf{Waiting time} [s]: Pertains to the SUMO \texttt{waitingTime} metric, which measures the time spent stopped by all entities in an episode.
-  \item \textbf{Queue} [entities]: Indicates the number of entities queued at intersections in an episode. Its gathering is part of the \texttt{Signal} class observation presented in this work, which was described in Section \ref{subsec:state_def}. Hence, it inherits its limitations regarding pedestrian queue measurements.
+  \item \textbf{Queue} [entities]: Indicates the number of entities queued at intersections in an episode. Its gathering is part of the \texttt{Signal} class observation presented in this work, which was described in Section \ref{subsubsec:mp_state}. Hence, it inherits its limitations regarding pedestrian queue measurements.
   \item \textbf{Throughput} [entities/h]: Counts the number of entities that were able to reach their destination in an episode.
   \item \textbf{Modal share of total wait time}: Represents the share that a specific mode had of the total waiting time at traffic lights in an episode. 
   \item \textbf{Never arrived} [entities/h]: Counts the number of entities that did not reach their destination by the end of the episode, including the half-hour simulation time without demand generation.
@@ -335,11 +340,11 @@ Max Wave & 220.96 & 177.39 & 133.04 & 227.25 & 143.8 & 157.3 & 54035 & 27132 & 2
 Fixed time 20 & 119.7 & 78.9 & 65.43 & 19.55 & 16.32 & 51 & 26556.4 & 3234.4 & 4148.8 & 34020.4 \\
 Fixed time 40 & 114.7 & 73.83 & 59.62 & 18.9 & 16.27 & 46.8 & 26282.2 & \textbf{2959.8} & 4126.2 & \textbf{33409.8} \\
 IDQN & 141.58 & 101.43 & 77.22 & 120.66 & 50.24 & 80.29 & 44047.8 & 19365.8 & 10018.4 & 73432 \\
-IDQN MM & 133.66 & 92.29 & 69.42 & 62.51 & 8.69 & 57.85 & 36793.4 & 11326.8 & \textbf{2805.5} & 49749.2 \\
-MPLight & 125.7 & 83.99 & 60.38 & 33.64 & 17.74 & 53.03 & 27236.2 & 5058 & 4379.8 & 38936.2 \\
-MPLight MM & 113.88 & 73.48 & 53.75 & 60.71 & 16.47 & 47.02 & \textbf{25987.2} & 4188.6 & 4150.4 & 36292.2 \\
+IDQN MM & 133.66 & 92.29 & 69.42 & 62.51 & \textbf{8.69} & 57.85 & 36793.4 & 11326.8 & \textbf{2805.5} & 49749.2 \\
+MPLight & 125.7 & 83.99 & 60.38 & 53.64 & 17.74 & 53.03 & 27236.2 & 5058 & 4379.8 & 38936.2 \\
+MPLight MM & 113.88 & 73.48 & 53.75 & 50.71 & 16.47 & 47.02 & \textbf{25987.2} & 4188.6 & 4150.4 & 36292.2 \\
 IPPO & 113.79 & 72.52 & 57.74 & 30.92 & 16.03 & 50.65 & 26118 & 4325 & 4089 & 37706 \\
-FMA2C & \textbf{86.72} & \textbf{49.02} & \textbf{34.18} & \textbf{16.86} & \textbf{14.84} & \textbf{29.84} & 20859 & 2467 & N/A & 23612 \\
+FMA2C & \textbf{86.72} & \textbf{49.02} & \textbf{34.18} & \textbf{16.86} & 14.84 & \textbf{29.84} & 20859 & 2467 & N/A & 23612 \\
 \midrule
 \textbf{Corridor} &  &  &  &  &  &  &  &  &  &  \\ \midrule
 Max Pressure & 273 & 219.64 & 135.77 & 207.95 & 209.43 & 197.28 & 245795 & 199781 & N/A & 445576 \\
@@ -356,7 +361,7 @@ FMA2C & \textbf{129.46} & \textbf{78.47} & \textbf{35.48} & \textbf{60.26} & 36.
 
 \end{landscape}
 
-The following plots show the values of the main metrics for all the models across the training episodes, averaged across the five runs performed. The plots were smoothed with a five-episode rolling average to avoid outliers. More plots can be found in Appendix~\ref{ch:app_results}.
+The following plots show the values of the main metrics for all the models across the training episodes, averaged across the five runs performed. Note that the plots were smoothed with a five-episode rolling average to avoid outliers. More plots can be found in Appendix~\ref{ch:app_results}.
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
@@ -369,7 +374,7 @@ The following plots show the values of the main metrics for all the models acros
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsj1/queue_combined.png}}
-  \captionof{figure}{Single intersection: average accumulated combined queue per epoch.} \label{fig:queue_j1}
+  \captionof{figure}[Single intersection: average accumulated combined queue per epoch.]{Single intersection: average accumulated combined queue$^*$ per epoch.\\$^*$ The pedestrian queue has been obtained from counts of pedestrians unserved by the current phase.} \label{fig:queue_j1}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
@@ -422,14 +427,14 @@ The following plots show the values of the main metrics for all the models acros
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/queue_combined.png}}
-  \captionof{figure}{Corridor: average accumulated combined queue per epoch.} \label{fig:queue_c2}
+  \captionof{figure}[Corridor: average accumulated combined queue per epoch.]{Corridor: average accumulated combined queue$^*$ per epoch.\\$^*$ The combined queue does not include pedestrians.} \label{fig:queue_c2}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page
 \makebox[\linewidth]{%        to center the image
   \centering
   \includegraphics[width=\linewidth]{Figures/chapter04/plotsc2/waitingTime.png}}
-  \captionof{figure}{Corridor: average combined waiting time per epoch. \\ $^*$ The combined queue does not include pedestrians.} \label{fig:waitingTime_c2}
+  \captionof{figure}[Corridor: average combined waiting time per epoch.]{Corridor: average combined waiting time per epoch.} \label{fig:waitingTime_c2}
 \end{minipage}
 
 \begin{minipage}{\linewidth}% to keep image and caption on one page

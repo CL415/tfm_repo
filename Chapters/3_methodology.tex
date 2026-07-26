@@ -7,8 +7,10 @@
 \tikz[remember picture,overlay] \node[opacity=1,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/method-01.png}};
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
+\vspace*{100pt}
 
-decir q explicamos simulator aki porque nuestro modelo tiene decisiones influenciadas por el
+\noindent In this third chapter, the proposed multimodal \gls{rltsc} methods are presented, along with the tenets behind their conception. Because of its influence in the development of the proposals, the chapter starts with a description of the simulation environment used for training and evaluation, including the traffic simulator, the pedestrian and cyclist models, and the reinforcement learning framework. Then, the baseline \gls{tsc} methods used for comparison and integration in the multimodal environment are described. Finally, the proposed multimodal \gls{rltsc} methods are presented in detail, including their architecture, state representation, action space, and reward function.
+
 \section{Simulation environment}
 
 \subsection{Traffic simulator}
@@ -29,6 +31,12 @@ Finally, SUMO is a well-established traffic simulator, which has been used in a 
 
 \subsection{Pedestrian and cyclist models}
 
+As in \gls{tsc}, pedestrians and cyclists have often been overlooked in traffic simulation, with most of the progress in the field focusing on cars. However, the inclusion of these modes is crucial for an accurate modelling of urban traffic dynamics.
+
+Both of these modes have been studied for decades in the context of microscopic traffic simulation, with a number of models and tools developed to simulate their behaviour.\footnote{The interested reader can refer to the cited works in Section~\ref{sec:motivation} or to \cite{Papathanasopoulou2024, Brunner2024} for recent reviews of the state of the art for pedestrians and cyclists, respectively.} However, the integration of these models into \gls{tsc} research has been limited, with most studies focusing on vehicle dynamics and neglecting the impact of pedestrians and cyclists on traffic flow. 
+
+While their inclusion in the SUMO traffic simulator brings many possibilities in this regard, the models that the simulator uses shall be analysed critically to properly account for their limitations and the implications that they have on the experiments performed in this work.
+
 The model that SUMO uses for pedestrians by default is the \textit{striping model}, which models the interactions of pedestrians with vehicles and themselves. The model achieves high execution speed by only considering close-range interactions along piecewise linear paths. This is done by separating the available space into narrow stripes along the walking direction and only interacting with at most one other traffic object per stripe~\cite{AlvarezLopez2018}.
 
 Pedestrians in SUMO can travel in any lane that allows them in its vehicle permissions attribute, but they also enjoy exclusive map features. Firstly, any lane only allowing pedestrians is considered as a sidewalk, which unlike other SUMO lanes is not bound by directionality, letting pedestrians inside travel freely in any direction. SUMO pedestrians also use crossings to cross lanes used by vehicles, which can be either controlled by traffic signals or uncontrolled. In the case of controlled crossings, pedestrians can only cross when the traffic signal is green for them, while in uncontrolled crossings they can cross at any time, with vehicles yielding to them. Finally, SUMO adds, inside each intersection, pedestrian-only areas that connect the sidewalks of the approach edges among themselves and with the pedestrian crossings in the junction. These are referred to as \texttt{walkingAreas}.
@@ -38,6 +46,8 @@ Pedestrians in SUMO can travel in any lane that allows them in its vehicle permi
 \noindent Bicycles, in the other hand, lack a dedicated model. The options to simulate them are either to do so by treating them as smaller and slower cars —the current default—, or to behave as a fast pedestrian~\cite{Kaths2023}. While lacking a specific model for bicycles, their simulation in SUMO greatly benefits from its \textit{sublane model}, which allows for the longitudinal division of driving lanes into multiple sub-lanes using lateral dynamics, the width of which can be defined by the user~\cite{AlvarezLopez2018}. This permits to model common behaviours of cyclists, such as riding side by side on a same lane if it is wide enough.
 
 In the rest of aspects, bicycles in SUMO under the default settings behave as small vehicles, bound to lanes that allow them in their vehicle permissions and only moving in a single direction, according to the lane on which they travel.
+
+This aspects have been acknowledged by the SUMO community in a workshop organized in 2022, where several researchers identified shortcomings in the default models used, which were compiled in a paper by Roosta \textit{et al.}~\cite{Roosta2023}. Among some of the identified issues, the authors highlighted that the current model does not reflect the stochasticity of vehicle traffic in terms of speeds and sizes, that the large size of the spacing boxes used for bicycles could cause excessive separations between them, noting as well the lack of weighing options in the demand generation tools, the lack of realistic left-turn behaviour by default or the absence of relevant bicycle-specific infrastructure options such as bike boxes.
 
 \medskip
 
@@ -80,9 +90,8 @@ Furthermore, while the presented baseline methods have been proven in maps based
 
 Finally, while the baseline methods used in this work were \textit{not} modified to account for multimodal traffic, they have not been modified \textit{either} to ignore it. As will be described as part of the proposed models' definition in further pages —see Section~\ref{sec:proposed_models}—, the T-REX observation functions that relay traffic information were extended to include pedestrians and cyclists; hence, using the same observation tensor, baseline methods can still receive bike traffic data —for SUMO treats both cars and bicycles as vehicles— and optimize including it, without architectural changes. However, the lack of modifications also results on the methods aggregating bicycle and car traffic together, thus treating them equivalently. In this way, the possibility of integrating bicycle traffic into existing \gls{rltsc} architectures can also be studied, as well as the behaviour of mixed bicycle and car traffic in a \gls{rltsc} context.
 
-% TODO añadir comm sobre conclusiones tras leer literatura
+The included models are the following:
 
-The included models are the following: % TODO añadir refs a donde se expliquen, y cita IPPO
 \medskip
 
 \noindent \textbf{\Gls{rltsc} methods}
@@ -100,7 +109,7 @@ The included models are the following: % TODO añadir refs a donde se expliquen,
     \item Stochastic: a method that randomly selects the next phase to be activated at each intersection. Not a traditional \gls{tsc} method in any sense, it is included as a baseline to provide a lower bound for the performance of other methods.
     \item Max Pressure: similar to the implementation of Chen \textit{et al.}~\cite{Chen2020} of the method devised by Varaiya~\cite{Varaiya2013}, it selects the next phase to be activated at each intersection based on the pressures for each phase, which is defined as the difference between the number of vehicles waiting at the incoming lanes associated with the phase and the number of vehicles waiting at the outgoing lanes.
     \item Max Wave: the \textit{Greedy} method defined by Chen \textit{et al.}~\cite{Chen2020}, it chooses phases based on the wave of vehicles approaching the intersection, which is calculated as the number of vehicles approaching on the lanes associated with each phase within a certain distance.
-    \item Fixed time: a method that activates each phase for a fixed amount of time, regardless of traffic conditions. It was used as a compromise for the inability of obtaining optimal fixed times for all the intersections due to the difficulties laid out in Section~\ref{par:adios_fases}. Two different fixed times were tested, 20 and 40 seconds.
+    \item Fixed time: a fixed-time method that activates each phase for a fixed amount of time, regardless of traffic conditions. It was used as a compromise for the inability of obtaining optimal fixed times for all the intersections due to the difficulties laid out in Section~\ref{par:adios_fases}. Two different fixed times were tested, 20 and 40 seconds.
 \end{itemize}
 
 \section{Description of the proposed methods} \label{sec:proposed_models}
@@ -108,11 +117,11 @@ The included models are the following: % TODO añadir refs a donde se expliquen,
 We modelled intermodal \acrfull{tsc} as a decentralized, partially
 observable \acrfull{mdp}, which in this work we define by the octuple $\mathcal{M}=(S,A,T,R,\Omega,O,\gamma,I)$.
 
-In the aforementioned tuple, $S,A,T,R$ correspond to the state, action, transition function and reward function definitions described in Section~\ref{subsubsec:mdp}; $\Omega$ denotes a finite set of observations where $o \in \Omega$; $O$ is an observation function defined as $O:S\times A \times \Omega \rightarrow [0,1]$; $\gamma$ represents the discount factor used in Q-learning —see Section~\ref{subsubsec:idqn}—; while $I$ corresponds to the set of signalized intersections in the scenario.
+In the aforementioned tuple, $S,A,T,R$ correspond to the state, action, transition function and reward function definitions described in Section~\ref{subsubsec:mdp}; $\Omega$ denotes a finite set of observations where $o \in \Omega$; $O$ is an observation function defined as $O:S\times A \times \Omega \rightarrow [0,1]$; $\gamma$ represents the discount factor used in Q-learning; while $I$ corresponds to the set of signalized intersections in the scenario.
 
 For both of the proposed models, each signalized intersection is controlled independently by an agent $i \in I$ that interacts with the traffic simulation deployed in SUMO via the \gls{traci} interface. At each time step $t$, agent $i$ receives a local observation $o_t^i=O(s_t)$ constructed from features of the lanes and pedestrian crossings it controls, selects a discrete action $a_t^i \in A^i$ corresponding to a predefined signal phase applied for a fixed duration —acyclic phase selection—, and subsequently receives a scalar reward $r_t^i$. The environment state evolves, then, according to the joint action of all agents and the underlying traffic dynamics simulated over a simulation step.
 
-Each agent aims to optimize the \gls{tsc} probem through their reward function R. Their goal is to learn an optimal joint policy
+Each agent aims to optimize the \gls{tsc} probem through their reward function $R$. Their goal is to learn an optimal joint policy
 \begin{equation} \label{eq:joint_policy}
     \pi( \bm{a}_t|\bm{s}_t)=\prod_{i \in I}\pi^i_\theta(a^i_t|o^i_t)
 \end{equation}
@@ -121,7 +130,7 @@ maximizing the expected discounted return
 F(\pi)=\mathbb{E}_{\tau\sim\pi}\left[\sum_{t=0}^{\infty}\sum_{i\in I}\gamma^{t}r_{t}^{i}\right],
 \end{equation}
 
-\noindent where $\theta_i$ denotes the parameters of agent $i$'s policy and $\mathbb{E}$ refers to the averaged return over all possible trajectories across states and actions $\tau=(s_0, a_0, s_1, a_1,...)$ generated by following policy $\pi$ under the environment transition dynamics $T(s_{t+1}|s_t,a_t)$. As the model definition is based on independent agents, the learnt policy is decentralized following $\pi=\{\pi_i \}_{i \in I}$, enabling each agent to independently maximize its own long-term cumulative reward.
+\noindent where $\theta_i$ denotes the parameters of agent $i$'s policy and $\mathbb{E}$ refers to the averaged return over all possible trajectories across states and actions $\tau=(s_0, a_0, s_1, a_1,...)$ generated by following policy $\pi$ under the environment transition dynamics $T(s_{t+1}|s_t,a_t)$. Since SUMO is tasked with simulating traffic, transition dynamics are learned implicitly through interactions with the environment rather than through explicit modelling. The model definition is based on independent agents, and as such, the learnt policy is decentralized following $\pi=\{\pi_i \}_{i \in I}$, enabling each agent to independently maximize its own long-term cumulative reward.
 
 The following sections treat in further detail, for each of the proposed methods, the definitions of the different parts of the described problem.
 
@@ -196,20 +205,13 @@ W_{\text{ped},t}^i\;
 \end{itemize}
 
 \noindent The observant reader will have noticed that the described feature vector only lists four and not nine features as the tensor description advanced. The missing features correspond to modal queue and speed values which are included for logging the method's performance; as these are not used by the IDQN~MM agent, they were omitted from this explanation for simplicity.
-
-Those are:
-\begin{itemize}
-    \item[]$n_{\text{appr}}^l$ is the count of approaching (i.e.\ not currently waiting) vehicles on the lane;
-    \item[]$q_l^t$ and $q_l^{bike,t}$ are the (all-vehicle and bicycle-only) queue counts
-    \item[]$\bar v_l^t$ is the mean speed of detected vehicles on the lane (zero if the lane is empty)
-\end{itemize}
  
 \noindent \textbf{Pedestrian sensing}
 
 \noindent Pedestrian waiting times are computed at the intersection level rather than on a per-lane basis. First, the set of
 edges controlled by intersection $i$ is obtained by mapping every controlled inbound/outbound lane to its parent edge. Over this edge set, the agent queries SUMO for all currently present pedestrians —using the \gls{traci} call \texttt{getLastStepPersonIDs}—, stores their IDs and, for each, retrieves its instantaneous waiting time. A pedestrian is counted as \textit{waiting} if this waiting time is  positive, including when it has physically left the edge to move to the nearby \texttt{walkingArea}; $W_{i,ped}^t$ is the sum of waiting time over waiting pedestrians, which resets when pedestrians have been served by a phase. As compound intersections can have successive pedestrian crossings, pedestrian IDs are kept and transferred across edges if these are still within the control of agent $i$.
 
-Nevertheless, as shown in earlier lines, these pedestrian measures ultimately are included on all the lane feature vectors for the corresponding edge. This approach was chosen deliberately to align with the sensor approach that IDQN applies to cars, which would correspond to approach cameras in a pedestrian detection setting.
+Nevertheless, as shown in earlier lines, these pedestrian measures ultimately are included on all the lane feature vectors for the corresponding edge. This approach was chosen deliberately to align with the sensor setup that IDQN applies to cars, which would correspond to approach cameras in a pedestrian detection setting.
  
 \subsubsection{Reward function} \label{subsubsec:idqnmm_reward}
  
@@ -233,7 +235,7 @@ Weights and constants are resolved on a per-scenario level. The ones used in the
 
 The choice for a delta-based reward function instead of the existing IDQN waiting time formulation was made during the development of the method, as the original function quickly became monotonic when agent performance was poor. Furthermore, the delta formulation makes the reward sensitive to local improvement or deterioration rather than to the absolute demand levels of each approach, which helps normalize reward scale across heterogeneously-loaded intersections. Clipping and normalization were added for increased optimization stability.
  
-\subsubsection{Function approximation architecture} \label{subsubsec:idqnmm_architecture}
+\subsubsection{Base model architecture} \label{subsubsec:idqnmm_architecture}
 
 Instead of IDQN's original 2D convolution layer architecture, the proposed method relies on its own model architecture, based on a Deep Sets encoder \cite{Zaheer2017}, which has been named as \texttt{LaneWiseModel}.
 
@@ -241,15 +243,15 @@ Instead of IDQN's original 2D convolution layer architecture, the proposed metho
  
 \begin{enumerate}
 \item First, a shared-weight per-lane encoder $\phi_\theta$, a
-two-layer multilayer perceptron (MLP) with rectifier linear unit (ReLU) activations, is applied identically to every lane's feature
+two-layer \acrfull{mlp} with \acrfull{relu} activations, is applied identically to every lane's feature
 vector $\bm{x}_t^{i,l}$, independent of lane identity or position.
 \item The resulting per-lane embeddings are aggregated by mean pooling over the lane dimension,
 $\bar h_t^i = \frac{1}{L_i}\sum_{l} \phi_\theta(\bm{x}_t^{i,l})$, yielding a fixed-size intersection embedding, independent of the  number of controlled lanes $L_i$ or their order.
-\item A decision head composed of a further two-layer MLP followed by a PyTorch discrete action-value head maps
+\item A decision head composed of a further two-layer \gls{mlp} followed by a PyTorch discrete action-value head maps
 $\bar h_i^t$ to $Q(o_i^t, a,;\theta_i)$.
 \end{enumerate}
 
-While the original convolution layer architecture works on simpler intersections —as are the ones normally modelled in the current state of the art \cite{Ault2021}—, the complexity of some of the intersections in the present work scenarios is orders of magnitude larger. Pedestrian paths, bike or bus lanes, and especially compound intersections can result in disparate lane orderings that the existent model was not able to handle.
+While the original convolution layer architecture works on simpler intersections —as are the ones normally modelled in the current state of the art \cite{Liu2017,Ault2021, Zhu2022, Chen2025}—, the complexity of some of the junctions in the present work scenarios is orders of magnitude larger. Pedestrian paths, bike or bus lanes, pedestrian islands and especially compound intersections can result in disparate lane orderings that the existent model was not able to handle.
 
 The chosen approach ensures permutation invariance to avoid this, as the same lane encoder is used on each lane and aggregated in an order-independent way, the resulting Q-function is invariant to the arbitrary ordering in which lanes are enumerated. This accommodates intersections with differing lane counts and topologies, especially when these are compound.
  
@@ -297,18 +299,19 @@ For movement $m$, the queue pressures are computed following the inbound minus d
 \mathrm{bike}_t^i(m) &= \sum_{l \in L_i^{\mathrm{in}}(m)} q_{l,t}^{\mathrm{bike}} \;- \sum_{l' \in L_i^{\mathrm{out}}(m)} q_{l',t}^{\mathrm{bike}},
 \end{align}
  
-\noindent where $q_{l,t}$, $q_{l,t}^{\mathrm{bike}}$ are the queue counts on lane $l$ at
-time $t$, for all vehicles and for bikes only, respectively. The subtraction performed to calculate car counts is done to handle lanes with mixed traffic without double counting. It is relevant to mention that this counting process is performed taking into account the detection distance and modal classification steps explained in IDQN MM's state representation, in Section~\ref{subsubsec:idqnmm_state}
+\noindent where $q_{l,t}$, $q_{l,t}^{\mathrm{bike}}$ are the queue counts on lane $l$ at time $t$, for all vehicles and for bikes only, respectively. The subtraction performed to calculate car counts is done to handle lanes with mixed traffic without double counting. It is relevant to mention that this counting process is performed taking into account the detection distance and modal classification steps explained in IDQN MM's state representation, in Section~\ref{subsubsec:idqnmm_state}
 
 \medskip 
 
 \noindent Pedestrian demand, on the other hand, is not attached to a movement due to SUMO limitations.
 
-Ideally, pedestrians waiting on the \texttt{waitingAreas} associated to a given crossing would get their counts used to calculate pressures for the relevant phase, as is done with vehicles. Unfortunately, SUMO does not offer a method to easily count the pedestrians waiting to cross a specific zebra crossing in a scalable way across different intersections. As was seen in the review of the state of the art in multimodal \gls{rltsc}, in Section~\ref{subsec:rlformtsc}, some works in the literature have tackled this problem with a whole pedestrian detection module overriding the simulator limitations \cite{Zhang2025}; however, these approaches greatly surpass the scope of this work.
+Ideally, pedestrians waiting on the \texttt{waitingAreas} associated to a given crossing would get their counts used to calculate pressures for the relevant phase, as is done with vehicles. Unfortunately, SUMO does not offer a method to easily count the pedestrians waiting to cross a specific zebra crossing in a scalable way across different intersections. As was seen in the review of the state of the art in multimodal \gls{rltsc}, in Section~\ref{subsec:rlformtsc}, most works in the art have not encountered this problem, either because their scenarios showcase simple intersections with a limited number of approaches which can easily be paired with specific phases for later querying of idle pedestrians~\cite{Liu2017, Zhu2022, Chen2025}; because —also thanks to scenario simplicity— the coordinates of the \texttt{waitingAreas} associated to each phase in which to locate pedestrians are known~\cite{Zhang2021c, Wang2025, Nayeri2025, Zeng2025}; or because their \gls{dtse} design disregards them, only focusing in the approaches~\cite{Han2022, Rong2024, Huang2025, Poudel2025, Zhang2025b}.
 
-As a reasonable replacement, pedestrian queues are collected with a method that SUMO does offer: \texttt{getServedPersonCount}. When inputted a SUMO phase index, this \gls{traci} call returns the number of waiting pedestrians that would be served by the given phase if it were green, and the difference in these values is what MPLight~MM uses as an equivalent to find the pedestrian pressure $p_t^i(n)$, and by proxy, all pedestrian queue metrics collected during the monitoring of other methods. As pedestrian crossings are not associated with phase pairs as vehicle movements are, $p_t^i(n)$ is directly attached to each global phase pair.
+All these solutions are not applicable to the scenarios used in this work, however, as we have seeked a method able to handle complex intersections with varying numbers and types of legs, pedestrian islands and compound junctions in a generalizable way. Some proposals in the literature have tackled this problem with a whole pedestrian detection module overriding the simulator limitations \cite{Zhang2025}; however, these methods greatly surpass the scope of this work.
 
-We are aware of the caveats that this avenue entails. Firstly, it is \textit{too perfect}: sensor setups for pedestrians are far away from perfect and it is not feasible to detect, at every moment, the exact number of pedestrians waiting for a specific traffic signal phase, especially when crossings are close to each other and thus people waiting for different phases share the same space. To add up to it, a more prosaic reason: repeated calls to the \texttt{getServedPersonCount} on large scenarios causes a segmentation fault in SUMO, and it was not possible to debug it during the development of MPLight~MM.
+As a reasonable replacement, pedestrian queues are collected with a method that SUMO does offer: \texttt{getServedPersonCount}. When inputted a SUMO phase index, this \gls{traci} call returns the number of waiting pedestrians that would be served by the given phase if it were green, and the difference in these values is what MPLight~MM uses as an equivalent to find the pedestrian pressure $p_t^i(n)$, and by proxy, all pedestrian queue metrics collected during the monitoring of other methods. As pedestrian crossings are not associated with phase pairs as vehicle movements are, $p_t^i(n)$ is directly attached to each global phase pair. \label{par:putosumo}
+
+We are aware of the caveats that this avenue entails. Firstly, it is \textit{too perfect}: sensor setups for pedestrians are far away from perfect and it is not feasible to detect, at every moment, the exact number of pedestrians waiting for a specific traffic signal phase, especially when crossings are close to each other and thus people waiting for different phases share the same space. To add up to it, a more prosaic reason: repeated calls to the \texttt{getServedPersonCount} on large scenarios cause a segmentation fault in SUMO, and it was not possible to debug it during the development of MPLight~MM.
 
 It was decided to adopt \texttt{getServedPersonCount} while not diminishing these warnings, accepting the fact that no pedestrian queues can be collected with it in larger scenarios and as a consequence, that the MPLight~MM method will not be assessed in those.
 
@@ -332,7 +335,7 @@ r_t^i = -\Big( \mathrm{car}_t^i + w_{bike}\, \mathrm{bike}_t^i + w_{ped}\, \tild
  
 \noindent where $\tilde p_t^i$  is the total pedestrian pressure computed as explained in the previous section,  clipped \emph{before} weighting at a fixed ceiling hyperparameter $\bar P$ for enhanced stability. Akin to IDQN~MM, weights and other settings are resolved on a per-scenario level and compiled in the relevant section,~\ref{subsubsec:params}.
  
-\subsubsection{Function approximation architecture}
+\subsubsection{Base model architecture}
  
 The original MPLight relies for Q-learning approximation in the FRAP competition-graph architecture developed by Zheng \textit{et al.} specifically for \gls{rltsc}~\cite{Zheng2019}. This work proposes an extension of this architecture, modified for the handling of multimodal traffic, which has been given the name of \texttt{FRAP\_MM}.
 
@@ -340,7 +343,7 @@ The central inductive bias of FRAP is that the value of choosing a given phase p
  
 \medskip
 
-\noindent First, for each movement $m \in \{0,\dots,M-1\}$, two elements are computed and concatenated into a per-movement representation $h_t^i(m)$: an indicator expressing whether $m$ is one of the two movements requested by the phase pair served at time $t$, and a demand embedding of that movement's car/bike pressure pair. This process is done via a sigmoid-activated phase embedding, a sigmoid-activated linear demand embedding, and a ReLU-activated linear layer combining the two; a structure defined already by the original FRAP demand embedding. The only difference that \texttt{FRAP\_MM} presents is its widening of the demand input, becoming 2-dimensional due to the modal split ($\mathrm{car}_t^i(m), \mathrm{bike}_t^i(m)$) rather than a single queue value.
+\noindent First, for each movement $m \in \{0,\dots,M-1\}$, two elements are computed and concatenated into a per-movement representation $h_t^i(m)$: an indicator expressing whether $m$ is one of the two movements requested by the phase pair served at time $t$, and a demand embedding of that movement's car/bike pressure pair. This process is done via a sigmoid-activated phase embedding, a sigmoid-activated linear demand embedding, and a \gls{relu}-activated linear layer combining the two; a structure defined already by the original FRAP demand embedding. The only difference that \texttt{FRAP\_MM} presents is its widening of the demand input, becoming 2-dimensional due to the modal split ($\mathrm{car}_t^i(m), \mathrm{bike}_t^i(m)$) rather than a single queue value.
  
 \medskip
 
@@ -366,7 +369,7 @@ Training follows the same off-policy DQN structure described for IDQN~MM in Sect
 
 \noindent \textbf{Action masking}
 
-\noindent As each intersection $i$ can only execute its own local phases, greedy action selection and $\varepsilon$-greedy exploration are limited to $i$'s own subset of actions $\mathcal{N}_i$ rather than the full global one $\{0,\dots,N-1\}$.
+\noindent As each intersection $i$ is ony meant to execute its own local phases, greedy action selection and $\varepsilon$-greedy exploration are limited to $i$'s own subset of actions $|\mathcal{N}_i|=G_i$ rather than the full global one $\{0,\dots,N-1\}$.
 
 \medskip
 

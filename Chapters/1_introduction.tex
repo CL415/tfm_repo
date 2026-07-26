@@ -51,7 +51,7 @@ Despite the shift that mobility has experienced ever since, placing other modes
 
 It is well known that traffic control devices influence people's
  behaviour,\footnote{
-    For the case of traffic signals, see for instance tal y cual
+    For the case of traffic signals, see the \hyperref[sec:motivation]{following section} and the \hyperref[subsec:bckg_sota]{review of the state of the art} for examples.
  } and unsurprisingly, I frequently saw valencians jaywalking to avoid long
  waits in front of an empty roadway. This practice was not limited to people
  in a hurry or to rebellious types: families with children, elderly people,
@@ -104,9 +104,15 @@ While the personnel brushed off these concerns, an increasing undertone of dissa
 
 Engineering is about solving problems, and engineers develop complex systems to do so, but it is easy to become so focused on their abstractions in our pursuit of solutions that we lose sight of the problems that needed to be solved in the first place.
 
-Infrastructure is meant to serve people, and not the opposite. The traffic control system that I had the opportunity to see seemed like an excellent solution to the problem of optimizing vehicular flow, but it did not look like a solution for how citizens in general moved about the city.
+Infrastructure is meant to serve people, and not the opposite. The traffic control system that I had the opportunity to see seemed like an excellent solution to the problem of optimizing vehicular flow, but did not look like a solution for how citizens in general moved about the city.
 
 When professor Rodrigues presented the topic of this thesis, I could not help but remember how I felt bearing the long red lights of València and how they continued to serve only cars, just because pedestrian and cyclist flows still lack their proper place in mainstream traffic signal control systems.
+
+The real-world aspect of it enticed me even further, as I felt that facing a real-world scenario —the city of Copenhagen— would surely bring complexity and challenges, but also opportunities in which to find engineering solutions that actually explore beyond ideal abstractions and serve people.
+
+\medskip
+
+\noindent While this thesis does not aim to revolutionize traffic signal control, it does aim to be a useful contribution towards making traffic engineering better for all users of the streets.
 
 \medskip
 
@@ -117,56 +123,82 @@ When professor Rodrigues presented the topic of this thesis, I could not help bu
 %blabla q luego con la motorizacion nos olvidamos de peatones y bicis y tal pero
 % que en inicio la cosa era multimodal
 
-\section{Motivation}
+\section{Motivation} \label{sec:motivation}
 
-Lorem ipsum
+As the preface explains, traffic lights influence their users' behaviour, and the way they are designed and operated can have a significant impact on the safety, efficiency, and overall experience of people.
 
-en papers de peds y ciclistas hay bien de fuentes al ppio 
+Beyond personal experiences, there are several reasons that motivate the work presented in this thesis.
 
-Pedestrian non-compliance behaviour is encouraged by signal timings that are not favourable to them. This is the case both when a disproportionately large amount of time is made available to vehicular traffic and when pedestrian volumes are such that they do not fit into the time provided for by
-the pedestrian phase~\cite{Retzko1974}. 
+\medskip
 
-Long signal cycles may pose a safety hazard for pedestrians and therefore one of the most effective measures to increase pedestrian safety and compliance is to make signals "as good as possible" for pedestrians and that is by minimising their waiting times~\cite{Gaarder1989}.
+\noindent Increasing urbanization and population growth have led to the growth of cities worldwide, and with them, the need for capable transportation systems. Relying solely on the automobile for moving people in an urban environment is not an efficient solution, and it also results in negative externalities such as congestion, pollution, and accidents. Consequently, cities are progressively promoting alternative modes of transport, such as public transport, cycling, and walking, to reduce the reliance on private vehicles.
 
-In an extensive 2 year study in London, Crompton~\cite{Crompton1979} found that at
-controlled crossings (pelican crossings) 30–40\% of pedestrians felt annoyed when the delay was in the range of 6–22 s but more than 70\% felt annoyed when delay was above 26 s.
+However, to turn these modes a fully viable alternative, infrastructure must be developed accordingly. It is not only safety and comfort standards that matter, but especially the travel efficiency also plays a key role in attracting daily commuters to use a specific mode \cite{Rietveld2004,Brunner2024}.
 
-More recent research, conducted through child and adult focus groups by the Transport Research Laboratory, has shown that 30 s is the maximum amount of time that both children and adults are willing to wait at a signalised
-intersection~\cite{Martin2006}.
+Hence, as cities become more diverse in terms of transportation modes, the need for effective \acrfull{tsc} systems that can manage efficiently and safely this multimodal traffic becomes more and more important. 
 
-mira asi en general~\cite{Noland1996}
+Walking and cycling offer sustainable and promising alternatives to the automobile in terms of efficiency, especially when considering the constraints of an urban environment: a 3\,metre-wide car lane in a city can move around 1600 persons per hour; a bike lane of the same width can move around 3800 people, and an equivalent sidewalk, as much as 9000~\cite{natco2013}. In addition of their health and environmental benefits, these modes offer probably the best cost-efficiency ratio in terms of space and money per person transported.
 
-% hablar de q mucha gente pierde tiempo en tráf, movidas peatonaes y bicis,
-%   tema q no se les considera cuando son probs lo más importante...
+\medskip
 
-Stopping for a red light is a primary discouragement to cycling (\cite{Rietveld2004});
- it costs a great deal of extra time and energy and imposes
-additional stress on the body which can lead to injury. In addition, according
-to Sharples, the peak hour for cyclists is much more pronounced than for motorized traffic
-(Sharples, 1997) Y VER CPH and commuting cyclists prefer controlled environments, for instance traffic
-controlled intersections (Aultman-Hall, Hall, and Baetz, 1997). Based on these statements,
-it becomes easily understandable that intervention at signalized intersections in favor of
-cyclists is more than justified. SIGUE LEYENDO EN~\cite{Apostola2014} para más motivos sobre infraccion
-de rojos por ciclistas que a su vez se cobra vidas, Y LAS DELAYS DISCOURAGEAN AL CICLISMO
+\noindent If a \gls{tsc} system is to be effective, it must account for the behaviour of all road users, including pedestrians and cyclists. This is not reduced solely to the safety of these vulnerable modes, however. As will be seen further in Section~\ref{subsec:bckg_sota}, pedestrian and cyclist dynamics have a certain impact in the design and performance of traffic signals, and with it in the overall transport system in general \cite{Noland1996}.
 
-Noland has shown that focusing only on motorvehicle ﬂows may not lead to economically optimal solutions whenpedestrian delay is also accounted for (\cite{Noland1996}). For some trips, the traveltime delay costs associated with walking may reduce the likelihoodthat people will choose to walk.
+\medskip
 
-diciendo q research focus en coxes, de ahi pasamos a multimodal
+\noindent Regarding moving by foot, pedestrian crossing speed influences the determination of several \gls{tsc} parameters, such as pedestrian clearance time or cycle length. However, unlike some traffic manuals suggest, it is not a fixed value, but rather a variable that depends on the characteristics of the pedestrians themselves. Pedestrian crossing speed is affected by various factors, including age, health condition, physical fitness, and psychological expectations; hence significant differences in crossing speeds exist among different individuals. Relevant studies~\cite{Huang2010, Chandra2013} proved that pedestrian crossing speed at intersections typically follows a normal distribution.
 
-Disregarding pedestrian travel
-costs might lead to non-optimal network design if
-pedestrians form a noticeable proportion of road users,
-such as in urban centres
+Pedestrian dynamics are also affected by the presence of other pedestrians~\cite{Alhajyaseen2009}. When demand is high, the difference in speeds between different persons has a significant impact, as faster pedestrians are forced to slow down due to the presence of slower ones. The influence of other pedestrians is particularly relevant in the case of bi-directional flows, precisely the case of signalized crosswalks, where pedestrians from both sides of the street interact with each other. The interaction between opposing pedestrian flows can lead to congestion and delays, as pedestrians must navigate around each other while crossing the street. This can result in longer crossing times and increased waiting times for pedestrians, especially during peak hours when pedestrian demand is high.
 
-q mayoria trabajos que consideran peats pero en intersecciones concretas, no a nivel de red, y que no consideran ciclistas ni tampoco la variabilidad de los peats,
- y que además no usan RL sino optimización tradicional, o fuzzy logic (justificar xq eso no sirve para lo nuestor)
+On the other hand, as it was discussed already in the \hyperref[sec:preface]{preface}, jaywalking is of major importance for \gls{tsc} in particular and urban mobility in general, both in terms of efficiency as of safety. Research ~\cite{Crompton1979, Gaarder1989, Martin2006} has shown that most pedestrians are willing to wait around 20 to 30 seconds at a signalized intersection before compliance starts to drop, albeit this value is highly dependent on the context, with factors such as the presence of other pedestrians, the perceived safety of the crossing, or the traffic culture of the city \cite{Retzko1974}. Furthermore, pedestrians crossing streets in non-signalized crossings —be it in zebra crossings lacking signals, using in a mixed-traffic street or simply jaywalking— creates opportunities for interaction between modes, which even in non-risky situations imply changes of speed and behaviour for all users involved that cannot be ignored when modelling urban traffic \cite{Marisamynathan2018}.
+
+\medskip
+
+\noindent Similarly, taking cyclists into account is also relevant in the design of a proper \gls{tsc} system, especially in an urban setting.
+
+Its ability to keep high flows even under congested conditions makes cycling a very attractive mode of transport for the urban environment \cite{Brunner2024}. However, the dynamics of cyclists are different from those of motorized vehicles, and they require different considerations in terms of traffic signal timing and phasing. 
+
+Akin to pedestrians, cyclist dynamics are also very heterogeneous and influenced by factors such as age, gender, experience or bicycle type \cite{PérezCastro2025}. Cyclists also have different acceleration and deceleration characteristics than motorized vehicles, which can affect their ability to clear intersections quickly; and may show specific behaviours in manoeuvres such as left turns. Additionally, and also like pedestrians, cyclists are vulnerable road users in traffic conflicts with other modes —such as turning vehicles— which can impact their safety and travel time, hindering the perception of the bicycle as a modal choice \cite{Apostola2014}. Thus, these factors must be taken into account when designing street infrastructure, including \gls{tsc}.
+
+Cyclists are especially sensitive to becoming stopped by red lights, as each stop implies a significant loss of speed and energy, which can be discouraging for them. This is particularly relevant in urban areas that require cyclists to navigate through multiple intersections, as frequent stops can significantly increase travel time and reduce the attractiveness of cycling as a mode of transport \cite{Apostola2014}. In contrast, a well-designed \gls{tsc} system has been proven to improve the efficiency of cycling as a mode and attract users towards the bicycle \cite{Aultman-Hall1997, Rietveld2004}.
+
+\medskip
+
+\noindent Despite these considerations, and as the \hyperref[subsec:bckg_sota]{review of the state of the art} shows further in this thesis, most of the research on \gls{tsc} has focused on motorized traffic, with limited attention given to pedestrians and cyclists.
+
+When in the 1990s, the first \acrfull{rl} methods were applied to \gls{tsc}, the focus stayed on optimizing traffic flow for motorized vehicles, and further progress in the field of \acrfull{rltsc} has largely stayed centred only in the automobile.\footnote{Precisely, in a recent revision of the state of the art \cite{Xiao2024}, these challenges were explicitly identified as directions for future work.} On the other hand, most of the \gls{rltsc} research focuses in relatively simple scenarios, which may not accurately represent the complexity of real-world urban traffic networks, and this is specially true in the limited corpus of multimodal \gls{rltsc} literature. Furthermore, works treating the inclusion of bicycle traffic are very scarce in the current \gls{rltsc} state of the art.
+
+\medskip
+
+\noindent Considering the above, it is clear that there is a need for further research on \gls{tsc} that takes into account the dynamics of pedestrians and cyclists, especially in realistic urban scenarios. This thesis aims to address this gap.
 
 \section{Problem statement}
 
-Lorem ipsum
+While \acrfull{rl} has already been proven as a robust option for \acrfull{tsc}, most of the research performed so far has focused exclusively on automobiles, as the later \hyperref[sec:lit_review]{literature review} shows, and the work done considering multimodal traffic flows has mostly limited itself to simple intersections and not to realistic depictions of urban networks. Furthermore, among the studies accounting for multimodal traffic, the inclusion of cyclists still has not received the necessary attention if we account for their relevance in urban mobility.
 
-\section{Research objectives}
+\medskip
 
-Lorem ipsum
+\noindent Considering this, the problem statement of this thesis can be summarized as follows:
+
+\indent \textit{Development and evaluation of reinforcement learning methods for traffic signal control that account for pedestrians and cyclists in realistic scenarios.}
+
+\section{Research questions}\label{sec:rqs}
+
+The present thesis aims to provide address the stated problem by solving a number of research questions:
+
+\begin{enumerate}[I.]
+   \item Is it possible to develop a scenario for traffic control simulation that incorporates realistic demand and infrastructure based in a real-world setting?
+   \item Can existing reinforcement learning methods for traffic signal control be adapted or extended to account for multimodal traffic flows, including pedestrians and cyclists?
+   \item How do multimodal reinforcement learning methods for traffic signal control perform in realistic scenarios?
+   \item Which influence have the architectural decisions taken in the design of multimodal reinforcement learning methods for traffic signal control on their performance across modes?
+\end{enumerate}
 
 \section{Scope and limitations}
+
+While the topic of multimodal traffic signal control is broad and complex, the scope of this thesis is necessarily limited by our time and capabilities. As such, the following limitations are acknowledged:
+
+\begin{itemize}
+    \item The nature of the traffic signal control methods developed in this work is limited to reinforcement learning, and does not consider other traffic management strategies or technologies.
+    \item The multimodal aspect of this thesis is centred on pedestrians and cyclists for the scenario design and the traffic signal control methods. While highly relevant for traffic signal control, other relevant modes such as public transport, autonomous vehicles, emergency vehicles, or micromobility devices are explicitly excluded from the scope of this thesis.
+    \item Although aiming to be realistic, the development and evaluation of the traffic signal control methods is limited to simulation, and does not include real-world implementation or testing.
+    \item The scenarios and methods developed in this thesis are based on the city of Copenhagen, Denmark, and may not be directly applicable to other cities or regions with different traffic patterns, infrastructure, or regulations.
+\end{itemize}

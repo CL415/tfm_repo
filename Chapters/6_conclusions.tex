@@ -8,17 +8,38 @@
 %\tikz[remember picture,overlay] \node[opacity=0.3,inner sep=0pt] at ([yshift=3cm,xshift=2cm]current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{./Figures/cover/sesshu_1.jpg}};
 \clearpage 
 
-Lorem ipsum
+\vspace*{100pt}
 
-e main contributions of this work are as follows:
-- escenarios realistas con complejidad y ambito multimodal, incl copenhagen left
-- integracion de bicis en metodos existentes
-- propuesta de exp de metodos para peds y bicis
+\noindent \lettrine{T}{his thesis} has developed and evaluated methods for \gls{rltsc} in realistic multimodal scenarios, with a particular focus on the integration of pedestrian and cyclist traffic. In this way, we have addressed the stated problem and provided answers to the research questions posed at its start.
 
-\section{Conclusions}
+\medskip
 
-Lorem ipsum
+\noindent After the introduction, the beginning of this work laid out some definitions and presented \gls{tsc} as a \gls{rl} problem, to then offer a comprehensive review of the state of the art of multimodal \gls{tsc} and \gls{rltsc}, highlighting the limitations of existing approaches in handling multimodal traffic and the need for more realistic evaluation scenarios.
 
-\section{Future work}
+Then, the methods followed were described, regarding the simulation environment and the proposed \gls{rltsc} methods developed, along with their baselines.
 
-Lorem ipsum
+The fourth chapter explained how the evaluation of the methods was carried out, including the definition of realistic scenarios, the experimental setup, the metrics used, and the results obtained.
+
+Finally, the fifth chapter discussed these results and their implications, while also acknowledging the limitations of this work and suggesting future research directions.
+
+\medskip 
+
+\noindent We can summarize the main contributions of this work as 
+
+\begin{enumerate}[I.]
+   \item We have developed a number of realistic scenarios based in the city of Copenhagen, with multimodal traffic demand reflecting real data, accurate and complex intersection layouts and a variety of infrastructure elements. 
+   \item We have adapted and extended, as baselines, existing reinforcement learning methods for traffic signal control to include cyclist traffic.
+   \item We have proposed two reinforcement learning methods for traffic signal control that consider both pedestrians and cyclists, using existing methods as a starting point.
+   \item We have performed several experiments in the developed scenarios to evaluate the performance of the proposed methods and the extended baselines.
+\end{enumerate}
+
+\noindent In conclusion, this thesis has strived to make a useful contribution to the field of multimodal \gls{rltsc}. We hope that the findings of this work can inform future research and development in the field, contributing to the improvement of urban mobility and the consideration of all road users.
+
+\medskip 
+
+\noindent For, as was stated in the introduction, the ultimate goal of traffic engineering should be to move persons, regardless of their mode of transport.
+\medskip 
+
+\noindent Traffic signals may control traffic; they should do so by serving \textit{people}.
+
+\clearpage
